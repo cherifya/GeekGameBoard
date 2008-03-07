@@ -1,0 +1,139 @@
+{\rtf1\ansi\ansicpg1252\cocoartf949\cocoasubrtf270
+{\fonttbl\f0\fnil\fcharset0 Verdana;}
+{\colortbl;\red255\green255\blue255;}
+\margl1440\margr1440\vieww13900\viewh17120\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
+
+\f0\b\fs38 \cf0 GeekGameBoard
+\b0\fs22 \
+\
+
+\b by Jens Alfke
+\b0 \
+\
+GeekGameBoard is an example of using Core Animation to present the user interface of a board or card game. It implements a small framework for implementing such games, with domain-specific classes like "Grid" and "Piece", and examples of several game definitions built on top of the framework.\
+\
+Some of the generally-useful Core Animation techniques illustrated are:\
+\'95 Hit testing\
+\'95 Dragging CALayers with the mouse\
+\'95 Loading images from files and setting them as layer contents\
+\'95 3D "card-flip" animations\
+\
+
+\b\fs28 History
+\b0 \
+
+\fs22 \
+I wrote GeekGameBoard in 2007 while at Apple, which published it as sample code. Apple's sample code license allows unrestricted use of the source code, requiring only that you keep their copyright notice in an 
+\i unmodified
+\i0  distribution.\
+\
+I am no longer employed by Apple. To encourage further development of this framework, in March 2008 I created this open source project (under a BSD license) based on a slightly-evolved version of the published sample code.\
+\
+1.0: Original Apple sample code release (12/19/2007)\
+2.0: First open source release. (Major version number bumped to avoid conflict with any future Apple revisions.) No longer requires garbage collection. Fixed some memory leaks of CG objects. Fixed a bug when advancing to the 8th row in the Checkers game. (3/7/2008)\
+\
+
+\b\fs28 Project Description\
+
+\b0\fs22 \
+
+\b Important Classes
+\b0 \
+\
+A 
+\b Bit
+\b0  is a moveable object in a game, either a 
+\b Card
+\b0  or a 
+\b Piece
+\b0 .\
+A 
+\b BitHolder
+\b0  is a container for Bits; they can be dragged into and/or out of it. Typical BitHolders are 
+\b GridCell
+\b0 s (the squares/hexes in a board), 
+\b Deck
+\b0 s or 
+\b Stack
+\b0 s of cards, and 
+\b Dispensers
+\b0  (supplies of new pieces.)\
+A 
+\b Grid
+\b0  is a regular arrangement of 
+\b GridCell
+\b0 s; rectangular and hex grids are implemented.\
+
+\b BoardView
+\b0  is the NSView whose layer hosts all of the above. It also tracks mouse events so the user can drag Bits.\
+
+\b Game
+\b0  represents the rules of a particular game. It sets up the pieces/cards/grids that make up the game, decides which moves are legal, keeps track of whose turn it is, and decides when someone's won.\
+
+\b Player
+\b0  is a passive object that represents one of the players in a Game.\
+\
+
+\b Class Hierarchy
+\b0 \
+\
+(Underlined classes are from external frameworks; italic classes are abstract.)\
+\
+\ul CALayer\ulnone \
+	
+\i Bit
+\i0 \
+		Card\
+			PlayingCard\
+		DraggedStack\
+		Piece\
+			DiscPiece\
+	
+\i BitHolder*
+\i0 \
+		
+\i GridCell
+\i0 \
+			Hex\
+			Square\
+				GoSquare\
+		Deck\
+		Dispenser\
+		Stack\
+	
+\i Grid
+\i0 \
+		HexGrid\
+		RectGrid\
+\
+\ul NSView\ulnone \
+	BoardView\
+\
+
+\i \ul NSObject
+\i0 \ulnone \
+	
+\i Game
+\i0 \
+		TicTacToeGame (etc...)\
+	Player\
+\
+
+\fs20 * BitHolder is actually both a protocol, and a class that implements the protocol. I've combined them here, for simplicity.\
+
+\fs22 \
+\
+
+\b\fs28 Related Information\
+
+\b0\fs22 \
+\'95 {\field{\*\fldinst{HYPERLINK "http://developer.apple.com/samplecode/GeekGameBoard/"}}{\fldrslt Apple's original GeekGameBoard sample code}}\
+\'95 {\field{\*\fldinst{HYPERLINK "http://developer.apple.com/documentation/Cocoa/Conceptual/CoreAnimation_guide/index.html"}}{\fldrslt 
+\i Core Animation Programming Guide}}\
+
+\i \'95 {\field{\*\fldinst{HYPERLINK "http://developer.apple.com/documentation/GraphicsImaging/Conceptual/drawingwithquartz2d/dq_images/chapter_12_section_4.html"}}{\fldrslt Quartz 2D Programming Guide: Creating Images}}\
+\'95 {\field{\*\fldinst{HYPERLINK "http://developer.apple.com/documentation/GraphicsImaging/Conceptual/drawingwithquartz2d/dq_patterns/chapter_7_section_1.html"}}{\fldrslt Quartz 2D Programming Guide: Patterns}}\
+\'95 {\field{\*\fldinst{HYPERLINK "http://developer.apple.com/documentation/GraphicsImaging/Conceptual/drawingwithquartz2d/dq_paths/chapter_4_section_1.html"}}{\fldrslt Quartz 2D Programming Guide: Paths}}
+\i0 \
+}
