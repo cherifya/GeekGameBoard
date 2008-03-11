@@ -1,5 +1,5 @@
 //
-//  GGB_iPhoneAppDelegate.h
+//  iPhoneAppDelegate.h
 //  GGB-iPhone
 //
 //  Created by Jens Alfke on 3/7/08.

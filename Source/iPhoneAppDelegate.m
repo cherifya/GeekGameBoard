@@ -1,12 +1,12 @@
 //
-//  GGB_iPhoneAppDelegate.m
+//  iPhoneAppDelegate.m
 //  GGB-iPhone
 //
 //  Created by Jens Alfke on 3/7/08.
 //  Copyright __MyCompanyName__ 2008. All rights reserved.
 //
 
-#import "GGB_iPhoneAppDelegate.h"
+#import "iPhoneAppDelegate.h"
 #import "BoardUIView.h"
 #import "Game.h"
 #import "QuartzUtils.h"
