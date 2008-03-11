@@ -71,6 +71,14 @@
     return self;
 }
 
+- (Bit*) bitToPlaceInHolder: (id<BitHolder>)holder
+{
+    if( holder.bit==nil && [holder isKindOfClass: [Square class]] )
+        return _dispenser[self.currentPlayer.index].bit;
+    else
+        return nil;
+}
+
 - (void) nextPlayer
 {
     [super nextPlayer];

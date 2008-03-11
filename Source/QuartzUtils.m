@@ -71,8 +71,9 @@ void ChangeSuperlayer( CALayer *layer, CALayer *newSuperlayer, int index )
     [CATransaction setValue:(id)kCFBooleanTrue
                      forKey:kCATransactionDisableActions];
 
-    CGPoint pos = [newSuperlayer convertPoint: layer.position 
-                      fromLayer: layer.superlayer];
+    CGPoint pos = layer.position;
+    if( layer.superlayer )
+        pos = [newSuperlayer convertPoint: pos fromLayer: layer.superlayer];
     [layer retain];
     [layer removeFromSuperlayer];
     if( index >= 0 )

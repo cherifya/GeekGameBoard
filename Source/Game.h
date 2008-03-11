@@ -60,6 +60,10 @@
     Default implementation just calls -endTurn. */
 - (void) bit: (Bit*)bit movedFrom: (id<BitHolder>)src to: (id<BitHolder>)dst;
 
+/** Called on mouse-down/touch of an *empty* BitHolder. Should return a Bit if
+    it's OK to place a new Bit there; else nil. */
+- (Bit*) bitToPlaceInHolder: (id<BitHolder>)holder;
+
 /** Called instead of the above if a Bit is simply clicked, not dragged.
     Should return NO if the click is illegal (i.e. clicking an empty draw pile in a card game.)
     Default implementation always returns YES. */

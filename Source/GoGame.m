@@ -32,29 +32,20 @@
 @implementation GoGame
 
 
-- (void) x_createDispenser: (NSString*)imageName position: (CGPoint)position forPlayer: (unsigned)playerNo
-{
-    CGFloat pieceSize = (int)(_grid.spacing.width * 0.9) & ~1;  // make sure it's even
-    Piece *stone = [[Piece alloc] initWithImageNamed: imageName scale: pieceSize];
-    stone.owner = [self.players objectAtIndex: playerNo];
-    CGRect frame = {position, {1.5*pieceSize,1.5*pieceSize}};
-    Dispenser *disp = [[Dispenser alloc] initWithPrototype: stone quantity: INT_MAX frame:frame];
-    [_board addSublayer: disp];
-    [disp release];
-    [stone release];
-}    
-
-
 - (id) initWithBoard: (GGBLayer*)board
 {
     self = [super initWithBoard: board];
     if (self != nil) {
         [self setNumberOfPlayers: 2];
+        [(Player*)[_players objectAtIndex: 0] setName: @"Red"];
+        [(Player*)[_players objectAtIndex: 1] setName: @"White"];
         
         CGSize size = board.bounds.size;
+        CGFloat boardSide = MIN(size.width,size.height);
         RectGrid *grid = [[RectGrid alloc] initWithRows: 9 columns: 9 
-                                                  frame: CGRectMake((size.width-size.height+16)/2,8,
-                                                                    size.height-16,size.height-16)];
+                                                  frame: CGRectMake(floor((size.width-boardSide)/2),
+                                                                    floor((size.height-boardSide)/2),
+                                                                    boardSide,boardSide)];
         _grid = grid;
         grid.backgroundColor = GetCGPatternNamed(@"Wood.jpg");
         grid.borderColor = kTranslucentLightGrayColor;
@@ -72,15 +63,6 @@
         
         CGRect gridFrame = grid.frame;
         CGFloat pieceSize = (int)grid.spacing.width & ~1;  // make sure it's even
-        [self x_createDispenser: @"Red Ball.png"
-                      position: CGPointMake(CGRectGetMinX(gridFrame)-2*pieceSize, 
-                                            CGRectGetMinY(gridFrame))
-                     forPlayer: 0];
-        [self x_createDispenser: @"White Ball.png"
-                      position: CGPointMake(CGRectGetMaxX(gridFrame)+0.5*pieceSize,
-                                            CGRectGetMaxY(gridFrame)-1.5*pieceSize)
-                     forPlayer: 1];
-        
         CGFloat captureHeight = gridFrame.size.height-4*pieceSize;
         _captured[0] = [[Stack alloc] initWithStartPos: CGPointMake(2*pieceSize,0)
                                                spacing: CGSizeMake(0,pieceSize)
@@ -107,6 +89,18 @@
         [self nextPlayer];
 }
     return self;
+}
+
+
+- (Bit*) bitToPlaceInHolder: (id<BitHolder>)holder
+{
+    if( holder.bit != nil || ! [holder isKindOfClass: [GoSquare class]] )
+        return nil;
+    NSString *imageName = self.currentPlayer.index ?@"White Ball.png" :@"Red Ball.png";
+    CGFloat pieceSize = (int)(_grid.spacing.width * 0.9) & ~1;  // make sure it's even
+    Piece *stone = [[Piece alloc] initWithImageNamed: imageName scale: pieceSize];
+    stone.owner = self.currentPlayer;
+    return [stone autorelease];
 }
 
 

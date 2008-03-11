@@ -45,7 +45,7 @@
     [_window addSubview: _headline];
     
     // Start game:
-    [self startGameNamed: @"TicTacToeGame"];
+    [self startGameNamed: @"GoGame"];
     
     // Show window
     [_window makeKeyAndVisible];

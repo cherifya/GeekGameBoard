@@ -14,6 +14,11 @@
 #import "GGBUtils.h"
 
 
+@interface BoardUIView ()
+- (void) _findDropTarget: (CGPoint)pos;
+@end
+
+
 @implementation BoardUIView
 
 
@@ -102,17 +107,40 @@ static BOOL layerIsBitHolder( CALayer* layer )  {return [layer conformsToProtoco
     NSAssert(touches.count==1,@"No multitouch support yet");
     UITouch *touch = touches.anyObject;
     
+    BOOL placing = NO;
     _dragStartPos = touch.locationInView;
     _dragBit = (Bit*) [self hitTestPoint: _dragStartPos
                         forLayerMatching: layerIsBit 
                                   offset: &_dragOffset];
-    if( _dragBit ) {
-        _dragMoved = NO;
-        _dropTarget = nil;
-        _oldHolder = _dragBit.holder;
-        // Ask holder's and game's permission before dragging:
-        if( _oldHolder )
-            _dragBit = [_oldHolder canDragBit: _dragBit];
+
+    if( ! _dragBit ) {
+        // If no bit was clicked, see if it's a BitHolder the game will let the user add a Bit to:
+        id<BitHolder> holder = (id<BitHolder>) [self hitTestPoint: _dragStartPos
+                                                 forLayerMatching: layerIsBitHolder
+                                                           offset: NULL];
+        if( holder ) {
+            _dragBit = [_game bitToPlaceInHolder: holder];
+            if( _dragBit ) {
+                _dragOffset.x = _dragOffset.y = 0;
+                if( _dragBit.superlayer==nil )
+                    _dragBit.position = _dragStartPos;
+                placing = YES;
+            }
+        }
+    }
+
+    if( ! _dragBit ) {
+        Beep();
+        return;
+    }
+    
+    // Clicked on a Bit:
+    _dragMoved = NO;
+    _dropTarget = nil;
+    _oldHolder = _dragBit.holder;
+    // Ask holder's and game's permission before dragging:
+    if( _oldHolder ) {
+        _dragBit = [_oldHolder canDragBit: _dragBit];
         if( _dragBit && ! [_game canBit: _dragBit moveFrom: _oldHolder] ) {
             [_oldHolder cancelDragBit: _dragBit];
             _dragBit = nil;
@@ -122,14 +150,20 @@ static BOOL layerIsBitHolder( CALayer* layer )  {return [layer conformsToProtoco
             Beep();
             return;
         }
-        // Start dragging:
-        _oldSuperlayer = _dragBit.superlayer;
-        _oldLayerIndex = [_oldSuperlayer.sublayers indexOfObjectIdenticalTo: _dragBit];
-        _oldPos = _dragBit.position;
-        ChangeSuperlayer(_dragBit, self.layer, self.layer.sublayers.count);
-        _dragBit.pickedUp = YES;
-    } else
-        Beep();
+    }
+    // Start dragging:
+    _oldSuperlayer = _dragBit.superlayer;
+    _oldLayerIndex = [_oldSuperlayer.sublayers indexOfObjectIdenticalTo: _dragBit];
+    _oldPos = _dragBit.position;
+    ChangeSuperlayer(_dragBit, self.layer, self.layer.sublayers.count);
+    _dragBit.pickedUp = YES;
+    
+    if( placing ) {
+        if( _oldSuperlayer )
+            _dragBit.position = _dragStartPos;      // animate Bit to new position
+        _dragMoved = YES;
+        [self _findDropTarget: _dragStartPos];
+    }
 }
 
 
@@ -158,27 +192,33 @@ static BOOL layerIsBitHolder( CALayer* layer )  {return [layer conformsToProtoco
         [CATransaction commit];
 
         // Find what it's over:
-        id<BitHolder> target = (id<BitHolder>) [self hitTestPoint: pos
-                                                 forLayerMatching: layerIsBitHolder
-                                                           offset: NULL];
-        if( target == _oldHolder )
-            target = nil;
-        if( target != _dropTarget ) {
-            [_dropTarget willNotDropBit: _dragBit];
-            _dropTarget.highlighted = NO;
-            _dropTarget = nil;
-        }
-        if( target ) {
-            CGPoint targetPos = [(CALayer*)target convertPoint: _dragBit.position
-                                                     fromLayer: _dragBit.superlayer];
-            if( [target canDropBit: _dragBit atPoint: targetPos]
-               && [_game canBit: _dragBit moveFrom: _oldHolder to: target] ) {
-                _dropTarget = target;
-                _dropTarget.highlighted = YES;
-            }
-        }
+        [self _findDropTarget: pos];
     }
 }
+
+
+- (void) _findDropTarget: (CGPoint)pos
+{
+    id<BitHolder> target = (id<BitHolder>) [self hitTestPoint: pos
+                                             forLayerMatching: layerIsBitHolder
+                                                       offset: NULL];
+    if( target == _oldHolder )
+        target = nil;
+    if( target != _dropTarget ) {
+        [_dropTarget willNotDropBit: _dragBit];
+        _dropTarget.highlighted = NO;
+        _dropTarget = nil;
+    }
+    if( target ) {
+        CGPoint targetPos = [(CALayer*)target convertPoint: _dragBit.position
+                                                 fromLayer: _dragBit.superlayer];
+        if( [target canDropBit: _dragBit atPoint: targetPos]
+           && [_game canBit: _dragBit moveFrom: _oldHolder to: target] ) {
+            _dropTarget = target;
+            _dropTarget.highlighted = YES;
+        }
+    }
+}    
 
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
@@ -200,9 +240,13 @@ static BOOL layerIsBitHolder( CALayer* layer )  {return [layer conformsToProtoco
             } else {
                 // Nope, cancel:
                 [_dropTarget willNotDropBit: _dragBit];
-                ChangeSuperlayer(_dragBit, _oldSuperlayer, _oldLayerIndex);
-                _dragBit.position = _oldPos;
-                [_oldHolder cancelDragBit: _dragBit];
+                if( _oldSuperlayer ) {
+                    ChangeSuperlayer(_dragBit, _oldSuperlayer, _oldLayerIndex);
+                    _dragBit.position = _oldPos;
+                    [_oldHolder cancelDragBit: _dragBit];
+                } else {
+                    [_dragBit removeFromSuperlayer];
+                }
             }
         } else {
             // Just a click, without a drag:

@@ -67,9 +67,14 @@
 {
     CGFloat spacing = floor(MIN( (frame.size.width -2)/(CGFloat)nColumns,
                                (frame.size.height-2)/(CGFloat)nRows) );
+    CGSize size = CGSizeMake(nColumns*spacing+2, nRows*spacing+2);
+    CGPoint position = frame.origin;
+    position.x += round( (frame.size.width -size.width )/2.0 );
+    position.y += round( (frame.size.height-size.height)/2.0 );
+
     return [self initWithRows: nRows columns: nColumns
                       spacing: CGSizeMake(spacing,spacing)
-                     position: frame.origin];
+                     position: position];
 }
 
 
@@ -187,6 +192,7 @@ static void setcolor( CGColorRef *var, CGColorRef color )
 {
     // Custom CALayer drawing implementation. Delegates to the cells to draw themselves
     // in me; this is more efficient than having each cell have its own drawing.
+    [super drawInContext: ctx];
     if( _cellColor ) {
         CGContextSetFillColorWithColor(ctx, _cellColor);
         [self drawCellsInContext: ctx fill: YES];
@@ -409,6 +415,7 @@ static void setcolor( CGColorRef *var, CGColorRef color )
 - (void) setHighlighted: (BOOL)highlighted
 {
     [super setHighlighted: highlighted];
+    self.cornerRadius = self.bounds.size.width/2.0;
     self.borderWidth = (highlighted ?6 :0);
 }
 

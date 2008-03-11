@@ -30,15 +30,6 @@
 @end
 
 
-/**  WARNING: THIS CODE REQUIRES GARBAGE COLLECTION!
- **  This sample application uses Objective-C 2.0 garbage collection.
- **  Therefore, the source code in this file does NOT perform manual object memory management.
- **  If you reuse any of this code in a process that isn't garbage collected, you will need to
- **  add all necessary retain/release/autorelease calls, and implement -dealloc methods,
- **  otherwise unpleasant leakage will occur!
- **/
-
-
 @implementation Game
 
 
@@ -133,6 +124,12 @@
 {
     [self endTurn];
 }
+
+- (Bit*) bitToPlaceInHolder: (id<BitHolder>)holder
+{
+    return nil;
+}
+
 
 - (BOOL) clickedBit: (Bit*)bit
 {
