@@ -20,6 +20,10 @@
 */
 #import "GGBUtils.h"
 
+#if TARGET_OS_ASPEN
+#import <AudioToolbox/AudioToolbox.h>
+#endif
+
 
 void setObj( id *variable, id newValue )
 {
@@ -35,4 +39,29 @@ void setObjCopy( id<NSCopying> *variable, id<NSCopying> newValue )
         [*variable release];
         *variable = [(id)newValue copy];
     }
+}
+
+
+void PlaySound( NSString* name )
+{
+#if TARGET_OS_ASPEN
+    NSURL *url = [NSURL fileURLWithPath: [@"/Library/Sounds/" stringByAppendingPathComponent: name]];
+    SystemSoundID soundID;
+    if( AudioServicesCreateSystemSoundID((CFURLRef)url,&soundID) != noErr ) {
+        NSLog(@"Couldn't load sound %@",url);
+        return;
+    }
+    AudioServicesPlaySystemSound(soundID);
+#else
+    [[NSSound soundNamed: name] play];
+#endif
+}
+
+void Beep()
+{
+#if TARGET_OS_ASPEN
+    AudioServicesPlaySystemSound(kSystemSoundID_UserPreferredAlert);
+#else
+    NSBeep();
+#endif
 }

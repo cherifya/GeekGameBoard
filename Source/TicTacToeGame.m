@@ -29,16 +29,24 @@
 
 @implementation TicTacToeGame
 
-- (void) x_createDispenser: (NSString*)imageName forPlayer: (int)playerNumber x: (int)x
+- (void) x_createDispenser: (NSString*)imageName forPlayer: (int)playerNumber
 {
     Piece *p = [[Piece alloc] initWithImageNamed: imageName scale: 80];
     p.owner = [self.players objectAtIndex: playerNumber];
+    CGFloat x = floor(CGRectGetMidX(_board.bounds));
+#if TARGET_OS_ASPEN
+    x = x - 80 + 160*playerNumber;
+    CGFloat y = 360;
+#else
+    x += (playerNumber==0 ?-230 :230);
+    CGFloat y = 175;
+#endif
     _dispenser[playerNumber] = [[Dispenser alloc] initWithPrototype: p quantity: 0
-                                                        frame: CGRectMake(x,16, 120,120)];
+                                                        frame: CGRectMake(x-45,y-45, 90,90)];
     [_board addSublayer: _dispenser[playerNumber]];
 }
 
-- (id) initWithBoard: (CALayer*)board
+- (id) initWithBoard: (GGBLayer*)board
 {
     self = [super initWithBoard: board];
     if (self != nil) {
@@ -46,18 +54,16 @@
         
         // Create a 3x3 grid:
         CGFloat center = floor(CGRectGetMidX(board.bounds));
-        _grid = [[RectGrid alloc] initWithRows: 3 columns: 3 frame: CGRectMake(center-150,16, 300,300)];
+        _grid = [[RectGrid alloc] initWithRows: 3 columns: 3 frame: CGRectMake(center-150,0, 300,300)];
         [_grid addAllCells];
         _grid.allowsMoves = _grid.allowsCaptures = NO;
-        _grid.cellColor = CGColorCreateGenericGray(1.0, 0.25);
+        _grid.cellColor = CreateGray(1.0, 0.25);
         _grid.lineColor = kTranslucentLightGrayColor;
         [board addSublayer: _grid];
         
         // Create piece dispensers for the two players:
-        [self x_createDispenser: @"/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/ToolbarUtilitiesFolderIcon.icns"
-                     forPlayer: 0 x: center-290];
-        [self x_createDispenser: @"/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/ToolbarAdvanced.icns"
-                     forPlayer: 1 x: center+170];
+        [self x_createDispenser: @"X.tiff" forPlayer: 0];
+        [self x_createDispenser: @"O.tiff" forPlayer: 1];
         
         // And they're off!
         [self nextPlayer];

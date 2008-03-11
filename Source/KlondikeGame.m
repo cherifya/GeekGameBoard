@@ -41,7 +41,7 @@
 @implementation KlondikeGame
 
 
-- (id) initWithBoard: (CALayer*)board
+- (id) initWithBoard: (GGBLayer*)board
 {
     self = [super initWithBoard: board];
     if (self != nil) {

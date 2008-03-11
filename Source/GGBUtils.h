@@ -18,7 +18,7 @@
     CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
     THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-#import <Cocoa/Cocoa.h>
+
 
 /** Handy utility for assigning a new value to a retained instance variable. Use as:
         setObj(&_instanceVar, newValue);
@@ -26,6 +26,9 @@
 
 void setObj( id *variable, id newValue );
 
-
 /** Just like setObj except that it _copies_ the new value. */
 void setObjCopy( id<NSCopying> *variable, id<NSCopying> newValue );
+
+
+void PlaySound( NSString* name );
+void Beep( void );

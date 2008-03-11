@@ -25,7 +25,7 @@
 
 
 /** Abstract superclass of regular geometric grids of GridCells that Bits can be placed on. */
-@interface Grid : CALayer
+@interface Grid : GGBLayer
 {
     unsigned _nRows, _nColumns;                         
     CGSize _spacing;                                    

@@ -21,6 +21,7 @@
     THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 #import "Card.h"
+#import "GGBTextLayer.h"
 #import "QuartzUtils.h"
 
 
@@ -68,19 +69,11 @@ static CATransform3D kFaceUpTransform, kFaceDownTransform;
 }
 
 
-- (void)encodeWithCoder:(NSCoder *)aCoder
+- (id) copyWithZone: (NSZone*)zone
 {
-    [super encodeWithCoder: aCoder];
-    [aCoder encodeInt: _serialNumber forKey: @"serialNumber"];
-}
-
-- (id)initWithCoder:(NSCoder *)aDecoder
-{
-    self = [super initWithCoder: aDecoder];
-    if( self ) {
-        _serialNumber = [aDecoder decodeIntForKey: @"serialNumber"];
-    }
-    return self;
+    Card *clone = [super copyWithZone: zone];
+    clone->_serialNumber = _serialNumber;
+    return clone;
 }
 
 
@@ -115,25 +108,25 @@ static CATransform3D kFaceUpTransform, kFaceDownTransform;
 }
 
 
-- (CALayer*) createFront
+- (GGBLayer*) createFront
 {
-    CALayer *front = [[CALayer alloc] init];
+    GGBLayer *front = [[GGBLayer alloc] init];
     front.bounds = CGRectMake(0,0,kCardWidth,kCardHeight);
     front.position = CGPointMake(kCardWidth/2,kCardHeight/2);
     front.edgeAntialiasingMask = 0;
     front.backgroundColor = kWhiteColor;
     front.cornerRadius = 8;
     front.borderWidth = 1;
-    front.borderColor = CGColorCreateGenericGray(0.7, 1.0);
+    front.borderColor = CreateGray(0.7, 1.0);
     front.doubleSided = NO;         // this makes the layer invisible when it's flipped
     return [front autorelease];
 }
 
 
-- (CALayer*) createBack
+- (GGBLayer*) createBack
 {
     CGSize size = self.bounds.size;
-    CALayer *back = [[CALayer alloc] init];
+    GGBLayer *back = [[GGBLayer alloc] init];
     back.bounds = CGRectMake(0,0,size.width,size.height);
     back.position = CGPointMake(kCardWidth/2,kCardHeight/2);
     back.contents = (id) GetCGImageNamed(@"/Library/Desktop Pictures/Classic Aqua Blue.jpg");
@@ -145,10 +138,11 @@ static CATransform3D kFaceUpTransform, kFaceDownTransform;
     back.edgeAntialiasingMask = 0;
     back.doubleSided = NO;          // this makes the layer invisible when it's flipped
     
-    CATextLayer *label = AddTextLayer(back, @"\u2603",          // Unicode snowman character
-                                      [NSFont systemFontOfSize: 0.9*size.width],
-                                      kCALayerWidthSizable|kCALayerHeightSizable);
-    label.foregroundColor = CGColorCreateGenericGray(1.0,0.5);
+    GGBTextLayer *label = [GGBTextLayer textLayerInSuperlayer: back
+                                                     withText: @"\u2603"          // Unicode snowman character
+                                                     fontSize: 0.9*size.width
+                                                    alignment: kCALayerWidthSizable|kCALayerHeightSizable];
+    label.foregroundColor = CreateGray(1.0,0.5);
     return [back autorelease];
 }    
 
@@ -156,6 +150,8 @@ static CATransform3D kFaceUpTransform, kFaceDownTransform;
 #pragma mark -
 #pragma mark DRAG-AND-DROP:
 
+
+#if ! TARGET_OS_ASPEN
 
 // An image from another app can be dragged onto a Card to change its background. */
 
@@ -173,7 +169,7 @@ static CATransform3D kFaceUpTransform, kFaceDownTransform;
 {
     CGImageRef image = GetCGImageFromPasteboard([sender draggingPasteboard]);
     if( image ) {
-        CALayer *face = _faceUp ?_front :_back;
+        GGBLayer *face = _faceUp ?_front :_back;
         face.contents = (id) image;
         face.contentsGravity = kCAGravityResizeAspectFill;
         face.masksToBounds = YES;
@@ -182,5 +178,6 @@ static CATransform3D kFaceUpTransform, kFaceDownTransform;
         return NO;
 }
 
+#endif
 
 @end

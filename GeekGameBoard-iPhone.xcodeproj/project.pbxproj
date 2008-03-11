@@ -1,0 +1,438 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 45;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1D3623EC0D0F72F000981E51 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D3623EB0D0F72F000981E51 /* CoreGraphics.framework */; };
+		1D60589B0D05DD56006BFB54 /* main-iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main-iPhone.m */; };
+		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
+		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
+		279F4B590D85C51700B32DBF /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 279F4B580D85C51700B32DBF /* AudioToolbox.framework */; };
+		279F4B5B0D85C51700B32DBF /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 279F4B5A0D85C51700B32DBF /* QuartzCore.framework */; };
+		279F4B620D85C63000B32DBF /* GGBTextLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 279F4B610D85C63000B32DBF /* GGBTextLayer.m */; };
+		279F4B6A0D85CBFC00B32DBF /* iPhoneAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 279F4B690D85CBFC00B32DBF /* iPhoneAppDelegate.m */; };
+		279F4B740D85CDE900B32DBF /* ToolbarAdvanced.icns in Resources */ = {isa = PBXBuildFile; fileRef = 279F4B720D85CDE900B32DBF /* ToolbarAdvanced.icns */; };
+		279F4C1D0D85D0AF00B32DBF /* X.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 279F4C1C0D85D0AF00B32DBF /* X.tiff */; };
+		279F4C1F0D85D0CB00B32DBF /* O.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 279F4C1E0D85D0CB00B32DBF /* O.tiff */; };
+		279F4C740D85D43800B32DBF /* Background.png in Resources */ = {isa = PBXBuildFile; fileRef = 279F4C730D85D43800B32DBF /* Background.png */; };
+		27C99B0F0D820868005AFD4F /* BoardUIView.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C99AE40D820868005AFD4F /* BoardUIView.m */; };
+		27C99B100D820868005AFD4F /* Bit.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C99AE60D820868005AFD4F /* Bit.m */; };
+		27C99B110D820868005AFD4F /* BitHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C99AE80D820868005AFD4F /* BitHolder.m */; };
+		27C99B120D820868005AFD4F /* Stack.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C99AEA0D820868005AFD4F /* Stack.m */; };
+		27C99B130D820868005AFD4F /* Card.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C99AED0D820868005AFD4F /* Card.m */; };
+		27C99B140D820868005AFD4F /* Deck.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C99AEF0D820868005AFD4F /* Deck.m */; };
+		27C99B150D820868005AFD4F /* PlayingCard.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C99AF10D820868005AFD4F /* PlayingCard.m */; };
+		27C99B160D820868005AFD4F /* Piece.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C99AF40D820868005AFD4F /* Piece.m */; };
+		27C99B170D820868005AFD4F /* DiscPiece.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C99AF60D820868005AFD4F /* DiscPiece.m */; };
+		27C99B180D820868005AFD4F /* Grid.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C99AF80D820868005AFD4F /* Grid.m */; };
+		27C99B190D820868005AFD4F /* HexGrid.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C99AFA0D820868005AFD4F /* HexGrid.m */; };
+		27C99B1A0D820868005AFD4F /* Dispenser.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C99AFC0D820868005AFD4F /* Dispenser.m */; };
+		27C99B1B0D820868005AFD4F /* Game.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C99AFF0D820868005AFD4F /* Game.m */; };
+		27C99B1C0D820868005AFD4F /* TicTacToeGame.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C99B010D820868005AFD4F /* TicTacToeGame.m */; };
+		27C99B1D0D820868005AFD4F /* CheckersGame.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C99B030D820868005AFD4F /* CheckersGame.m */; };
+		27C99B1E0D820868005AFD4F /* HexchequerGame.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C99B050D820868005AFD4F /* HexchequerGame.m */; };
+		27C99B1F0D820868005AFD4F /* GoGame.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C99B070D820868005AFD4F /* GoGame.m */; };
+		27C99B200D820868005AFD4F /* KlondikeGame.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C99B090D820868005AFD4F /* KlondikeGame.m */; };
+		27C99B210D820868005AFD4F /* QuartzUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C99B0B0D820868005AFD4F /* QuartzUtils.m */; };
+		27C99B220D820868005AFD4F /* GGBUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C99B0D0D820868005AFD4F /* GGBUtils.m */; };
+		27C99B510D82106E005AFD4F /* GGBLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C99B500D82106E005AFD4F /* GGBLayer.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		1D3623EB0D0F72F000981E51 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		1D6058910D05DD3D006BFB54 /* GGB-iPhone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "GGB-iPhone.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		279F4B580D85C51700B32DBF /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		279F4B5A0D85C51700B32DBF /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		279F4B600D85C63000B32DBF /* GGBTextLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GGBTextLayer.h; sourceTree = "<group>"; };
+		279F4B610D85C63000B32DBF /* GGBTextLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GGBTextLayer.m; sourceTree = "<group>"; };
+		279F4B680D85CBFC00B32DBF /* iPhoneAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = iPhoneAppDelegate.h; path = Source/iPhoneAppDelegate.h; sourceTree = "<group>"; };
+		279F4B690D85CBFC00B32DBF /* iPhoneAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = iPhoneAppDelegate.m; path = Source/iPhoneAppDelegate.m; sourceTree = "<group>"; };
+		279F4B720D85CDE900B32DBF /* ToolbarAdvanced.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = ToolbarAdvanced.icns; path = /System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/ToolbarAdvanced.icns; sourceTree = "<absolute>"; };
+		279F4C1C0D85D0AF00B32DBF /* X.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = X.tiff; sourceTree = "<group>"; };
+		279F4C1E0D85D0CB00B32DBF /* O.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = O.tiff; sourceTree = "<group>"; };
+		279F4C730D85D43800B32DBF /* Background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Background.png; sourceTree = "<group>"; };
+		27C99AE30D820868005AFD4F /* BoardUIView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BoardUIView.h; sourceTree = "<group>"; };
+		27C99AE40D820868005AFD4F /* BoardUIView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BoardUIView.m; sourceTree = "<group>"; };
+		27C99AE50D820868005AFD4F /* Bit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bit.h; sourceTree = "<group>"; };
+		27C99AE60D820868005AFD4F /* Bit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bit.m; sourceTree = "<group>"; };
+		27C99AE70D820868005AFD4F /* BitHolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BitHolder.h; sourceTree = "<group>"; };
+		27C99AE80D820868005AFD4F /* BitHolder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BitHolder.m; sourceTree = "<group>"; };
+		27C99AE90D820868005AFD4F /* Stack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Stack.h; sourceTree = "<group>"; };
+		27C99AEA0D820868005AFD4F /* Stack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Stack.m; sourceTree = "<group>"; };
+		27C99AEC0D820868005AFD4F /* Card.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Card.h; sourceTree = "<group>"; };
+		27C99AED0D820868005AFD4F /* Card.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Card.m; sourceTree = "<group>"; };
+		27C99AEE0D820868005AFD4F /* Deck.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Deck.h; sourceTree = "<group>"; };
+		27C99AEF0D820868005AFD4F /* Deck.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Deck.m; sourceTree = "<group>"; };
+		27C99AF00D820868005AFD4F /* PlayingCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayingCard.h; sourceTree = "<group>"; };
+		27C99AF10D820868005AFD4F /* PlayingCard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayingCard.m; sourceTree = "<group>"; };
+		27C99AF30D820868005AFD4F /* Piece.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Piece.h; sourceTree = "<group>"; };
+		27C99AF40D820868005AFD4F /* Piece.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Piece.m; sourceTree = "<group>"; };
+		27C99AF50D820868005AFD4F /* DiscPiece.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscPiece.h; sourceTree = "<group>"; };
+		27C99AF60D820868005AFD4F /* DiscPiece.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiscPiece.m; sourceTree = "<group>"; };
+		27C99AF70D820868005AFD4F /* Grid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Grid.h; sourceTree = "<group>"; };
+		27C99AF80D820868005AFD4F /* Grid.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Grid.m; sourceTree = "<group>"; };
+		27C99AF90D820868005AFD4F /* HexGrid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HexGrid.h; sourceTree = "<group>"; };
+		27C99AFA0D820868005AFD4F /* HexGrid.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HexGrid.m; sourceTree = "<group>"; };
+		27C99AFB0D820868005AFD4F /* Dispenser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Dispenser.h; sourceTree = "<group>"; };
+		27C99AFC0D820868005AFD4F /* Dispenser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Dispenser.m; sourceTree = "<group>"; };
+		27C99AFE0D820868005AFD4F /* Game.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Game.h; sourceTree = "<group>"; };
+		27C99AFF0D820868005AFD4F /* Game.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Game.m; sourceTree = "<group>"; };
+		27C99B000D820868005AFD4F /* TicTacToeGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TicTacToeGame.h; sourceTree = "<group>"; };
+		27C99B010D820868005AFD4F /* TicTacToeGame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TicTacToeGame.m; sourceTree = "<group>"; };
+		27C99B020D820868005AFD4F /* CheckersGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CheckersGame.h; sourceTree = "<group>"; };
+		27C99B030D820868005AFD4F /* CheckersGame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CheckersGame.m; sourceTree = "<group>"; };
+		27C99B040D820868005AFD4F /* HexchequerGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HexchequerGame.h; sourceTree = "<group>"; };
+		27C99B050D820868005AFD4F /* HexchequerGame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HexchequerGame.m; sourceTree = "<group>"; };
+		27C99B060D820868005AFD4F /* GoGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoGame.h; sourceTree = "<group>"; };
+		27C99B070D820868005AFD4F /* GoGame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoGame.m; sourceTree = "<group>"; };
+		27C99B080D820868005AFD4F /* KlondikeGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KlondikeGame.h; sourceTree = "<group>"; };
+		27C99B090D820868005AFD4F /* KlondikeGame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KlondikeGame.m; sourceTree = "<group>"; };
+		27C99B0A0D820868005AFD4F /* QuartzUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuartzUtils.h; sourceTree = "<group>"; };
+		27C99B0B0D820868005AFD4F /* QuartzUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QuartzUtils.m; sourceTree = "<group>"; };
+		27C99B0C0D820868005AFD4F /* GGBUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GGBUtils.h; sourceTree = "<group>"; };
+		27C99B0D0D820868005AFD4F /* GGBUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GGBUtils.m; sourceTree = "<group>"; };
+		27C99B4F0D82106E005AFD4F /* GGBLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GGBLayer.h; sourceTree = "<group>"; };
+		27C99B500D82106E005AFD4F /* GGBLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GGBLayer.m; sourceTree = "<group>"; };
+		29B97316FDCFA39411CA2CEA /* main-iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "main-iPhone.m"; path = "Source/main-iPhone.m"; sourceTree = "<group>"; };
+		32CA4F630368D1EE00C91783 /* GGB-iPhone_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "GGB-iPhone_Prefix.pch"; path = "Source/GGB-iPhone_Prefix.pch"; sourceTree = "<group>"; };
+		8D1107310486CEB800E47090 /* Info-iPhone.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-iPhone.plist"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		1D60588F0D05DD3D006BFB54 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
+				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
+				1D3623EC0D0F72F000981E51 /* CoreGraphics.framework in Frameworks */,
+				279F4B590D85C51700B32DBF /* AudioToolbox.framework in Frameworks */,
+				279F4B5B0D85C51700B32DBF /* QuartzCore.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1D3623EB0D0F72F000981E51 /* CoreGraphics.framework */,
+				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
+				1D30AB110D05D00D00671497 /* Foundation.framework */,
+			);
+			name = "Linked Frameworks";
+			sourceTree = "<group>";
+		};
+		1058C7A2FEA54F0111CA2CBB /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		19C28FACFE9D520D11CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1D6058910D05DD3D006BFB54 /* GGB-iPhone.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		27C99AE00D820868005AFD4F /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				27C99AE30D820868005AFD4F /* BoardUIView.h */,
+				27C99AE40D820868005AFD4F /* BoardUIView.m */,
+				27C99B4F0D82106E005AFD4F /* GGBLayer.h */,
+				27C99B500D82106E005AFD4F /* GGBLayer.m */,
+				279F4B600D85C63000B32DBF /* GGBTextLayer.h */,
+				279F4B610D85C63000B32DBF /* GGBTextLayer.m */,
+				27C99AE50D820868005AFD4F /* Bit.h */,
+				27C99AE60D820868005AFD4F /* Bit.m */,
+				27C99AE70D820868005AFD4F /* BitHolder.h */,
+				27C99AE80D820868005AFD4F /* BitHolder.m */,
+				27C99AE90D820868005AFD4F /* Stack.h */,
+				27C99AEA0D820868005AFD4F /* Stack.m */,
+				27C99AF20D820868005AFD4F /* Boards and Pieces */,
+				27C99AEB0D820868005AFD4F /* Cards */,
+				27C99AFD0D820868005AFD4F /* Games */,
+				27C99B0A0D820868005AFD4F /* QuartzUtils.h */,
+				27C99B0B0D820868005AFD4F /* QuartzUtils.m */,
+				27C99B0C0D820868005AFD4F /* GGBUtils.h */,
+				27C99B0D0D820868005AFD4F /* GGBUtils.m */,
+			);
+			path = Source;
+			sourceTree = "<group>";
+		};
+		27C99AEB0D820868005AFD4F /* Cards */ = {
+			isa = PBXGroup;
+			children = (
+				27C99AEC0D820868005AFD4F /* Card.h */,
+				27C99AED0D820868005AFD4F /* Card.m */,
+				27C99AEE0D820868005AFD4F /* Deck.h */,
+				27C99AEF0D820868005AFD4F /* Deck.m */,
+				27C99AF00D820868005AFD4F /* PlayingCard.h */,
+				27C99AF10D820868005AFD4F /* PlayingCard.m */,
+			);
+			name = Cards;
+			sourceTree = "<group>";
+		};
+		27C99AF20D820868005AFD4F /* Boards and Pieces */ = {
+			isa = PBXGroup;
+			children = (
+				27C99AF30D820868005AFD4F /* Piece.h */,
+				27C99AF40D820868005AFD4F /* Piece.m */,
+				27C99AF50D820868005AFD4F /* DiscPiece.h */,
+				27C99AF60D820868005AFD4F /* DiscPiece.m */,
+				27C99AF70D820868005AFD4F /* Grid.h */,
+				27C99AF80D820868005AFD4F /* Grid.m */,
+				27C99AF90D820868005AFD4F /* HexGrid.h */,
+				27C99AFA0D820868005AFD4F /* HexGrid.m */,
+				27C99AFB0D820868005AFD4F /* Dispenser.h */,
+				27C99AFC0D820868005AFD4F /* Dispenser.m */,
+			);
+			name = "Boards and Pieces";
+			sourceTree = "<group>";
+		};
+		27C99AFD0D820868005AFD4F /* Games */ = {
+			isa = PBXGroup;
+			children = (
+				27C99AFE0D820868005AFD4F /* Game.h */,
+				27C99AFF0D820868005AFD4F /* Game.m */,
+				27C99B000D820868005AFD4F /* TicTacToeGame.h */,
+				27C99B010D820868005AFD4F /* TicTacToeGame.m */,
+				27C99B020D820868005AFD4F /* CheckersGame.h */,
+				27C99B030D820868005AFD4F /* CheckersGame.m */,
+				27C99B040D820868005AFD4F /* HexchequerGame.h */,
+				27C99B050D820868005AFD4F /* HexchequerGame.m */,
+				27C99B060D820868005AFD4F /* GoGame.h */,
+				27C99B070D820868005AFD4F /* GoGame.m */,
+				27C99B080D820868005AFD4F /* KlondikeGame.h */,
+				27C99B090D820868005AFD4F /* KlondikeGame.m */,
+			);
+			name = Games;
+			sourceTree = "<group>";
+		};
+		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
+			isa = PBXGroup;
+			children = (
+				27C99AE00D820868005AFD4F /* Source */,
+				29B97315FDCFA39411CA2CEA /* Other Sources */,
+				29B97317FDCFA39411CA2CEA /* Resources */,
+				29B97323FDCFA39411CA2CEA /* Frameworks */,
+				19C28FACFE9D520D11CA2CBB /* Products */,
+				279F4B580D85C51700B32DBF /* AudioToolbox.framework */,
+				279F4B5A0D85C51700B32DBF /* QuartzCore.framework */,
+			);
+			name = CustomTemplate;
+			sourceTree = "<group>";
+		};
+		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
+			isa = PBXGroup;
+			children = (
+				279F4B680D85CBFC00B32DBF /* iPhoneAppDelegate.h */,
+				279F4B690D85CBFC00B32DBF /* iPhoneAppDelegate.m */,
+				32CA4F630368D1EE00C91783 /* GGB-iPhone_Prefix.pch */,
+				29B97316FDCFA39411CA2CEA /* main-iPhone.m */,
+			);
+			name = "Other Sources";
+			sourceTree = "<group>";
+		};
+		29B97317FDCFA39411CA2CEA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				279F4C730D85D43800B32DBF /* Background.png */,
+				279F4C1C0D85D0AF00B32DBF /* X.tiff */,
+				279F4C1E0D85D0CB00B32DBF /* O.tiff */,
+				279F4B720D85CDE900B32DBF /* ToolbarAdvanced.icns */,
+				8D1107310486CEB800E47090 /* Info-iPhone.plist */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
+				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1D6058900D05DD3D006BFB54 /* GGB-iPhone */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "GGB-iPhone" */;
+			buildPhases = (
+				1D60588D0D05DD3D006BFB54 /* Resources */,
+				1D60588E0D05DD3D006BFB54 /* Sources */,
+				1D60588F0D05DD3D006BFB54 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "GGB-iPhone";
+			productName = "GGB-iPhone";
+			productReference = 1D6058910D05DD3D006BFB54 /* GGB-iPhone.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		29B97313FDCFA39411CA2CEA /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "GeekGameBoard-iPhone" */;
+			compatibilityVersion = "Xcode 3.1";
+			hasScannedForEncodings = 1;
+			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1D6058900D05DD3D006BFB54 /* GGB-iPhone */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		1D60588D0D05DD3D006BFB54 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				279F4B740D85CDE900B32DBF /* ToolbarAdvanced.icns in Resources */,
+				279F4C1D0D85D0AF00B32DBF /* X.tiff in Resources */,
+				279F4C1F0D85D0CB00B32DBF /* O.tiff in Resources */,
+				279F4C740D85D43800B32DBF /* Background.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1D60588E0D05DD3D006BFB54 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1D60589B0D05DD56006BFB54 /* main-iPhone.m in Sources */,
+				27C99B0F0D820868005AFD4F /* BoardUIView.m in Sources */,
+				27C99B100D820868005AFD4F /* Bit.m in Sources */,
+				27C99B110D820868005AFD4F /* BitHolder.m in Sources */,
+				27C99B120D820868005AFD4F /* Stack.m in Sources */,
+				27C99B130D820868005AFD4F /* Card.m in Sources */,
+				27C99B140D820868005AFD4F /* Deck.m in Sources */,
+				27C99B150D820868005AFD4F /* PlayingCard.m in Sources */,
+				27C99B160D820868005AFD4F /* Piece.m in Sources */,
+				27C99B170D820868005AFD4F /* DiscPiece.m in Sources */,
+				27C99B180D820868005AFD4F /* Grid.m in Sources */,
+				27C99B190D820868005AFD4F /* HexGrid.m in Sources */,
+				27C99B1A0D820868005AFD4F /* Dispenser.m in Sources */,
+				27C99B1B0D820868005AFD4F /* Game.m in Sources */,
+				27C99B1C0D820868005AFD4F /* TicTacToeGame.m in Sources */,
+				27C99B1D0D820868005AFD4F /* CheckersGame.m in Sources */,
+				27C99B1E0D820868005AFD4F /* HexchequerGame.m in Sources */,
+				27C99B1F0D820868005AFD4F /* GoGame.m in Sources */,
+				27C99B200D820868005AFD4F /* KlondikeGame.m in Sources */,
+				27C99B210D820868005AFD4F /* QuartzUtils.m in Sources */,
+				27C99B220D820868005AFD4F /* GGBUtils.m in Sources */,
+				27C99B510D82106E005AFD4F /* GGBLayer.m in Sources */,
+				279F4B620D85C63000B32DBF /* GGBTextLayer.m in Sources */,
+				279F4B6A0D85CBFC00B32DBF /* iPhoneAppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		1D6058940D05DD3E006BFB54 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Source/GGB-iPhone_Prefix.pch";
+				INFOPLIST_FILE = "Resources/Info-iPhone.plist";
+				PREBINDING = NO;
+				PRODUCT_NAME = "GGB-iPhone";
+			};
+			name = Debug;
+		};
+		1D6058950D05DD3E006BFB54 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Source/GGB-iPhone_Prefix.pch";
+				INFOPLIST_FILE = "Resources/Info-iPhone.plist";
+				PREBINDING = NO;
+				PRODUCT_NAME = "GGB-iPhone";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		C01FCF4F08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=aspen*]" = "iPhone Developer";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PREBINDING = NO;
+				SDKROOT = aspen1.2;
+				WARNING_CFLAGS = "-Wall";
+			};
+			name = Debug;
+		};
+		C01FCF5008A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				PREBINDING = NO;
+				SDKROOT = aspen1.2;
+				WARNING_CFLAGS = "-Wall";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "GGB-iPhone" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1D6058940D05DD3E006BFB54 /* Debug */,
+				1D6058950D05DD3E006BFB54 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "GeekGameBoard-iPhone" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4F08A954540054247B /* Debug */,
+				C01FCF5008A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
+}

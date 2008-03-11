@@ -72,7 +72,7 @@
 - (void) dump
 {
     printf("Stack = ");
-    for( CALayer *layer in self.sublayers )
+    for( GGBLayer *layer in self.sublayers )
         printf("%s @z=%g   ", [[layer description] UTF8String],layer.zPosition);
     printf("\n");
 }

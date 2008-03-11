@@ -40,20 +40,11 @@
 }
 
 
-- (id) initWithCoder: (NSCoder*)decoder
+- (id) copyWithZone: (NSZone*)zone
 {
-    self = [super initWithCoder: decoder];
-    if( self ) {
-        self.imageName = [decoder decodeObjectForKey: @"imageName"];
-        // (actual image (self.contents) was already restord by superclass)
-    }
-    return self;
-}
-
-- (void) encodeWithCoder: (NSCoder*)coder
-{
-    [super encodeWithCoder: coder];
-    [coder encodeObject: _imageName forKey: @"imageName"];
+    Piece *clone = [super copyWithZone: zone];
+    clone.imageName = self.imageName;
+    return clone;
 }
 
 

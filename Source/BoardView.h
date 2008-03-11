@@ -21,7 +21,7 @@
     THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 #import <Cocoa/Cocoa.h>
-@class Bit, Card, Grid, Game;
+@class GGBLayer, Bit, Card, Grid, Game;
 @protocol BitHolder;
 
 
@@ -30,7 +30,7 @@
 {
     @private
     Game *_game;                                // Current Game
-    CALayer *_gameboard;                        // Game's main layer
+    GGBLayer *_gameboard;                       // Game's main layer
     
     // Used during mouse-down tracking:
     NSPoint _dragStartPos;                      // Starting position of mouseDown

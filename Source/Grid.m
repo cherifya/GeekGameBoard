@@ -40,7 +40,7 @@
         _nColumns = nColumns;
         _spacing = spacing;
         _cellClass = [GridCell class];
-        _lineColor = kBlackColor;
+        self.lineColor = kBlackColor;
         _allowsMoves = YES;
         _usesDiagonals = YES;
 
@@ -328,6 +328,8 @@ static void setcolor( CGColorRef *var, CGColorRef color )
 #pragma mark DRAG-AND-DROP:
 
 
+#if ! TARGET_OS_ASPEN
+
 // An image from another app can be dragged onto a Dispenser to change the Piece's appearance.
 
 
@@ -353,6 +355,7 @@ static void setcolor( CGColorRef *var, CGColorRef color )
         return NO;
 }
 
+#endif
 
 @end
 
@@ -430,6 +433,8 @@ static void setcolor( CGColorRef *var, CGColorRef color )
 - (Square*) l      {return self.fwdIsN ?self.w  :self.e;}
 
 
+#if ! TARGET_OS_ASPEN
+
 - (BOOL)performDragOperation:(id <NSDraggingInfo>)sender
 {
     CGImageRef image = GetCGImageFromPasteboard([sender draggingPasteboard]);
@@ -446,6 +451,8 @@ static void setcolor( CGColorRef *var, CGColorRef color )
     } else
         return NO;
 }
+
+#endif
 
 @end
 
@@ -482,5 +489,6 @@ static void setcolor( CGColorRef *var, CGColorRef color )
         }
     }
 }
+
 
 @end

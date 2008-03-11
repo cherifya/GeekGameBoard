@@ -21,6 +21,7 @@
     THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 #import "PlayingCard.h"
+#import "GGBTextLayer.h"
 #import "QuartzUtils.h"
 
 
@@ -33,25 +34,31 @@
 }
 
 
-- (CALayer*) createFront
+- (GGBLayer*) createFront
 {
-    CALayer *front = [super createFront];
+    GGBLayer *front = [super createFront];
     NSString *name = [NSString stringWithFormat: @"%@%@",
                       self.rankString, self.suitString];
     
     CGColorRef suitColor = self.suitColor;
-    CATextLayer *label;
-    label = AddTextLayer(front, name, [NSFont systemFontOfSize: 18],
-                         kCALayerMaxXMargin | kCALayerMinYMargin);
+    GGBTextLayer *label;
+    label = [GGBTextLayer textLayerInSuperlayer: front
+                                       withText: name
+                                       fontSize: 18.0
+                                      alignment: kCALayerMaxXMargin | kCALayerMinYMargin];
     label.foregroundColor = suitColor;
-    label = AddTextLayer(front, name, [NSFont systemFontOfSize: 18],
-                         kCALayerMaxXMargin | kCALayerMaxYMargin);
+    label = [GGBTextLayer textLayerInSuperlayer: front
+                                       withText: name
+                                       fontSize: 18.0
+                                      alignment: kCALayerMaxXMargin | kCALayerMaxYMargin];
     label.foregroundColor = suitColor;
     label.anchorPoint = CGPointMake(1,1);
     [label setValue: [NSNumber numberWithFloat: M_PI] forKeyPath: @"transform.rotation"];
     
-    label = AddTextLayer(front, self.faceSymbol, [NSFont systemFontOfSize: 80],
-                         kCALayerWidthSizable | kCALayerHeightSizable);
+    label = [GGBTextLayer textLayerInSuperlayer: front
+                                       withText: self.faceSymbol
+                                       fontSize: 80
+                                      alignment: kCALayerWidthSizable | kCALayerHeightSizable];
     label.foregroundColor = suitColor;
     return front;
 }
@@ -86,7 +93,7 @@
     static CGColorRef kSuitColor[4];
     if( ! kSuitColor[0] ) {
         kSuitColor[0] = kSuitColor[3] = kBlackColor;
-        kSuitColor[1] = kSuitColor[2] = CGColorCreateGenericRGB(1, 0, 0, 1);
+        kSuitColor[1] = kSuitColor[2] = CreateRGB(1, 0, 0, 1);
     }
     return kSuitColor[self.suit];
 }

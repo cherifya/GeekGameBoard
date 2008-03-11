@@ -30,42 +30,10 @@
 
 - (id) copyWithZone: (NSZone*)zone
 {
-    // NSLayer isn't copyable, but it is archivable. So create a copy by archiving to
-    // a temporary data block, then unarchiving a new layer from that block.
-    
-    // One complication is that, due to a bug in Core Animation, CALayer can't archive
-    // a pattern-based CGColor. So as a workaround, clear the background before archiving,
-    // then restore it afterwards.
-    
-    // Also, archiving a CALayer with an image in it leaks memory. (Filed as rdar://5786865 )
-    // As a workaround, clear the contents before archiving, then restore.
-    
-    CGColorRef bg = CGColorRetain(self.backgroundColor);
-    self.backgroundColor = NULL;
-    id contents = [self.contents retain];
-    self.contents = nil;
-    
-    NSData *data = [NSKeyedArchiver archivedDataWithRootObject: self];
-    
-    self.backgroundColor = bg;
-    self.contents = contents;
-
-    Bit *clone = [NSKeyedUnarchiver unarchiveObjectWithData: data];
-    clone.backgroundColor = bg;
-    clone.contents = contents;
-    CGColorRelease(bg);
-    [contents release];
-
-    clone->_owner = _owner;             // _owner is not archived
-    return [clone retain];
+    Bit *clone = [super copyWithZone: zone];
+    clone->_owner = _owner;
+    return clone;
 }
-
-
-- (NSString*) description
-{
-    return [NSString stringWithFormat: @"%@[(%g,%g)]", self.class,self.position.x,self.position.y];
-}
-
 
 @synthesize owner=_owner;
 
@@ -124,9 +92,11 @@
         }
         
         self.zPosition = z;
+#if !TARGET_OS_ASPEN
         self.shadowOpacity = shadow;
         self.shadowOffset = CGSizeMake(offset,-offset);
         self.shadowRadius = radius;
+#endif
         self.opacity = opacity;
         self.scale *= scale;
     }

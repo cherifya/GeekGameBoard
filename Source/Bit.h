@@ -20,7 +20,7 @@
     CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
     THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-#import <Quartz/Quartz.h>
+#import "GGBLayer.h"
 
 
 @class Game, Player;
@@ -39,7 +39,7 @@ enum {
 
 /** A moveable item in a card/board game.
     Abstract superclass of Card and Piece. */
-@interface Bit : CALayer <NSCopying>
+@interface Bit : GGBLayer
 {
     @private
     int _restingZ;      // Original z position, saved while pickedUp

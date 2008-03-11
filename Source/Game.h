@@ -20,15 +20,14 @@
     CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
     THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-#import <Cocoa/Cocoa.h>
-@class Bit, Player;
+@class GGBLayer, Bit, Player;
 @protocol BitHolder;
 
 
 /** Abstract superclass. Keeps track of the rules and turns of a game. */
 @interface Game : NSObject
 {
-    CALayer *_board;
+    GGBLayer *_board;
     NSArray *_players;
     Player *_currentPlayer, *_winner;
 }
@@ -45,7 +44,7 @@
 
 /** Designated initializer. After calling the superclass implementation,
     it should add the necessary Grids, Pieces, Cards, Decks etc. to the board. */
-- (id) initWithBoard: (CALayer*)board;
+- (id) initWithBoard: (GGBLayer*)board;
 
 /** Should return YES if it is legal for the given bit to be moved from its current holder.
     Default implementation always returns YES. */

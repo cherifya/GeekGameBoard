@@ -22,6 +22,7 @@
 */
 #import "DemoBoardView.h"
 #import "Game.h"
+#import "GGBTextLayer.h"
 #import "QuartzUtils.h"
 
 
@@ -79,12 +80,13 @@ static NSString* sCurrentGameName = @"KlondikeGame";
     [self registerForDraggedTypes: [NSArray arrayWithObject: NSFilenamesPboardType]];
     
     CGRect bounds = self.layer.bounds;
-    self.layer.backgroundColor = GetCGPatternNamed(@"/Library/Desktop Pictures/Small Ripples graphite.png");
+    self.layer.backgroundColor = GetCGPatternNamed(@"Background.png");
         
     bounds.size.height -= 32;
-    _headline = AddTextLayer(self.layer,
-                             nil, [NSFont boldSystemFontOfSize: 24], 
-                             kCALayerWidthSizable | kCALayerMinYMargin);
+    _headline = [GGBTextLayer textLayerInSuperlayer: self.layer
+                                           withText: nil
+                                           fontSize: 24
+                                          alignment: kCALayerWidthSizable | kCALayerMinYMargin];
     
     [self startGameNamed: sCurrentGameName];
 }

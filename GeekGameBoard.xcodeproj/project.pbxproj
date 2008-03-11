@@ -24,6 +24,11 @@
 		276DFC570D00890C00D329AE /* Yellow Ball.png in Resources */ = {isa = PBXBuildFile; fileRef = 276DFC540D00890C00D329AE /* Yellow Ball.png */; };
 		276DFC580D00890C00D329AE /* White Ball.png in Resources */ = {isa = PBXBuildFile; fileRef = 276DFC550D00890C00D329AE /* White Ball.png */; };
 		2795C2B80CC278C800D7B2BD /* Piece.m in Sources */ = {isa = PBXBuildFile; fileRef = 2795C2B70CC278C800D7B2BD /* Piece.m */; };
+		279F4D870D8606C200B32DBF /* GGBLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 279F4D840D8606C200B32DBF /* GGBLayer.m */; };
+		279F4D880D8606C200B32DBF /* GGBTextLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 279F4D860D8606C200B32DBF /* GGBTextLayer.m */; };
+		279F4DB20D8607AD00B32DBF /* O.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 279F4DB00D8607AD00B32DBF /* O.tiff */; };
+		279F4DB30D8607AD00B32DBF /* X.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 279F4DB10D8607AD00B32DBF /* X.tiff */; };
+		279F4DE20D8609C200B32DBF /* Background.png in Resources */ = {isa = PBXBuildFile; fileRef = 279F4DE10D8609C200B32DBF /* Background.png */; };
 		27B7543E0D08884F000516B9 /* Wood.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 27B7543D0D08884F000516B9 /* Wood.jpg */; };
 		27C999C30D81185E005AFD4F /* GGBUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C999C20D81185E005AFD4F /* GGBUtils.m */; };
 		27CCA8050CB8A3F9001CFE24 /* BoardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 27CCA8040CB8A3F9001CFE24 /* BoardView.m */; };
@@ -73,9 +78,18 @@
 		276DFC550D00890C00D329AE /* White Ball.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "White Ball.png"; path = "Resources/White Ball.png"; sourceTree = "<group>"; };
 		2795C2B60CC278C800D7B2BD /* Piece.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Piece.h; sourceTree = "<group>"; };
 		2795C2B70CC278C800D7B2BD /* Piece.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Piece.m; sourceTree = "<group>"; };
+		279F4D830D8606C200B32DBF /* GGBLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GGBLayer.h; sourceTree = "<group>"; };
+		279F4D840D8606C200B32DBF /* GGBLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GGBLayer.m; sourceTree = "<group>"; };
+		279F4D850D8606C200B32DBF /* GGBTextLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GGBTextLayer.h; sourceTree = "<group>"; };
+		279F4D860D8606C200B32DBF /* GGBTextLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GGBTextLayer.m; sourceTree = "<group>"; };
+		279F4DB00D8607AD00B32DBF /* O.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = O.tiff; path = Resources/O.tiff; sourceTree = "<group>"; };
+		279F4DB10D8607AD00B32DBF /* X.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = X.tiff; path = Resources/X.tiff; sourceTree = "<group>"; };
+		279F4DE10D8609C200B32DBF /* Background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Background.png; path = Resources/Background.png; sourceTree = "<group>"; };
 		27B7543D0D08884F000516B9 /* Wood.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = Wood.jpg; path = Resources/Wood.jpg; sourceTree = "<group>"; };
 		27C999C10D81185E005AFD4F /* GGBUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GGBUtils.h; sourceTree = "<group>"; };
 		27C999C20D81185E005AFD4F /* GGBUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GGBUtils.m; sourceTree = "<group>"; };
+		27C99AB40D820500005AFD4F /* BoardUIView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BoardUIView.h; sourceTree = "<group>"; };
+		27C99AB50D820500005AFD4F /* BoardUIView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BoardUIView.m; sourceTree = "<group>"; };
 		27CCA8030CB8A3F9001CFE24 /* BoardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BoardView.h; sourceTree = "<group>"; };
 		27CCA8040CB8A3F9001CFE24 /* BoardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BoardView.m; sourceTree = "<group>"; };
 		27CCA95E0CB8A74D001CFE24 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = /System/Library/Frameworks/Quartz.framework; sourceTree = "<absolute>"; };
@@ -118,6 +132,8 @@
 			children = (
 				27CCA8030CB8A3F9001CFE24 /* BoardView.h */,
 				27CCA8040CB8A3F9001CFE24 /* BoardView.m */,
+				27C99AB40D820500005AFD4F /* BoardUIView.h */,
+				27C99AB50D820500005AFD4F /* BoardUIView.m */,
 				27CCABBD0CB9496B001CFE24 /* Bit.h */,
 				27CCABBE0CB9496B001CFE24 /* Bit.m */,
 				2731E2A60CD5630600E6E4C8 /* BitHolder.h */,
@@ -127,6 +143,10 @@
 				27275C440CC70095009C4C6C /* Cards */,
 				27275C450CC700C4009C4C6C /* Boards and Pieces */,
 				27275C480CC700D8009C4C6C /* Games */,
+				279F4D830D8606C200B32DBF /* GGBLayer.h */,
+				279F4D840D8606C200B32DBF /* GGBLayer.m */,
+				279F4D850D8606C200B32DBF /* GGBTextLayer.h */,
+				279F4D860D8606C200B32DBF /* GGBTextLayer.m */,
 				2722526D0CC2E86600814095 /* QuartzUtils.h */,
 				2722526E0CC2E86600814095 /* QuartzUtils.m */,
 				27C999C10D81185E005AFD4F /* GGBUtils.h */,
@@ -240,11 +260,14 @@
 				29B97318FDCFA39411CA2CEA /* MainMenu.nib */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
+				279F4DE10D8609C200B32DBF /* Background.png */,
 				276DFC400D00867000D329AE /* Green Ball.png */,
 				276DFC530D00890C00D329AE /* Red Ball.png */,
 				276DFC540D00890C00D329AE /* Yellow Ball.png */,
 				276DFC550D00890C00D329AE /* White Ball.png */,
 				27B7543D0D08884F000516B9 /* Wood.jpg */,
+				279F4DB00D8607AD00B32DBF /* O.tiff */,
+				279F4DB10D8607AD00B32DBF /* X.tiff */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -308,6 +331,9 @@
 				276DFC570D00890C00D329AE /* Yellow Ball.png in Resources */,
 				276DFC580D00890C00D329AE /* White Ball.png in Resources */,
 				27B7543E0D08884F000516B9 /* Wood.jpg in Resources */,
+				279F4DB20D8607AD00B32DBF /* O.tiff in Resources */,
+				279F4DB30D8607AD00B32DBF /* X.tiff in Resources */,
+				279F4DE20D8609C200B32DBF /* Background.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -340,6 +366,8 @@
 				2731E2A80CD5630600E6E4C8 /* BitHolder.m in Sources */,
 				274124060CFCCF9D00842A9B /* DemoBoardView.m in Sources */,
 				27C999C30D81185E005AFD4F /* GGBUtils.m in Sources */,
+				279F4D870D8606C200B32DBF /* GGBLayer.m in Sources */,
+				279F4D880D8606C200B32DBF /* GGBTextLayer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -412,6 +440,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.5.sdk";
 				WARNING_CFLAGS = "-Wall";
 			};
 			name = Debug;
@@ -429,6 +458,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.5.sdk";
 				WARNING_CFLAGS = "-Wall";
 			};
 			name = Release;

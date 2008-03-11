@@ -20,7 +20,7 @@
     CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
     THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-#import <Quartz/Quartz.h>
+#import "GGBLayer.h"
 
 
 /** Constants for various commonly used colors. */
@@ -29,17 +29,21 @@ extern CGColorRef kBlackColor, kWhiteColor,
                   kAlmostInvisibleWhiteColor,
                   kHighlightColor;
 
+#if TARGET_OS_ASPEN
+// These don't exist on iPhone, so I implement them:
+CGColorRef CreateGray(CGFloat gray, CGFloat alpha);
+CGColorRef CreateRGB(CGFloat red, CGFloat green, CGFloat blue, CGFloat alpha);
+#else
+#define CreateGray  CGColorCreateGenericGray
+#define CreateRGB   CGColorCreateGenericRGB
+#endif
+
 
 /** Moves a layer from one superlayer to another, without changing its position onscreen. */
 void ChangeSuperlayer( CALayer *layer, CALayer *newSuperlayer, int index );
 
 /** Removes a layer from its superlayer without any fade-out animation. */
 void RemoveImmediately( CALayer *layer );
-
-/** Convenience for creating a CATextLayer. */
-CATextLayer* AddTextLayer( CALayer *superlayer,
-                           NSString *text, NSFont* font,
-                           enum CAAutoresizingMask align );
 
 
 /** Loads an image or pattern file into a CGImage or CGPattern.
@@ -52,8 +56,10 @@ CATextLayer* AddTextLayer( CALayer *superlayer,
 CGImageRef GetCGImageNamed( NSString *name );
 CGColorRef GetCGPatternNamed( NSString *name );
 
+#if ! TARGET_OS_ASPEN
 /** Loads image data from the pasteboard into a CGImage. */
 CGImageRef GetCGImageFromPasteboard( NSPasteboard *pb );
+#endif
 
 /** Creates a CGPattern from a CGImage. Caller must release it. */
 CGPatternRef CreateImagePattern( CGImageRef image );
@@ -68,3 +74,5 @@ float GetPixelAlpha( CGImageRef image, CGSize imageSize, CGPoint pt );
 static inline CGPoint GetCGRectCenter( CGRect rect ) {
     return CGPointMake(CGRectGetMidX(rect),CGRectGetMidY(rect));
 }
+
+void AddRoundRect( CGContextRef ctx, CGRect rect, CGFloat radius );

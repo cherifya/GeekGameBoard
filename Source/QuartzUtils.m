@@ -21,6 +21,7 @@
     THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 #import "QuartzUtils.h"
+#import <QuartzCore/QuartzCore.h>
 
 
 CGColorRef kBlackColor, kWhiteColor, 
@@ -32,13 +33,34 @@ CGColorRef kBlackColor, kWhiteColor,
 __attribute__((constructor))        // Makes this function run when the app loads
 static void InitQuartzUtils()
 {
-    kBlackColor = CGColorCreateGenericGray(0.0, 1.0);
-    kWhiteColor = CGColorCreateGenericGray(1.0, 1.0);
-    kTranslucentGrayColor = CGColorCreateGenericGray(0.0, 0.5);
-    kTranslucentLightGrayColor = CGColorCreateGenericGray(0.0, 0.25);
-    kAlmostInvisibleWhiteColor = CGColorCreateGenericGray(1, 0.05);
-    kHighlightColor = CGColorCreateGenericRGB(1, 1, 0, 0.5);
+    kBlackColor = CreateGray(0.0, 1.0);
+    kWhiteColor = CreateGray(1.0, 1.0);
+    kTranslucentGrayColor = CreateGray(0.0, 0.5);
+    kTranslucentLightGrayColor = CreateGray(0.0, 0.25);
+    kAlmostInvisibleWhiteColor = CreateGray(1, 0.05);
+    kHighlightColor = CreateRGB(1, 1, 0, 0.5);
 }
+
+
+#if TARGET_OS_ASPEN
+CGColorRef CreateGray(CGFloat gray, CGFloat alpha)
+{
+    CGColorSpaceRef graySpace = CGColorSpaceCreateDeviceGray();
+    CGFloat components[2] = {gray,alpha};
+    CGColorRef color = CGColorCreate(graySpace, components);
+    CGColorSpaceRelease(graySpace);
+    return color;
+}
+
+CGColorRef CreateRGB(CGFloat red, CGFloat green, CGFloat blue, CGFloat alpha)
+{
+    CGColorSpaceRef rgbSpace = CGColorSpaceCreateDeviceRGB();
+    CGFloat components[4] = {red,green,blue,alpha};
+    CGColorRef color = CGColorCreate(rgbSpace, components);
+    CGColorSpaceRelease(rgbSpace);
+    return color;
+}
+#endif
 
 
 void ChangeSuperlayer( CALayer *layer, CALayer *newSuperlayer, int index )
@@ -75,49 +97,13 @@ void RemoveImmediately( CALayer *layer )
 }    
 
 
-CATextLayer* AddTextLayer( CALayer *superlayer,
-                           NSString *text, NSFont* font,
-                           enum CAAutoresizingMask align )
-{
-    CATextLayer *label = [[CATextLayer alloc] init];
-    label.string = text;
-    label.font = font;
-    label.fontSize = font.pointSize;
-    label.foregroundColor = kBlackColor;
-    
-    NSString *mode;
-    if( align & kCALayerWidthSizable )
-        mode = @"center";
-    else if( align & kCALayerMinXMargin )
-        mode = @"right";
-    else
-        mode = @"left";
-    align |= kCALayerWidthSizable;
-    label.alignmentMode = mode;
-    
-    CGFloat inset = superlayer.borderWidth + 3;
-    CGRect bounds = CGRectInset(superlayer.bounds, inset, inset);
-    CGFloat height = font.ascender;
-    CGFloat y = bounds.origin.y;
-    if( align & kCALayerHeightSizable )
-        y += (bounds.size.height-height)/2.0;
-    else if( align & kCALayerMinYMargin )
-        y += bounds.size.height - height;
-    align &= ~kCALayerHeightSizable;
-    label.bounds = CGRectMake(0, font.descender,
-                              bounds.size.width, height - font.descender);
-    label.position = CGPointMake(bounds.origin.x,y+font.descender);
-    label.anchorPoint = CGPointMake(0,0);
-    
-    label.autoresizingMask = align;
-    [superlayer addSublayer: label];
-    [label release];
-    return label;
-}
-
-
 CGImageRef CreateCGImageFromFile( NSString *path )
 {
+#if TARGET_OS_ASPEN
+    UIImage *uiImage = [UIImage imageWithContentsOfFile: path];
+    if(!uiImage) NSLog(@"Warning: UIImage imageWithContentsOfFile failed on file %@",path);
+    return CGImageRetain(uiImage.CGImage);
+#else
     CGImageRef image = NULL;
     CFURLRef url = (CFURLRef) [NSURL fileURLWithPath: path];
     CGImageSourceRef src = CGImageSourceCreateWithURL(url, NULL);
@@ -127,11 +113,18 @@ CGImageRef CreateCGImageFromFile( NSString *path )
         if(!image) NSLog(@"Warning: CGImageSourceCreateImageAtIndex failed on file %@ (ptr size=%u)",path,sizeof(void*));
     }
     return image;
+#endif
 }
 
 
 CGImageRef GetCGImageNamed( NSString *name )
 {
+#if TARGET_OS_ASPEN
+    name = name.lastPathComponent;
+    UIImage *uiImage = [UIImage imageNamed: name];
+    NSCAssert1(uiImage,@"Couldn't find bundle image resource '%@'",name);
+    return uiImage.CGImage;
+#else
     // For efficiency, loaded images are cached in a dictionary by name.
     static NSMutableDictionary *sMap;
     if( ! sMap )
@@ -153,6 +146,7 @@ CGImageRef GetCGImageNamed( NSString *name )
         CGImageRelease(image);
     }
     return image;
+#endif
 }
 
 
@@ -173,6 +167,7 @@ CGColorRef GetCGPatternNamed( NSString *name )         // can be resource name o
 }
 
 
+#if ! TARGET_OS_ASPEN
 CGImageRef GetCGImageFromPasteboard( NSPasteboard *pb )
 {
     CGImageSourceRef src = NULL;
@@ -195,11 +190,17 @@ CGImageRef GetCGImageFromPasteboard( NSPasteboard *pb )
         return image;
     } else
         return NULL;
-}    
+}
+#endif
 
 
 float GetPixelAlpha( CGImageRef image, CGSize imageSize, CGPoint pt )
 {
+#if TARGET_OS_ASPEN
+    // iPhone uses "flipped" (i.e. normal) coords, so images are wrong-way-up
+    pt.y = imageSize.height - pt.y;
+#endif
+    
     // Trivial reject:
     if( pt.x<0 || pt.x>=imageSize.width || pt.y<0 || pt.y>=imageSize.height )
         return 0.0;
@@ -271,3 +272,24 @@ CGColorRef CreatePatternColor( CGImageRef image )
     CGPatternRelease(pattern);
     return color;
 }
+
+
+#pragma mark -
+#pragma mark PATHS:
+
+
+void AddRoundRect( CGContextRef ctx, CGRect rect, CGFloat radius )
+{
+    radius = MIN(radius, floorf(rect.size.width/2));
+    float x0 = CGRectGetMinX(rect), y0 = CGRectGetMinY(rect),
+    x1 = CGRectGetMaxX(rect), y1 = CGRectGetMaxY(rect);
+    
+    CGContextBeginPath(ctx);
+    CGContextMoveToPoint(ctx,x0+radius,y0);
+    CGContextAddArcToPoint(ctx,x1,y0, x1,y1, radius);
+    CGContextAddArcToPoint(ctx,x1,y1, x0,y1, radius);
+    CGContextAddArcToPoint(ctx,x0,y1, x0,y0, radius);
+    CGContextAddArcToPoint(ctx,x0,y0, x1,y0, radius);
+    CGContextClosePath(ctx);
+}
+

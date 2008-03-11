@@ -24,6 +24,7 @@
 #import "Grid.h"
 #import "Piece.h"
 #import "QuartzUtils.h"
+#import "GGBUtils.h"
 
 
 @implementation CheckersGame
@@ -64,8 +65,8 @@
     grid.position = pos;
     grid.allowsMoves = YES;
     grid.allowsCaptures = NO;
-    grid.cellColor = CGColorCreateGenericGray(0.0, 0.25);
-    grid.altCellColor = CGColorCreateGenericGray(1.0, 0.25);
+    grid.cellColor = CreateGray(0.0, 0.25);
+    grid.altCellColor = CreateGray(1.0, 0.25);
     grid.lineColor = nil;
     [self addPieces: @"Green Ball.png" toGrid: grid forPlayer: 0 rows: NSMakeRange(0,3) alternating: YES];
     [self addPieces: @"Red Ball.png"   toGrid: grid forPlayer: 1 rows: NSMakeRange(5,3) alternating: YES];
@@ -73,7 +74,7 @@
 }
 
 
-- (id) initWithBoard: (CALayer*)board
+- (id) initWithBoard: (GGBLayer*)board
 {
     self = [super initWithBoard: board];
     if (self != nil) {
@@ -102,12 +103,12 @@
     int playerIndex = self.currentPlayer.index;
     BOOL isKing = ([bit valueForKey: @"King"] != nil);
     
-    [[NSSound soundNamed: (isKing ?@"Funk" :@"Tink")] play];
+    PlaySound(isKing ?@"Funk" :@"Tink");
 
     // "King" a piece that made it to the last row:
     if( dst.row == (playerIndex ?0 :7) )
         if( ! isKing ) {
-            [[NSSound soundNamed: @"Blow"] play];
+            PlaySound(@"Blow");
             bit.scale = 1.4;
             [bit setValue: @"King" forKey: @"King"];
             // don't set isKing flag - piece can't jump again after being kinged.
@@ -125,7 +126,7 @@
         capture = src.br;
     
     if( capture ) {
-        [[NSSound soundNamed: @"Pop"] play];
+        PlaySound(@"Pop");
         Bit *bit = capture.bit;
         _numPieces[bit.owner.index]--;
         [bit destroy];

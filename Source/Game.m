@@ -51,7 +51,7 @@
 }
 
 
-- (id) initWithBoard: (CALayer*)board
+- (id) initWithBoard: (GGBLayer*)board
 {
     self = [super init];
     if (self != nil) {

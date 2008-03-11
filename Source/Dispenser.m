@@ -163,6 +163,8 @@
 #pragma mark DRAG-AND-DROP:
 
 
+#if ! TARGET_OS_ASPEN
+
 // An image from another app can be dragged onto a Dispenser to change the Piece's appearance.
 
 
@@ -190,5 +192,7 @@
         return NO;
 }
 
+
+#endif
 
 @end

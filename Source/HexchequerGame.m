@@ -24,6 +24,7 @@
 #import "HexGrid.h"
 #import "Piece.h"
 #import "QuartzUtils.h"
+#import "GGBUtils.h"
 
 
 @implementation HexchequerGame
@@ -38,7 +39,7 @@
     [grid addCellsInHexagon];
     grid.allowsMoves = YES;
     grid.allowsCaptures = NO;      // no land-on captures, that is
-    grid.cellColor = CGColorCreateGenericGray(1.0, 0.25);
+    grid.cellColor = CreateGray(1.0, 0.25);
     grid.lineColor = kTranslucentLightGrayColor;
     
     [self addPieces: @"Green Ball.png" toGrid: grid forPlayer: 0 rows: NSMakeRange(0,2) alternating: NO];
@@ -65,12 +66,12 @@
     int playerIndex = self.currentPlayer.index;
     BOOL isKing = ([bit valueForKey: @"King"] != nil);
     
-    [[NSSound soundNamed: (isKing ?@"Funk" :@"Tink")] play];
+    PlaySound(isKing ?@"Funk" :@"Tink");
 
     // "King" a piece that made it to the last row:
     if( dst.row == (playerIndex ?0 :8) )
         if( ! isKing ) {
-            [[NSSound soundNamed: @"Blow"] play];
+            PlaySound(@"Blow");
             bit.scale = 1.4;
             [bit setValue: @"King" forKey: @"King"];
             // don't set isKing flag - piece can't capture again after being kinged.
@@ -92,7 +93,7 @@
         capture = src.r;
     
     if( capture ) {
-        [[NSSound soundNamed: @"Pop"] play];
+        PlaySound(@"Pop");
         Bit *bit = capture.bit;
         _numPieces[bit.owner.index]--;
         [bit destroy];

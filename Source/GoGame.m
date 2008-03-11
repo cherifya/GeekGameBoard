@@ -26,6 +26,7 @@
 #import "Dispenser.h"
 #import "Stack.h"
 #import "QuartzUtils.h"
+#import "GGBUtils.h"
 
 
 @implementation GoGame
@@ -44,7 +45,7 @@
 }    
 
 
-- (id) initWithBoard: (CALayer*)board
+- (id) initWithBoard: (GGBLayer*)board
 {
     self = [super initWithBoard: board];
     if (self != nil) {
@@ -153,7 +154,7 @@
             }
         }
     if( captured )
-        [[NSSound soundNamed: @"Pop"] play];
+        PlaySound(@"Pop");
         
     [self nextPlayer];
 }

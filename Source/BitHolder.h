@@ -20,7 +20,7 @@
     CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
     THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-#import <Quartz/Quartz.h>
+#import "GGBLayer.h"
 @class Bit;
 
 
@@ -63,7 +63,7 @@
 
 
 /** A basic implementation of the BitHolder protocol. */
-@interface BitHolder : CALayer <BitHolder>
+@interface BitHolder : GGBLayer <BitHolder>
 {
     @protected
     Bit *_bit;

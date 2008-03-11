@@ -35,7 +35,7 @@
 {
     @private
     int _serialNumber;
-    CALayer *_front, *_back;
+    GGBLayer *_front, *_back;
     BOOL _faceUp;
 }
 
@@ -56,11 +56,11 @@
 /** Creates the sub-layer that displays the front side of the card.
     Subclasses should probably call the superclass method, configure the layer it returns
     (based on the card's serialNumber) and then return that layer. */
-- (CALayer*) createFront;
+- (GGBLayer*) createFront;
 
 /** Creates the sub-layer that displays the back side of the card.
     Subclasses should probably call the superclass method, configure the layer it returns and
     return that layer. */
-- (CALayer*) createBack;
+- (GGBLayer*) createBack;
 
 @end
