@@ -40,7 +40,7 @@
 {
     self = [super init];
     if (self != nil) {
-        self.bounds = CGRectMake(0,0,kCardWidth,kCardHeight);
+        self.bounds = (CGRect){{0,0},[Card cardSize]};
         self.cornerRadius = 8;
         self.backgroundColor = kAlmostInvisibleWhiteColor;
         self.borderColor = kHighlightColor;

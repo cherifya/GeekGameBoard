@@ -24,23 +24,8 @@
 }
 @property CGFloat cornerRadius, borderWidth;
 @property CGColorRef borderColor;
-@property unsigned int autoresizingMask;
 #endif
+
+- (void) redisplayAll;
 
 @end
-
-
-#if TARGET_OS_ASPEN
-/* Bit definitions for `autoresizingMask' property. */
-
-enum CAAutoresizingMask
-{
-    kCALayerNotSizable	= 0,
-    kCALayerMinXMargin	= 1U << 0,
-    kCALayerWidthSizable	= 1U << 1,
-    kCALayerMaxXMargin	= 1U << 2,
-    kCALayerMinYMargin	= 1U << 3,
-    kCALayerHeightSizable	= 1U << 4,
-    kCALayerMaxYMargin	= 1U << 5
-};
-#endif

@@ -41,25 +41,37 @@
                       self.rankString, self.suitString];
     
     CGColorRef suitColor = self.suitColor;
+    float scale = [Card cardSize].height/150;
+    float cornerFontSize = MAX(18*scale, 14);
+    float centerFontSize = 80*scale;
+    
+#if TARGET_OS_ASPEN
+    UIFont *cornerFont = [UIFont boldSystemFontOfSize: cornerFontSize];
+#else
+    NSFont *cornerFont = [NSFont boldSystemFontOfSize: cornerFontSize];
+#endif
     GGBTextLayer *label;
     label = [GGBTextLayer textLayerInSuperlayer: front
                                        withText: name
-                                       fontSize: 18.0
-                                      alignment: kCALayerMaxXMargin | kCALayerMinYMargin];
+                                           font: cornerFont
+                                      alignment: kCALayerMaxXMargin | kCALayerBottomMargin];
     label.foregroundColor = suitColor;
     label = [GGBTextLayer textLayerInSuperlayer: front
                                        withText: name
-                                       fontSize: 18.0
-                                      alignment: kCALayerMaxXMargin | kCALayerMaxYMargin];
+                                           font: cornerFont
+                                      alignment: kCALayerMaxXMargin | kCALayerTopMargin];
     label.foregroundColor = suitColor;
     label.anchorPoint = CGPointMake(1,1);
     [label setValue: [NSNumber numberWithFloat: M_PI] forKeyPath: @"transform.rotation"];
     
     label = [GGBTextLayer textLayerInSuperlayer: front
                                        withText: self.faceSymbol
-                                       fontSize: 80
+                                       fontSize: centerFontSize
                                       alignment: kCALayerWidthSizable | kCALayerHeightSizable];
     label.foregroundColor = suitColor;
+    //label.borderWidth = 1;
+    //label.borderColor = kBlackColor;
+    
     return front;
 }
 

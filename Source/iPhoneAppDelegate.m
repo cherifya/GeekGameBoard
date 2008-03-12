@@ -23,6 +23,9 @@
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application 
 {	
+    for( NSString *family in [UIFont familyNames] )
+        NSLog(@"%@: (%@)", family, [[UIFont fontNamesForFamilyName: family] componentsJoinedByString: @", "]);
+        
     // Create window
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     _window.layer.backgroundColor = GetCGPatternNamed(@"Background.png");
@@ -45,7 +48,7 @@
     [_window addSubview: _headline];
     
     // Start game:
-    [self startGameNamed: @"GoGame"];
+    [self startGameNamed: @"KlondikeGame"];
     
     // Show window
     [_window makeKeyAndVisible];

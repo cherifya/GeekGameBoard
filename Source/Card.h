@@ -23,11 +23,6 @@
 #import "Bit.h"
 
 
-/** Hardcoded dimensions of a Card */
-#define kCardWidth  100
-#define kCardHeight 150
-
-
 /* A card of some type (playing card, Community Chest, money, ...)
    Has an identifying serial number (could be in the range 1..52 for playing cards).
    Can be face-up or down. */
@@ -42,6 +37,9 @@
 /** The range of serialNumbers used for this type of card. Used when instantiating Decks.
     Abstract; must be overridden. */
 + (NSRange) serialNumberRange;
+
++ (CGSize) cardSize;
++ (void) setCardSize: (CGSize)size;
 
 - (id) initWithSerialNumber: (int)serial position: (CGPoint)pos;
 

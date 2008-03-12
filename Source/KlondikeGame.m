@@ -24,21 +24,19 @@
 #import "Deck.h"
 #import "PlayingCard.h"
 #import "Stack.h"
+#import "QuartzUtils.h"
 
 
 #define kStackHeight 500
 
 
-/**  WARNING: THIS CODE REQUIRES GARBAGE COLLECTION!
- **  This sample application uses Objective-C 2.0 garbage collection.
- **  Therefore, the source code in this file does NOT perform manual object memory management.
- **  If you reuse any of this code in a process that isn't garbage collected, you will need to
- **  add all necessary retain/release/autorelease calls, and implement -dealloc methods,
- **  otherwise unpleasant leakage will occur!
- **/
-
-
 @implementation KlondikeGame
+
+
++ (BOOL) landscapeOriented
+{
+    return YES;
+}
 
 
 - (id) initWithBoard: (GGBLayer*)board
@@ -47,29 +45,43 @@
     if (self != nil) {
         [self setNumberOfPlayers: 1];
         
+        CGSize boardSize = board.bounds.size;
+        CGFloat xSpacing = floor(boardSize.width/7);
+        CGSize kCardSize;
+        kCardSize.width  = round(xSpacing * 0.9);  // 1/7th of width, with 10% gap
+        kCardSize.height = round(kCardSize.width * 1.5);
+        CGFloat gap = xSpacing-kCardSize.width;
+        [Card setCardSize: kCardSize];
+        
+        CGPoint pos = {floor(gap/2)+kCardSize.width/2, floor(boardSize.height-kCardSize.height/2)};
         _deck = [[Deck alloc] initWithCardsOfClass: [PlayingCard class]];
         [_deck shuffle];
-        _deck.position = CGPointMake(kCardWidth/2+16,kCardHeight/2+16);
+        _deck.position = pos;
         [board addSublayer: _deck];
         
+        pos.x += xSpacing;
         _sink = [[Deck alloc] init];
-        _sink.position = CGPointMake(3*kCardWidth/2+32,kCardHeight/2+16);
+        _sink.position = pos;
         [board addSublayer: _sink];
         
+        pos.x += xSpacing;
         for( CardSuit suit=kSuitClubs; suit<=kSuitSpades; suit++ ) {
+            pos.x += xSpacing;
             Deck *aces = [[Deck alloc] init];
-            aces.position = CGPointMake(kCardWidth/2+16+(kCardWidth+16)*(suit%2),
-                                        120+kCardHeight+(kCardHeight+16)*(suit/2));
+            aces.position = pos;
             [board addSublayer: aces];
             _aces[suit] = aces;
         }
         
+        CGRect stackFrame = {{floor(gap/2), gap}, 
+                             {kCardSize.width, boardSize.height-kCardSize.height-2*gap}};
+        CGPoint startPos = CGPointMake(kCardSize.width/2,kCardSize.height/2);
+        CGSize spacing = {0, floor((stackFrame.size.height-kCardSize.height)/11.0)};
         for( int s=0; s<7; s++ ) {
-            Stack *stack = [[Stack alloc] initWithStartPos: CGPointMake(kCardWidth/2,
-                                                                        kStackHeight-kCardHeight/2.0)
-                                                   spacing: CGSizeMake(0,-22)];
-            stack.frame = CGRectMake(260+s*(kCardWidth+16),16, kCardWidth,kStackHeight);
-            stack.backgroundColor = nil;
+            Stack *stack = [[Stack alloc] initWithStartPos: startPos spacing: spacing];
+            stack.frame = stackFrame;
+            stackFrame.origin.x += xSpacing;
+            stack.backgroundColor = nil; //kAlmostInvisibleWhiteColor;
             stack.dragAsStacks = YES;
             [board addSublayer: stack];
             

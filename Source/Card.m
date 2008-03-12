@@ -28,6 +28,8 @@
 @implementation Card
 
 
+static CGSize sCardSize = {100,150};
+
 static CATransform3D kFaceUpTransform, kFaceDownTransform;
 
 + (void) initialize
@@ -51,12 +53,16 @@ static CATransform3D kFaceUpTransform, kFaceDownTransform;
 }
 
 
++ (CGSize) cardSize                 {return sCardSize;}
++ (void) setCardSize: (CGSize)size  {sCardSize = size;}
+
+
 - (id) initWithSerialNumber: (int)serial position: (CGPoint)pos
 {
     self = [super init];
     if (self != nil) {
         _serialNumber = serial;
-        self.bounds = CGRectMake(0,0,kCardWidth,kCardHeight);
+        self.bounds = CGRectMake(0,0,sCardSize.width,sCardSize.height);
         self.position = pos;
         self.edgeAntialiasingMask = 0;
         _back = [self createBack];
@@ -111,11 +117,11 @@ static CATransform3D kFaceUpTransform, kFaceDownTransform;
 - (GGBLayer*) createFront
 {
     GGBLayer *front = [[GGBLayer alloc] init];
-    front.bounds = CGRectMake(0,0,kCardWidth,kCardHeight);
-    front.position = CGPointMake(kCardWidth/2,kCardHeight/2);
+    front.bounds = CGRectMake(0,0,sCardSize.width,sCardSize.height);
+    front.position = CGPointMake(sCardSize.width/2,sCardSize.height/2);
     front.edgeAntialiasingMask = 0;
     front.backgroundColor = kWhiteColor;
-    front.cornerRadius = 8;
+    front.cornerRadius = 8 * (sCardSize.height/150);
     front.borderWidth = 1;
     front.borderColor = CreateGray(0.7, 1.0);
     front.doubleSided = NO;         // this makes the layer invisible when it's flipped
@@ -128,19 +134,29 @@ static CATransform3D kFaceUpTransform, kFaceDownTransform;
     CGSize size = self.bounds.size;
     GGBLayer *back = [[GGBLayer alloc] init];
     back.bounds = CGRectMake(0,0,size.width,size.height);
-    back.position = CGPointMake(kCardWidth/2,kCardHeight/2);
+    back.position = CGPointMake(sCardSize.width/2,sCardSize.height/2);
+#if TARGET_OS_ASPEN
+    back.backgroundColor = CreateRGB(0.0,0.5,0.5, 1.0);
+#else
     back.contents = (id) GetCGImageNamed(@"/Library/Desktop Pictures/Classic Aqua Blue.jpg");
+#endif
     back.contentsGravity = kCAGravityResize;
     back.masksToBounds = YES;
-    back.borderWidth = 4;
+    back.borderWidth = 4 * (sCardSize.height/150);
     back.borderColor = kWhiteColor;
-    back.cornerRadius = 8;
+    back.cornerRadius = 8 * (sCardSize.height/150);
     back.edgeAntialiasingMask = 0;
     back.doubleSided = NO;          // this makes the layer invisible when it's flipped
     
+#if TARGET_OS_ASPEN
+    // On iPhone, only Hiragana Kaku includes the coveted snowman glyph... who knows why?
+    UIFont *font = [UIFont fontWithName: @"HiraKakuProN-W3" size: 1*size.width];
+#else
+    NSFont *font = [NSFont systemFontOfSize: 1*size.width];
+#endif
     GGBTextLayer *label = [GGBTextLayer textLayerInSuperlayer: back
                                                      withText: @"\u2603"          // Unicode snowman character
-                                                     fontSize: 0.9*size.width
+                                                         font: font
                                                     alignment: kCALayerWidthSizable|kCALayerHeightSizable];
     label.foregroundColor = CreateGray(1.0,0.5);
     return [back autorelease];

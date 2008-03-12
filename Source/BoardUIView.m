@@ -42,19 +42,33 @@
 
 - (void) startGameNamed: (NSString*)gameClassName
 {
+    Class gameClass = NSClassFromString(gameClassName);
+    NSAssert1(gameClass,@"Unknown game '%@'",gameClassName);
+    
+    setObj(&_game,nil);
     if( _gameboard ) {
         [_gameboard removeFromSuperlayer];
         _gameboard = nil;
     }
+
+    CALayer *rootLayer = self.layer;
+    self.layer.affineTransform = CGAffineTransformIdentity;
+    CGRect frame = rootLayer.frame;
+    frame.origin.x = frame.origin.y = 0;
+    rootLayer.bounds = frame;
+
+    if( [gameClass landscapeOriented] && frame.size.height > frame.size.width ) {
+        rootLayer.affineTransform = CGAffineTransformMakeRotation(M_PI/2);
+        frame = CGRectMake(0,0,frame.size.height,frame.size.width);
+        rootLayer.bounds = frame;
+    }
+    
     _gameboard = [[GGBLayer alloc] init];
-    _gameboard.frame = [self gameBoardFrame];
-    _gameboard.autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
-    [self.layer addSublayer: _gameboard];
+    _gameboard.frame = frame;
+    [rootLayer addSublayer: _gameboard];
     [_gameboard release];
     
-    Class gameClass = NSClassFromString(gameClassName);
-    NSAssert1(gameClass,@"Unknown game '%@'",gameClassName);
-    setObj(&_game, [[gameClass alloc] initWithBoard: _gameboard]);
+    _game = [[gameClass alloc] initWithBoard: _gameboard];
 }
 
 

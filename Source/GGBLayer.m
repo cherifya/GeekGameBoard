@@ -19,6 +19,17 @@
 }
 
 
+- (void) redisplayAll
+{
+    [self setNeedsDisplay];
+    for( CALayer *layer in self.sublayers )
+        if( [layer isKindOfClass: [GGBLayer class]] )
+            ((GGBLayer*)layer).redisplayAll;
+        else
+            [layer setNeedsDisplay];
+}
+
+
 #if TARGET_OS_ASPEN
 
 #pragma mark -
@@ -57,7 +68,6 @@
     clone.cornerRadius = self.cornerRadius;
     clone.borderWidth = self.borderWidth;
     clone.borderColor = self.borderColor;
-    clone.autoresizingMask = self.autoresizingMask;
     
     for( GGBLayer *sublayer in self.sublayers ) {
         sublayer = [sublayer copyWithZone: zone];
@@ -66,8 +76,6 @@
     return clone;
 }
 
-
-@synthesize autoresizingMask=_autoresizingMask;
 
 - (CGFloat) cornerRadius    {return _cornerRadius;}
 - (CGFloat) borderWidth     {return _borderWidth;}
@@ -115,6 +123,8 @@
 
 - (void)drawInContext:(CGContextRef)ctx
 {
+    [super drawInContext: ctx];
+    
     CGContextSaveGState(ctx);
 
     if( _realBGColor ) {

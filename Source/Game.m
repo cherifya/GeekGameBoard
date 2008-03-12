@@ -110,6 +110,12 @@
 #pragma mark GAMEPLAY METHODS TO BE OVERRIDDEN:
 
 
++ (BOOL) landscapeOriented
+{
+    return NO;
+}
+
+
 - (BOOL) canBit: (Bit*)bit moveFrom: (id<BitHolder>)src
 {
     return YES;

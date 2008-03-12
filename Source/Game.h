@@ -36,6 +36,8 @@
     (By default it just returns the class name with the "Game" suffix removed.) */
 + (NSString*) displayName;
 
++ (BOOL) landscapeOriented;
+
 @property (readonly, copy) NSArray *players;
 @property (readonly) Player *currentPlayer, *winner;
 
