@@ -106,6 +106,8 @@
 
 - (BOOL) canBit: (Bit*)bit moveFrom: (id<BitHolder>)srcHolder to: (id<BitHolder>)dstHolder
 {
+    if( ! [dstHolder isKindOfClass: [Square class]] )
+        return NO;
     Square *dst=(Square*)dstHolder;
     
     // There should be a check here for a "ko" (repeated position) ... exercise for the reader!
