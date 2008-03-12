@@ -104,6 +104,14 @@
 #pragma mark HIT-TESTING:
 
 
+/** Converts a point from window coords, to this view's root layer's coords. */
+- (CGPoint) _convertPointFromWindowToLayer: (NSPoint)locationInWindow
+{
+    NSPoint where = [self convertPoint: locationInWindow fromView: nil];    // convert to view coords
+    return NSPointToCGPoint( [self convertPointToBase: where] );            // then to layer coords
+}
+
+
 // Hit-testing callbacks (to identify which layers caller is interested in):
 typedef BOOL (*LayerMatchCallback)(CALayer*);
 
@@ -119,8 +127,7 @@ static BOOL layerIsDropTarget( CALayer* layer ) {return [layer respondsToSelecto
          forLayerMatching: (LayerMatchCallback)match
                    offset: (CGPoint*)outOffset
 {
-    CGPoint where = NSPointToCGPoint([self convertPoint: locationInWindow fromView: nil]);
-    where = [_gameboard convertPoint: where fromLayer: self.layer];
+    CGPoint where = [self _convertPointFromWindowToLayer: locationInWindow ];
     CALayer *layer = [_gameboard hitTest: where];
     while( layer ) {
         if( match(layer) ) {
@@ -158,7 +165,7 @@ static BOOL layerIsDropTarget( CALayer* layer ) {return [layer respondsToSelecto
             if( _dragBit ) {
                 _dragOffset.x = _dragOffset.y = 0;
                 if( _dragBit.superlayer==nil )
-                    _dragBit.position = NSPointToCGPoint([self convertPoint: _dragStartPos fromView: nil]);
+                    _dragBit.position = [self _convertPointFromWindowToLayer: _dragStartPos];
                 placing = YES;
             }
         }
@@ -197,7 +204,7 @@ static BOOL layerIsDropTarget( CALayer* layer ) {return [layer respondsToSelecto
     
     if( placing ) {
         if( _oldSuperlayer )
-            _dragBit.position = NSPointToCGPoint([self convertPoint: _dragStartPos fromView: nil]);
+            _dragBit.position = [self _convertPointFromWindowToLayer: _dragStartPos];
         _dragMoved = YES;
         [self _findDropTarget: _dragStartPos];
     }
@@ -213,12 +220,11 @@ static BOOL layerIsDropTarget( CALayer* layer ) {return [layer respondsToSelecto
             _dragMoved = YES;
         
         // Move the _dragBit (without animation -- it's unnecessary and slows down responsiveness):
-        NSPoint where = [self convertPoint: pos fromView: nil];
+        CGPoint where = [self _convertPointFromWindowToLayer: pos];
         where.x += _dragOffset.x;
         where.y += _dragOffset.y;
         
-        CGPoint newPos = [_dragBit.superlayer convertPoint: NSPointToCGPoint(where) 
-                                                 fromLayer: self.layer];
+        CGPoint newPos = [_dragBit.superlayer convertPoint: where fromLayer: self.layer];
 
         [CATransaction flush];
         [CATransaction begin];
