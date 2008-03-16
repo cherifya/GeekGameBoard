@@ -30,5 +30,6 @@ void setObj( id *variable, id newValue );
 void setObjCopy( id<NSCopying> *variable, id<NSCopying> newValue );
 
 
+void PreloadSound( NSString* name );
 void PlaySound( NSString* name );
 void Beep( void );

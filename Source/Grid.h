@@ -67,6 +67,7 @@
 /** Removes a particular cell, leaving a blank space. */
 - (void) removeCellAtRow: (unsigned)row column: (unsigned)col;
 
+- (GridCell*) cellWithName: (NSString*)identifier;
 
 // protected:
 - (GridCell*) createCellAtRow: (unsigned)row column: (unsigned)col 

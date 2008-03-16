@@ -30,6 +30,43 @@
 }
 
 
+/*
+- (void)addAnimation:(CAAnimation *)anim forKey:(NSString *)key 
+{
+    NSLog(@"%@[%p] addAnimation: %p forKey: %@",[self class],self,anim,key);
+    [super addAnimation: anim forKey: key];
+}
+*/
+
+
+- (void) animateAndBlock: (NSString*)keyPath from: (id)from to: (id)to duration: (NSTimeInterval)duration
+{
+    //WARNING: This code works, but is a mess. I hope to find a better way to do this. --Jens 3/16/08
+    CABasicAnimation *anim = [CABasicAnimation animationWithKeyPath: keyPath];
+    anim.duration= duration;
+    anim.fromValue = from;
+    anim.toValue = to;
+    anim.isRemovedOnCompletion = YES;
+    anim.delegate = self;
+    [self addAnimation:anim forKey: @"animateAndBlock:"];
+    _curAnimation = (id)[self animationForKey: @"animateAndBlock:"];
+    [self setValue: to forKeyPath: keyPath];    // animation doesn't update the property value
+
+    // Now wait for it to finish:
+    while( _curAnimation ) {
+        [[NSRunLoop currentRunLoop] runMode: NSDefaultRunLoopMode//NSEventTrackingRunLoopMode
+                                 beforeDate: [NSDate dateWithTimeIntervalSinceNow: 0.1]];
+    }
+}
+
+- (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag
+{
+    if( anim==_curAnimation ) {
+        _curAnimation = nil;
+    }
+}
+
+
 #if TARGET_OS_ASPEN
 
 #pragma mark -

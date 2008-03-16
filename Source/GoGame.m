@@ -87,6 +87,7 @@
         [_captured[1] release];
 
         [self nextPlayer];
+        PreloadSound(@"Pop");
 }
     return self;
 }
@@ -104,9 +105,15 @@
 }
 
 
+- (BOOL) canBit: (Bit*)bit moveFrom: (id<BitHolder>)srcHolder
+{
+    return (srcHolder==nil);
+}
+
+
 - (BOOL) canBit: (Bit*)bit moveFrom: (id<BitHolder>)srcHolder to: (id<BitHolder>)dstHolder
 {
-    if( ! [dstHolder isKindOfClass: [Square class]] )
+    if( srcHolder!=nil || ! [dstHolder isKindOfClass: [Square class]] )
         return NO;
     Square *dst=(Square*)dstHolder;
     

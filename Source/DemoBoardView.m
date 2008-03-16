@@ -43,7 +43,7 @@ static NSString* const kMenuGameNames[] = {@"KlondikeGame", @"CheckersGame", @"H
                                            @"TicTacToeGame", @"GoGame"};
 
 /** Class name of the current game. */
-static NSString* sCurrentGameName = @"KlondikeGame";
+static NSString* sCurrentGameName = @"CheckersGame";
 
 
 - (void) startGameNamed: (NSString*)gameClassName
@@ -89,6 +89,8 @@ static NSString* sCurrentGameName = @"KlondikeGame";
                                           alignment: kCALayerWidthSizable | kCALayerMinYMargin];
     
     [self startGameNamed: sCurrentGameName];
+    
+    [_turnSlider bind: @"value"    toObject: self withKeyPath: @"game.currentTurn" options: nil];
 }
 
 
@@ -106,6 +108,10 @@ static NSString* sCurrentGameName = @"KlondikeGame";
 {
     Game *game = self.game;
     if( object == game ) {
+        NSLog(@"maxTurn = %u, currentTurn=%u", self.game.maxTurn,self.game.currentTurn);
+        _turnSlider.maxValue = self.game.maxTurn;
+        _turnSlider.numberOfTickMarks = self.game.maxTurn+1;
+        
         Player *p = game.winner;
         NSString *msg;
         if( p ) {
@@ -114,6 +120,7 @@ static NSString* sCurrentGameName = @"KlondikeGame";
         } else {
             p = game.currentPlayer;
             msg = @"Your turn, %@";
+            NSLog(@"Game state = '%@'", self.game.stateString);
         }
         _headline.string = [NSString stringWithFormat: msg, p.name];
     }

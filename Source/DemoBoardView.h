@@ -28,6 +28,7 @@
 @interface DemoBoardView : BoardView
 {
     CATextLayer *_headline;
+    IBOutlet NSSlider *_turnSlider;
 }
 
 - (IBAction) startGameFromMenu: (id)sender;

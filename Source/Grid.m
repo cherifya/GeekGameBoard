@@ -124,10 +124,11 @@ static void setcolor( CGColorRef *var, CGColorRef color )
 - (GridCell*) createCellAtRow: (unsigned)row column: (unsigned)col 
                suggestedFrame: (CGRect)frame
 {
-    return [[[_cellClass alloc] initWithGrid: self 
+    GridCell *cell = [[_cellClass alloc] initWithGrid: self 
                                         row: row column: col
-                                      frame: frame]
-                    autorelease];
+                                                frame: frame];
+    cell.name = [NSString stringWithFormat: @"%c%u", ('A'+row),col];
+    return [cell autorelease];
 }
 
 
@@ -169,6 +170,16 @@ static void setcolor( CGColorRef *var, CGColorRef color )
         [cell removeFromSuperlayer];
     [_cells replaceObjectAtIndex: index withObject: [NSNull null]];
     [self setNeedsDisplay];
+}
+
+
+- (GridCell*) cellWithName: (NSString*)name
+{
+    for( CALayer *layer in self.sublayers )
+        if( [layer isKindOfClass: [GridCell class]] )
+            if( [name isEqualToString: ((GridCell*)layer).name] )
+                return (GridCell*)layer;
+    return nil;
 }
 
 

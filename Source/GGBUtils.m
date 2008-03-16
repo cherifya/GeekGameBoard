@@ -42,6 +42,17 @@ void setObjCopy( id<NSCopying> *variable, id<NSCopying> newValue )
 }
 
 
+void PreloadSound( NSString* name )
+{
+#if ! TARGET_OS_ASPEN
+    NSSound *sound = [[NSSound soundNamed: @"Pop"] copy];
+    sound.volume = 0;
+    [sound play];
+    [sound release];
+#endif
+}    
+
+
 void PlaySound( NSString* name )
 {
 #if TARGET_OS_ASPEN

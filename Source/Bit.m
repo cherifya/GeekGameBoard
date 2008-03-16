@@ -35,11 +35,26 @@
     return clone;
 }
 
+- (void) dealloc
+{
+    [super dealloc];
+}
+
+
 @synthesize owner=_owner;
 
 - (BOOL) isFriendly         {return _owner.friendly;}
 - (BOOL) isUnfriendly       {return _owner.unfriendly;}
 
+/*
+- (NSString*) identifier
+{
+    if( _identifier )
+        return _identifier;
+    // Defaults to just identifying the owner:
+    return [NSString stringWithFormat: @"p%i", _owner.index+1];
+}
+*/
 
 - (CGFloat) scale
 {

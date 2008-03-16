@@ -32,18 +32,31 @@
 
 - (Grid*) x_makeGrid
 {
-    HexGrid *grid = [[[HexGrid alloc] initWithRows: 9 columns: 9 frame: _board.bounds] autorelease];
+    HexGrid *grid = [[HexGrid alloc] initWithRows: 9 columns: 9 frame: _board.bounds];
+    _grid = grid;
     CGPoint pos = grid.position;
     pos.x = floor((_board.bounds.size.width-grid.frame.size.width)/2);
     grid.position = pos;
-    [grid addCellsInHexagon];
     grid.allowsMoves = YES;
     grid.allowsCaptures = NO;      // no land-on captures, that is
     grid.cellColor = CreateGray(1.0, 0.25);
     grid.lineColor = kTranslucentLightGrayColor;
     
-    [self addPieces: @"Green Ball.png" toGrid: grid forPlayer: 0 rows: NSMakeRange(0,2) alternating: NO];
-    [self addPieces: @"Red Ball.png"   toGrid: grid forPlayer: 1 rows: NSMakeRange(7,2) alternating: NO];
+    [grid addCellsInHexagon];
+    for( int y=0; y<9; y++ ) {
+        for( int x=0; x<9; x++ ) {
+            GridCell *cell = [_grid cellAtRow: y column: x];
+            if( cell )
+                [_cells addObject: cell];
+        }
+    }
+    self.stateString = @"111111111111111111-------------------------222222222222222222";
+    
+    [self performSelector: @selector(applyMoveString:) withObject: @"C4D4" afterDelay: 2.0];
+    [self performSelector: @selector(applyMoveString:) withObject: @"G3F3" afterDelay: 5.0];
+    [self performSelector: @selector(applyMoveString:) withObject: @"D4E4" afterDelay: 8.0];
+    [self performSelector: @selector(applyMoveString:) withObject: @"F3D4" afterDelay: 11.0];
+    
     return grid;
 }
 
@@ -64,8 +77,12 @@
 {
     Hex *src=(Hex*)srcHolder, *dst=(Hex*)dstHolder;
     int playerIndex = self.currentPlayer.index;
-    BOOL isKing = ([bit valueForKey: @"King"] != nil);
+
+    if( self.currentMove.length==0 )
+        [self.currentMove appendString: src.name];
+    [self.currentMove appendString: dst.name];
     
+    BOOL isKing = ([bit valueForKey: @"King"] != nil);    
     PlaySound(isKing ?@"Funk" :@"Tink");
 
     // "King" a piece that made it to the last row:

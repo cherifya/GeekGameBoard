@@ -22,6 +22,8 @@
 */
 #import "Game.h"
 #import "Bit.h"
+#import "BitHolder.h"
+#import "QuartzUtils.h"
 
 
 @interface Game ()
@@ -46,6 +48,9 @@
 {
     self = [super init];
     if (self != nil) {
+        _states = [[NSMutableArray alloc] init];
+        _moves = [[NSMutableArray alloc] init];
+        _currentMove = [[NSMutableString alloc] init];
         _board = [board retain];
         // Store a pointer to myself as the value of the "Game" property
         // of my root layer. (CALayers can have arbitrary KV properties stored into them.)
@@ -60,11 +65,15 @@
 {
     [_board release];
     [_players release];
+    [_currentMove release];
+    [_states release];
+    [_moves release];
     [super dealloc];
 }
 
 
-@synthesize players=_players, currentPlayer=_currentPlayer, winner=_winner;
+@synthesize players=_players, currentPlayer=_currentPlayer, winner=_winner, 
+            currentMove=_currentMove, states=_states, moves=_moves;
 
 
 - (void) setNumberOfPlayers: (unsigned)n
@@ -82,13 +91,35 @@
 }
 
 
+- (void) addToMove: (NSString*)str;
+{
+    [_currentMove appendString: str];
+}
+
+
+- (BOOL) _rememberState
+{
+    if( self.isLatestTurn ) {
+        [_states addObject: self.stateString];
+        return YES;
+    } else
+        return NO;
+}
+
+
 - (void) nextPlayer
 {
+    BOOL latestTurn = [self _rememberState];
     if( ! _currentPlayer ) {
         NSLog(@"*** The %@ Begins! ***", self.class);
         self.currentPlayer = [_players objectAtIndex: 0];
     } else {
         self.currentPlayer = _currentPlayer.nextPlayer;
+        if( latestTurn ) {
+            [self willChangeValueForKey: @"currentTurn"];
+            _currentTurn++;
+            [self didChangeValueForKey: @"currentTurn"];
+        }
     }
     NSLog(@"Current player is %@",_currentPlayer);
 }
@@ -96,15 +127,87 @@
 
 - (void) endTurn
 {
-    NSLog(@"--- End of turn");
+    NSLog(@"--- End of turn (move was '%@')", _currentMove);
+    if( self.isLatestTurn ) {
+        [self willChangeValueForKey: @"maxTurn"];
+        [_moves addObject: [[_currentMove copy] autorelease]];
+        [_currentMove setString: @""];
+        [self didChangeValueForKey: @"maxTurn"];
+    }
+
     Player *winner = [self checkForWinner];
     if( winner ) {
         NSLog(@"*** The %@ Ends! The winner is %@ ! ***", self.class, winner);
+        [self _rememberState];
         self.winner = winner;
     } else
         [self nextPlayer];
 }
 
+
+- (unsigned) maxTurn
+{
+    return _moves.count;
+}
+
+- (unsigned) currentTurn
+{
+    return _currentTurn;
+}
+
+- (void) setCurrentTurn: (unsigned)turn
+{
+    NSParameterAssert(turn<=self.maxTurn);
+    if( turn != _currentTurn ) {
+        if( turn==_currentTurn+1 ) {
+            [self applyMoveString: [_moves objectAtIndex: _currentTurn]];
+        } else {
+            [CATransaction begin];
+            [CATransaction setValue:(id)kCFBooleanTrue
+                             forKey:kCATransactionDisableActions];
+            self.stateString = [_states objectAtIndex: turn];
+            [CATransaction commit];
+        }
+        _currentTurn = turn;
+        self.currentPlayer = [_players objectAtIndex: (turn % _players.count)];
+    }
+}
+
+
+- (BOOL) isLatestTurn
+{
+    return _currentTurn == MAX(_states.count,1)-1;
+}
+
+
+- (BOOL) animateMoveFrom: (BitHolder*)src to: (BitHolder*)dst
+{
+    if( src==nil || dst==nil || dst==src )
+        return NO;
+    Bit *bit = [src canDragBit: src.bit];
+    if( ! bit || ! [dst canDropBit: bit atPoint: GetCGRectCenter(dst.bounds)]
+              || ! [self canBit: bit moveFrom: src to: dst] )
+        return NO;
+    
+    ChangeSuperlayer(bit, _board.superlayer, -1);
+    bit.pickedUp = YES;
+    dst.highlighted = YES;
+    [bit performSelector: @selector(setPickedUp:) withObject:nil afterDelay: 0.15];
+    CGPoint endPosition = [dst convertPoint: GetCGRectCenter(dst.bounds) toLayer: bit.superlayer];
+    [bit animateAndBlock: @"position"
+                    from: [NSValue valueWithPoint: NSPointFromCGPoint(bit.position)]
+                      to: [NSValue valueWithPoint: NSPointFromCGPoint(endPosition)]
+                duration: 0.25];
+    dst.bit = bit;
+    dst.highlighted = NO;
+    bit.pickedUp = NO;
+    
+    [src draggedBit: bit to: dst];
+    [self bit: bit movedFrom: src to: dst];
+    src = dst;
+    return YES;
+}
+     
 
 #pragma mark -
 #pragma mark GAMEPLAY METHODS TO BE OVERRIDDEN:
@@ -147,6 +250,11 @@
     return nil;
 }
 
+
+- (NSString*) stateString                   {return @"";}
+- (void) setStateString: (NSString*)s       { }
+
+- (BOOL) applyMoveString: (NSString*)move   {return NO;}
 
 @end
 

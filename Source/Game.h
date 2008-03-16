@@ -20,7 +20,7 @@
     CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
     THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-@class GGBLayer, Bit, Player;
+@class GGBLayer, Bit, BitHolder, Player;
 @protocol BitHolder;
 
 
@@ -30,6 +30,9 @@
     GGBLayer *_board;
     NSArray *_players;
     Player *_currentPlayer, *_winner;
+    NSMutableString *_currentMove;
+    NSMutableArray *_states, *_moves;
+    unsigned _currentTurn;
 }
 
 /** Returns the human-readable name of this game.
@@ -41,12 +44,20 @@
 @property (readonly, copy) NSArray *players;
 @property (readonly) Player *currentPlayer, *winner;
 
+@property (readonly) NSArray *states, *moves;
+@property (readonly) unsigned maxTurn;
+@property unsigned currentTurn;
+@property (readonly) BOOL isLatestTurn;
+
+- (BOOL) animateMoveFrom: (BitHolder*)src to: (BitHolder*)dst;
+
 
 // Methods for subclasses to implement:
 
 /** Designated initializer. After calling the superclass implementation,
     it should add the necessary Grids, Pieces, Cards, Decks etc. to the board. */
 - (id) initWithBoard: (GGBLayer*)board;
+
 
 /** Should return YES if it is legal for the given bit to be moved from its current holder.
     Default implementation always returns YES. */
@@ -55,6 +66,7 @@
 /** Should return YES if it is legal for the given Bit to move from src to dst.
     Default implementation always returns YES. */
 - (BOOL) canBit: (Bit*)bit moveFrom: (id<BitHolder>)src to: (id<BitHolder>)dst;
+
 
 /** Should handle any side effects of a Bit's movement, such as captures or scoring.
     Does not need to do the actual movement! That's already happened.
@@ -76,10 +88,17 @@
 - (Player*) checkForWinner;
 
 
+@property (copy) NSString* stateString;
+- (BOOL) applyMoveString: (NSString*)move;
+
+
 // Protected methods for subclasses to call:
 
 /** Sets the number of players in the game. Subclass initializers should call this. */
 - (void) setNumberOfPlayers: (unsigned)n;
+
+/** The current move in progress. Append text to it as the user makes moves. */
+@property (readonly) NSMutableString* currentMove;
 
 /** Advance to the next player, when a turn is over. */
 - (void) nextPlayer;

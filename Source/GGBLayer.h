@@ -14,18 +14,24 @@
 
 
 @interface GGBLayer : CALayer <NSCopying>
-
-#if TARGET_OS_ASPEN
-// For some reason, the CALayer class on iPhone OS doesn't have these!
 {
+    CABasicAnimation *_curAnimation;
+
+#if ! TARGET_OS_ASPEN
+}
+#else
+// For some reason, the CALayer class on iPhone OS doesn't have these!
     CGFloat _cornerRadius, _borderWidth;
     CGColorRef _borderColor, _realBGColor;
     unsigned int _autoresizingMask;
 }
+
 @property CGFloat cornerRadius, borderWidth;
 @property CGColorRef borderColor;
 #endif
 
 - (void) redisplayAll;
+
+- (void) animateAndBlock: (NSString*)keyPath from: (id)from to: (id)to duration: (NSTimeInterval)duration;
 
 @end

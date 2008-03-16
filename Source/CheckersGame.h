@@ -29,13 +29,8 @@
 @interface CheckersGame : Game 
 {
     int _numPieces[2];
+    Grid *_grid;
+    NSMutableArray *_cells;
 }
-
-// For subclasses (See HexchequerGame):
-- (void) addPieces: (NSString*)imageName
-            toGrid: (Grid*)grid
-         forPlayer: (int)playerNum
-              rows: (NSRange)rows
-       alternating: (BOOL)alternating;
 
 @end

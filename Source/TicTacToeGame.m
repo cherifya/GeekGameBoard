@@ -29,21 +29,13 @@
 
 @implementation TicTacToeGame
 
-- (void) x_createDispenser: (NSString*)imageName forPlayer: (int)playerNumber
+- (Piece*) pieceForPlayer: (int)playerNumber
 {
-    Piece *p = [[Piece alloc] initWithImageNamed: imageName scale: 80];
+    Piece *p = [[Piece alloc] initWithImageNamed: (playerNumber ? @"O.tiff" :@"X.tiff")
+                                           scale: 80];
     p.owner = [self.players objectAtIndex: playerNumber];
-    CGFloat x = floor(CGRectGetMidX(_board.bounds));
-#if TARGET_OS_ASPEN
-    x = x - 80 + 160*playerNumber;
-    CGFloat y = 360;
-#else
-    x += (playerNumber==0 ?-230 :230);
-    CGFloat y = 175;
-#endif
-    _dispenser[playerNumber] = [[Dispenser alloc] initWithPrototype: p quantity: 0
-                                                        frame: CGRectMake(x-45,y-45, 90,90)];
-    [_board addSublayer: _dispenser[playerNumber]];
+    p.name = (playerNumber ?@"O" :@"X");
+    return [p autorelease];
 }
 
 - (id) initWithBoard: (GGBLayer*)board
@@ -62,8 +54,20 @@
         [board addSublayer: _grid];
         
         // Create piece dispensers for the two players:
-        [self x_createDispenser: @"X.tiff" forPlayer: 0];
-        [self x_createDispenser: @"O.tiff" forPlayer: 1];
+        for( int playerNumber=0; playerNumber<=1; playerNumber++ ) {
+            Piece *p = [self pieceForPlayer: playerNumber];
+            CGFloat x = floor(CGRectGetMidX(_board.bounds));
+#if TARGET_OS_ASPEN
+            x = x - 80 + 160*playerNumber;
+            CGFloat y = 360;
+#else
+            x += (playerNumber==0 ?-230 :230);
+            CGFloat y = 175;
+#endif
+            _dispenser[playerNumber] = [[Dispenser alloc] initWithPrototype: p quantity: 0
+                                                                      frame: CGRectMake(x-45,y-45, 90,90)];
+            [_board addSublayer: _dispenser[playerNumber]];
+        }            
         
         // And they're off!
         [self nextPlayer];
@@ -71,12 +75,49 @@
     return self;
 }
 
+
+- (NSString*) stateString
+{
+    unichar str[10];
+    for( int i=0; i<9; i++ ) {
+        NSString *ident = [_grid cellAtRow: i/3 column: i%3].bit.name;
+        if( ident==nil )
+            str[i] = '-';
+        else 
+            str[i] = [ident characterAtIndex: 0];
+    }
+    return [NSString stringWithCharacters: str length: 9];
+}
+
+- (void) setStateString: (NSString*)stateString
+{
+    for( int i=0; i<9; i++ ) {
+        Piece *piece;
+        switch( [stateString characterAtIndex: i] ) {
+            case 'X': case 'x': piece = [self pieceForPlayer: 0]; break;
+            case 'O': case 'o': piece = [self pieceForPlayer: 1]; break;
+            default:            piece = nil; break;
+        }
+        [_grid cellAtRow: i/3 column: i%3].bit = piece;
+    }
+}
+
+
 - (Bit*) bitToPlaceInHolder: (id<BitHolder>)holder
 {
     if( holder.bit==nil && [holder isKindOfClass: [Square class]] )
         return _dispenser[self.currentPlayer.index].bit;
     else
         return nil;
+}
+
+
+- (void) bit: (Bit*)bit movedFrom: (id<BitHolder>)src to: (id<BitHolder>)dst
+{
+    Square *square = (Square*)dst;
+    int squareIndex = 3*square.row + square.column;
+    [self.currentMove appendFormat: @"%@%i", bit.name, squareIndex];
+    [super bit: bit movedFrom: src to: dst];
 }
 
 - (void) nextPlayer

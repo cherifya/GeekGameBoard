@@ -46,8 +46,12 @@
 - (void) setBit: (Bit*)bit
 {
     if( bit != self.bit ) {
-        if( bit && _bit )
-            [_bit destroy];
+        if( _bit ) {
+            if( bit )
+                [_bit destroy];
+            else
+                [_bit removeFromSuperlayer];
+        }
         setObj(&_bit,bit);
         ChangeSuperlayer(bit,self,-1);
     }

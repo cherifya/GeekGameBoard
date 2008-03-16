@@ -76,11 +76,11 @@ void ChangeSuperlayer( CALayer *layer, CALayer *newSuperlayer, int index )
         pos = [newSuperlayer convertPoint: pos fromLayer: layer.superlayer];
     [layer retain];
     [layer removeFromSuperlayer];
+    layer.position = pos;
     if( index >= 0 )
         [newSuperlayer insertSublayer: layer atIndex: index];
     else
         [newSuperlayer addSublayer: layer];
-    layer.position = pos;
     [layer release];
 
     [CATransaction commit];
