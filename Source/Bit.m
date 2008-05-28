@@ -107,7 +107,7 @@
         }
         
         self.zPosition = z;
-#if !TARGET_OS_ASPEN
+#if !TARGET_OS_IPHONE
         self.shadowOpacity = shadow;
         self.shadowOffset = CGSizeMake(offset,-offset);
         self.shadowRadius = radius;

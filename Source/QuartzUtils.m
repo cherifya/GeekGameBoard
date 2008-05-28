@@ -42,7 +42,7 @@ static void InitQuartzUtils()
 }
 
 
-#if TARGET_OS_ASPEN
+#if TARGET_OS_IPHONE
 CGColorRef CreateGray(CGFloat gray, CGFloat alpha)
 {
     CGColorSpaceRef graySpace = CGColorSpaceCreateDeviceGray();
@@ -100,7 +100,7 @@ void RemoveImmediately( CALayer *layer )
 
 CGImageRef CreateCGImageFromFile( NSString *path )
 {
-#if TARGET_OS_ASPEN
+#if TARGET_OS_IPHONE
     UIImage *uiImage = [UIImage imageWithContentsOfFile: path];
     if(!uiImage) NSLog(@"Warning: UIImage imageWithContentsOfFile failed on file %@",path);
     return CGImageRetain(uiImage.CGImage);
@@ -120,7 +120,7 @@ CGImageRef CreateCGImageFromFile( NSString *path )
 
 CGImageRef GetCGImageNamed( NSString *name )
 {
-#if TARGET_OS_ASPEN
+#if TARGET_OS_IPHONE
     name = name.lastPathComponent;
     UIImage *uiImage = [UIImage imageNamed: name];
     NSCAssert1(uiImage,@"Couldn't find bundle image resource '%@'",name);
@@ -168,7 +168,7 @@ CGColorRef GetCGPatternNamed( NSString *name )         // can be resource name o
 }
 
 
-#if ! TARGET_OS_ASPEN
+#if ! TARGET_OS_IPHONE
 CGImageRef GetCGImageFromPasteboard( NSPasteboard *pb )
 {
     CGImageSourceRef src = NULL;
@@ -197,7 +197,7 @@ CGImageRef GetCGImageFromPasteboard( NSPasteboard *pb )
 
 float GetPixelAlpha( CGImageRef image, CGSize imageSize, CGPoint pt )
 {
-#if TARGET_OS_ASPEN
+#if TARGET_OS_IPHONE
     // iPhone uses "flipped" (i.e. normal) coords, so images are wrong-way-up
     pt.y = imageSize.height - pt.y;
 #endif

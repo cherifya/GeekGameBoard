@@ -18,7 +18,7 @@
                                fontSize: (float) fontSize
                               alignment: (enum CAAutoresizingMask) align
 {
-#if TARGET_OS_ASPEN
+#if TARGET_OS_IPHONE
     UIFont *font = [UIFont systemFontOfSize: fontSize];
 #else
     NSFont *font = [NSFont systemFontOfSize: fontSize];
@@ -38,7 +38,7 @@
     GGBTextLayer *label = [[self alloc] init];
     label.string = text;
 
-#if TARGET_OS_ASPEN
+#if TARGET_OS_IPHONE
     UIFont *font = inputFont;
     [label setNeedsDisplay];
     label.needsDisplayOnBoundsChange = YES;
@@ -60,45 +60,53 @@
     align |= kCALayerWidthSizable;
     label.alignmentMode = mode;
     
-    CGFloat inset = 3;
+    // Get the bounds of the interior of the superlayer:
+    CGFloat inset = round(font.pointSize/8);
     if( [superlayer respondsToSelector: @selector(borderWidth)] )
         inset += ((GGBLayer*)superlayer).borderWidth;
     CGRect bounds = CGRectInset(superlayer.bounds, inset, inset);
-    if( mode==@"center" )
+    if( mode==@"center" ) {
+        // horizontal centering: ignore x inset:
         bounds = CGRectInset(bounds,-inset,0);
-    CGFloat height = font.ascender;
-    float descender = font.descender;
-#if TARGET_OS_ASPEN
-    descender = -descender;
-#endif
-    CGFloat y = bounds.origin.y;
-    if( align & kCALayerHeightSizable ) {
-        y += (bounds.size.height-height)/2.0;
-#if TARGET_OS_ASPEN
-        y -= descender/2.0;
-#endif
-    } else if( align & kCALayerMinYMargin )
-        y += bounds.size.height - height;
-    align &= ~kCALayerHeightSizable;
-    label.bounds = CGRectMake(0, descender,
-                              bounds.size.width, height - descender);
-    label.position = CGPointMake(bounds.origin.x,y+descender);
-    label.anchorPoint = CGPointMake(0,0);
+    }
     
-#if ! TARGET_OS_ASPEN
+    // Compute y position of bottom of layer's frame. (Remember, descender is negative!)
+    CGFloat y = bounds.origin.y;
+    CGFloat descender=font.descender, height=font.ascender-descender;
+    if( align & kCALayerHeightSizable ) {
+        // Vertical centering:
+        y += (bounds.size.height-height)/2.0;
+#if ! TARGET_OS_IPHONE
+        y += descender/2.0;
+#endif
+        align &= ~kCALayerHeightSizable;
+    } else if( align & kCALayerMinYMargin ) {
+        // Top alignment (Mac) or bottom (iPhone):
+        y += bounds.size.height - height;
+    }
+    
+    // Compute label's geometry:
+    label.bounds = CGRectMake(0, descender,
+                              bounds.size.width, height);
+    label.anchorPoint = CGPointMake(0,0);
+    label.position = CGPointMake(bounds.origin.x,y);
+    
+#if ! TARGET_OS_IPHONE
     label.autoresizingMask = align;
 #endif
     [superlayer addSublayer: label];
     [label release];
     
-    //label.borderWidth = 1;
-    //label.borderColor = kBlackColor;
+#if 0 // for debugging layout, border the view
+    label.borderWidth = 1;
+    label.borderColor = kBlackColor;
+#endif
     
     return label;
 }
 
 
-#if TARGET_OS_ASPEN
+#if TARGET_OS_IPHONE
 @synthesize string=_string, font=_font, 
             foregroundColor=_foregroundColor, alignmentMode=_alignmentMode;
 
@@ -134,7 +142,9 @@
             align = UITextAlignmentLeft;
         
         CGRect bounds = self.bounds;
-        bounds.origin.y += _font.ascender+_font.descender - _font.leading;
+        //float ascender=_font.ascender, descender=_font.descender, leading=_font.leading;
+        //bounds.size.height -= ascender-descender - leading;
+        
         [_string drawInRect: bounds 
                    withFont: _font
               lineBreakMode: UILineBreakModeClip

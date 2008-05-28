@@ -44,7 +44,7 @@
     _headline.textAlignment = UITextAlignmentCenter;
     _headline.font = [UIFont boldSystemFontOfSize: 20];
     _headline.minimumFontSize = 14;
-    _headline.adjustsFontSizeToFit = YES;
+    _headline.adjustsFontSizeToFitWidth = YES;
     [_window addSubview: _headline];
     
     // Start game:
@@ -71,7 +71,7 @@
     [game removeObserver: self forKeyPath: @"winner"];
     
     if( gameClassName == nil )
-        gameClassName = [[game class] className];
+        gameClassName = [[game class] description];
     
     [_contentView startGameNamed: gameClassName];
     
@@ -110,8 +110,8 @@
             alert = [[UIAlertView alloc] initWithTitle: msg
                                                message: @"Congratulations!"
                                               delegate:self
-                                         defaultButton:@"OK" 
-                                          cancelButton:nil otherButtons:nil];
+                                     cancelButtonTitle:nil 
+                                     otherButtonTitles:nil];
             [alert show];
             [alert release];
         }            
@@ -119,7 +119,7 @@
 }
 
 
-- (void)modalView:(UIModalView *)modalView didDismissWithButtonIndex:(NSInteger)buttonIndex;
+- (void)alertView:(UIAlertView *)modalView didDismissWithButtonIndex:(NSInteger)buttonIndex;
 {
     // Start new game:
     [self startGameNamed: nil];

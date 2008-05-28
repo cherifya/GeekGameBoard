@@ -122,7 +122,7 @@ static BOOL layerIsBitHolder( CALayer* layer )  {return [layer conformsToProtoco
     UITouch *touch = touches.anyObject;
     
     BOOL placing = NO;
-    _dragStartPos = touch.locationInView;
+    _dragStartPos = [touch locationInView: self];
     _dragBit = (Bit*) [self hitTestPoint: _dragStartPos
                         forLayerMatching: layerIsBit 
                                   offset: &_dragOffset];
@@ -188,7 +188,7 @@ static BOOL layerIsBitHolder( CALayer* layer )  {return [layer conformsToProtoco
     
     if( _dragBit ) {
         // Get the mouse position, and see if we've moved 3 pixels since the mouseDown:
-        CGPoint pos = touch.locationInView;
+        CGPoint pos = [touch locationInView: self];
         if( fabs(pos.x-_dragStartPos.x)>=3 || fabs(pos.y-_dragStartPos.y)>=3 )
             _dragMoved = YES;
         

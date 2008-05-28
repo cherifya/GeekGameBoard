@@ -345,7 +345,7 @@ static void setcolor( CGColorRef *var, CGColorRef color )
 #pragma mark DRAG-AND-DROP:
 
 
-#if ! TARGET_OS_ASPEN
+#if ! TARGET_OS_IPHONE
 
 // An image from another app can be dragged onto a Dispenser to change the Piece's appearance.
 
@@ -451,7 +451,7 @@ static void setcolor( CGColorRef *var, CGColorRef color )
 - (Square*) l      {return self.fwdIsN ?self.w  :self.e;}
 
 
-#if ! TARGET_OS_ASPEN
+#if ! TARGET_OS_IPHONE
 
 - (BOOL)performDragOperation:(id <NSDraggingInfo>)sender
 {

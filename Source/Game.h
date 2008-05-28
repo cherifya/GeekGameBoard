@@ -27,6 +27,7 @@
 /** Abstract superclass. Keeps track of the rules and turns of a game. */
 @interface Game : NSObject
 {
+    NSString *_uniqueID;
     GGBLayer *_board;
     NSArray *_players;
     Player *_currentPlayer, *_winner;
@@ -34,6 +35,10 @@
     NSMutableArray *_states, *_moves;
     unsigned _currentTurn;
 }
+
+/** Returns the name used to identify this game in URLs.
+     (By default it just returns the class name with the "Game" suffix removed.) */
++ (NSString*) identifier;
 
 /** Returns the human-readable name of this game.
     (By default it just returns the class name with the "Game" suffix removed.) */
@@ -49,7 +54,15 @@
 @property unsigned currentTurn;
 @property (readonly) BOOL isLatestTurn;
 
+
+/** A globally-unique string assigned to this game instance, to help networked players identify it. */
+@property (readonly) NSString* uniqueID;
+
 - (BOOL) animateMoveFrom: (BitHolder*)src to: (BitHolder*)dst;
+
+
+- (id) initWithUniqueID: (NSString*)uniqueID;
+- (id) init;
 
 
 // Methods for subclasses to implement:
@@ -87,8 +100,11 @@
     Default implementation returns nil. */
 - (Player*) checkForWinner;
 
-
+/** A string describing the current state of the game (the positions of all pieces,
+    orderings of cards, player scores, ... */
 @property (copy) NSString* stateString;
+
+/** Add a move to the game based on the contents of the string. */
 - (BOOL) applyMoveString: (NSString*)move;
 
 
@@ -111,7 +127,7 @@
 
 
 /** A mostly-passive object used to represent a player. */
-@interface Player : NSObject
+@interface Player : NSObject <NSCoding>
 {
     Game *_game;
     NSString *_name;

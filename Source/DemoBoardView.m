@@ -72,6 +72,10 @@ static NSString* sCurrentGameName = @"CheckersGame";
 }
 
 
+- (BOOL)canBecomeKeyView        {return YES;}
+- (BOOL)acceptsFirstResponder   {return YES;}
+
+
 - (void) awakeFromNib
 {
     srandomdev();
@@ -94,7 +98,7 @@ static NSString* sCurrentGameName = @"CheckersGame";
 }
 
 
-- (void) startGameFromMenu: (id)sender
+- (IBAction) startGameFromMenu: (id)sender
 {
     sCurrentGameName = kMenuGameNames[ [sender tag] ];
     [self startGameNamed: sCurrentGameName];
@@ -124,6 +128,24 @@ static NSString* sCurrentGameName = @"CheckersGame";
         }
         _headline.string = [NSString stringWithFormat: msg, p.name];
     }
+}
+
+
+- (IBAction) undo: (id)sender
+{
+    if( self.game.currentTurn > 0 )
+        self.game.currentTurn--;
+    else
+        NSBeep();
+}
+
+
+- (IBAction) redo: (id)sender
+{
+    if( self.game.currentTurn < self.game.maxTurn )
+        self.game.currentTurn++;
+    else
+        NSBeep();
 }
 
 

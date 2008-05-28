@@ -135,7 +135,7 @@ static CATransform3D kFaceUpTransform, kFaceDownTransform;
     GGBLayer *back = [[GGBLayer alloc] init];
     back.bounds = CGRectMake(0,0,size.width,size.height);
     back.position = CGPointMake(sCardSize.width/2,sCardSize.height/2);
-#if TARGET_OS_ASPEN
+#if TARGET_OS_IPHONE
     back.backgroundColor = CreateRGB(0.0,0.5,0.5, 1.0);
 #else
     back.contents = (id) GetCGImageNamed(@"/Library/Desktop Pictures/Classic Aqua Blue.jpg");
@@ -148,7 +148,7 @@ static CATransform3D kFaceUpTransform, kFaceDownTransform;
     back.edgeAntialiasingMask = 0;
     back.doubleSided = NO;          // this makes the layer invisible when it's flipped
     
-#if TARGET_OS_ASPEN
+#if TARGET_OS_IPHONE
     // On iPhone, only Hiragana Kaku includes the coveted snowman glyph... who knows why?
     UIFont *font = [UIFont fontWithName: @"HiraKakuProN-W3" size: 1*size.width];
 #else
@@ -167,7 +167,7 @@ static CATransform3D kFaceUpTransform, kFaceDownTransform;
 #pragma mark DRAG-AND-DROP:
 
 
-#if ! TARGET_OS_ASPEN
+#if ! TARGET_OS_IPHONE
 
 // An image from another app can be dragged onto a Card to change its background. */
 

@@ -9,7 +9,7 @@
 #import "GGBLayer.h"
 
 
-#if TARGET_OS_ASPEN
+#if TARGET_OS_IPHONE
 @interface GGBTextLayer : GGBLayer
 {
     NSString *_string;
@@ -39,7 +39,7 @@
 @end
 
 
-#if TARGET_OS_ASPEN
+#if TARGET_OS_IPHONE
 /* Bit definitions for `autoresizingMask' property. */
 
 enum CAAutoresizingMask

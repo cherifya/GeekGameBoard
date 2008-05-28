@@ -20,7 +20,7 @@
 */
 #import "GGBUtils.h"
 
-#if TARGET_OS_ASPEN
+#if TARGET_OS_IPHONE
 #import <AudioToolbox/AudioToolbox.h>
 #endif
 
@@ -44,7 +44,7 @@ void setObjCopy( id<NSCopying> *variable, id<NSCopying> newValue )
 
 void PreloadSound( NSString* name )
 {
-#if ! TARGET_OS_ASPEN
+#if ! TARGET_OS_IPHONE
     NSSound *sound = [[NSSound soundNamed: @"Pop"] copy];
     sound.volume = 0;
     [sound play];
@@ -55,7 +55,7 @@ void PreloadSound( NSString* name )
 
 void PlaySound( NSString* name )
 {
-#if TARGET_OS_ASPEN
+#if TARGET_OS_IPHONE
     NSURL *url = [NSURL fileURLWithPath: [@"/Library/Sounds/" stringByAppendingPathComponent: name]];
     SystemSoundID soundID;
     if( AudioServicesCreateSystemSoundID((CFURLRef)url,&soundID) != noErr ) {
@@ -70,8 +70,8 @@ void PlaySound( NSString* name )
 
 void Beep()
 {
-#if TARGET_OS_ASPEN
-    AudioServicesPlaySystemSound(kSystemSoundID_UserPreferredAlert);
+#if TARGET_OS_IPHONE
+    AudioServicesPlayAlertSound(0x00001000/*kSystemSoundID_UserPreferredAlert*/);
 #else
     NSBeep();
 #endif

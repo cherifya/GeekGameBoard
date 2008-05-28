@@ -35,7 +35,7 @@
 @implementation Game
 
 
-+ (NSString*) displayName
++ (NSString*) identifier
 {
     NSString* name = [self description];
     if( [name hasSuffix: @"Game"] )
@@ -44,17 +44,46 @@
 }
 
 
-- (id) initWithBoard: (GGBLayer*)board
++ (NSString*) displayName
 {
+    return [self identifier];
+}
+
+
+- (id) initWithUniqueID: (NSString*)uuid
+{
+    NSParameterAssert(uuid);
     self = [super init];
     if (self != nil) {
-        _states = [[NSMutableArray alloc] init];
-        _moves = [[NSMutableArray alloc] init];
-        _currentMove = [[NSMutableString alloc] init];
-        _board = [board retain];
+        _uniqueID = [uuid copy];
+        _board = [[GGBLayer alloc] init];
         // Store a pointer to myself as the value of the "Game" property
         // of my root layer. (CALayers can have arbitrary KV properties stored into them.)
         // This is used by the -[CALayer game] category method defined below, to find the Game.
+        [_board setValue: self forKey: @"Game"];
+
+        _currentMove = [[NSMutableString alloc] init];
+    }
+    return self;
+}
+
+- (id) init
+{
+    CFUUIDRef uuidRef = CFUUIDCreate(NULL);
+    NSString* uuid = (id) CFUUIDCreateString(NULL,uuidRef);
+    self = [self initWithUniqueID: uuid];
+    CFRelease(uuid);
+    CFRelease(uuidRef);
+    return self;
+}
+
+- (id) initWithBoard: (GGBLayer*)board
+{
+    self = [self init];
+    if (self != nil) {
+        _states = [[NSMutableArray alloc] init];
+        _moves = [[NSMutableArray alloc] init];
+        _board = [board retain];
         [board setValue: self forKey: @"Game"];
     }
     return self;
@@ -73,7 +102,7 @@
 
 
 @synthesize players=_players, currentPlayer=_currentPlayer, winner=_winner, 
-            currentMove=_currentMove, states=_states, moves=_moves;
+            currentMove=_currentMove, states=_states, moves=_moves, uniqueID=_uniqueID;
 
 
 - (void) setNumberOfPlayers: (unsigned)n
@@ -129,9 +158,10 @@
 {
     NSLog(@"--- End of turn (move was '%@')", _currentMove);
     if( self.isLatestTurn ) {
-        [self willChangeValueForKey: @"maxTurn"];
-        [_moves addObject: [[_currentMove copy] autorelease]];
+        NSString *move = [[_currentMove copy] autorelease];
         [_currentMove setString: @""];
+        [self willChangeValueForKey: @"maxTurn"];
+        [_moves addObject: move];
         [self didChangeValueForKey: @"maxTurn"];
     }
 
@@ -143,6 +173,10 @@
     } else
         [self nextPlayer];
 }
+
+
+#pragma mark -
+#pragma mark STORED TURNS:
 
 
 - (unsigned) maxTurn
@@ -195,8 +229,13 @@
     [bit performSelector: @selector(setPickedUp:) withObject:nil afterDelay: 0.15];
     CGPoint endPosition = [dst convertPoint: GetCGRectCenter(dst.bounds) toLayer: bit.superlayer];
     [bit animateAndBlock: @"position"
+#if TARGET_OS_IPHONE
+                    from: [NSValue valueWithCGPoint: bit.position]
+                      to: [NSValue valueWithCGPoint: endPosition]
+#else
                     from: [NSValue valueWithPoint: NSPointFromCGPoint(bit.position)]
                       to: [NSValue valueWithPoint: NSPointFromCGPoint(endPosition)]
+#endif
                 duration: 0.25];
     dst.bit = bit;
     dst.highlighted = NO;
@@ -271,6 +310,28 @@
         _game = game;
     }
     return self;
+}
+
+- (id) initWithCoder: (NSCoder*)decoder
+{
+    self = [self init];
+    if( self ) {
+        _game =  [decoder decodeObjectForKey: @"game"];
+        _name = [[decoder decodeObjectForKey: @"name"] copy];
+    }
+    return self;
+}
+
+- (void) encodeWithCoder: (NSCoder*)coder
+{
+    [coder encodeObject: _game forKey: @"game"];
+    [coder encodeObject: _name forKey: @"name"];
+}
+
+- (void) dealloc
+{
+    [_name release];
+    [super dealloc];
 }
 
 

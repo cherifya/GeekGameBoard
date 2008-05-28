@@ -45,7 +45,7 @@
     float cornerFontSize = MAX(18*scale, 14);
     float centerFontSize = 80*scale;
     
-#if TARGET_OS_ASPEN
+#if TARGET_OS_IPHONE
     UIFont *cornerFont = [UIFont boldSystemFontOfSize: cornerFontSize];
 #else
     NSFont *cornerFont = [NSFont boldSystemFontOfSize: cornerFontSize];
@@ -69,8 +69,6 @@
                                        fontSize: centerFontSize
                                       alignment: kCALayerWidthSizable | kCALayerHeightSizable];
     label.foregroundColor = suitColor;
-    //label.borderWidth = 1;
-    //label.borderColor = kBlackColor;
     
     return front;
 }

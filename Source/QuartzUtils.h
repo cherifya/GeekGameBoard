@@ -29,7 +29,7 @@ extern CGColorRef kBlackColor, kWhiteColor,
                   kAlmostInvisibleWhiteColor,
                   kHighlightColor;
 
-#if TARGET_OS_ASPEN
+#if TARGET_OS_IPHONE
 // These don't exist on iPhone, so I implement them:
 CGColorRef CreateGray(CGFloat gray, CGFloat alpha);
 CGColorRef CreateRGB(CGFloat red, CGFloat green, CGFloat blue, CGFloat alpha);
@@ -56,7 +56,7 @@ void RemoveImmediately( CALayer *layer );
 CGImageRef GetCGImageNamed( NSString *name );
 CGColorRef GetCGPatternNamed( NSString *name );
 
-#if ! TARGET_OS_ASPEN
+#if ! TARGET_OS_IPHONE
 /** Loads image data from the pasteboard into a CGImage. */
 CGImageRef GetCGImageFromPasteboard( NSPasteboard *pb );
 #endif

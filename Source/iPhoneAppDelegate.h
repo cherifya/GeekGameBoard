@@ -10,7 +10,7 @@
 
 @class BoardUIView;
 
-@interface GGB_iPhoneAppDelegate : NSObject <UIModalViewDelegate> {
+@interface GGB_iPhoneAppDelegate : NSObject <UIAlertViewDelegate> {
     UIWindow *_window;
     BoardUIView *_contentView;
     UILabel *_headline;

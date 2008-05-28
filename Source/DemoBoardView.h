@@ -31,6 +31,9 @@
     IBOutlet NSSlider *_turnSlider;
 }
 
+- (IBAction) undo: (id)sender;
+- (IBAction) redo: (id)sender;
 - (IBAction) startGameFromMenu: (id)sender;
+- (IBAction) enterFullScreen: (id)sender;
 
 @end

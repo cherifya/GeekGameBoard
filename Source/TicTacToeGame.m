@@ -57,7 +57,7 @@
         for( int playerNumber=0; playerNumber<=1; playerNumber++ ) {
             Piece *p = [self pieceForPlayer: playerNumber];
             CGFloat x = floor(CGRectGetMidX(_board.bounds));
-#if TARGET_OS_ASPEN
+#if TARGET_OS_IPHONE
             x = x - 80 + 160*playerNumber;
             CGFloat y = 360;
 #else

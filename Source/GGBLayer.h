@@ -6,7 +6,8 @@
 //  Copyright 2008 __MyCompanyName__. All rights reserved.
 //
 
-#if TARGET_OS_ASPEN
+
+#if TARGET_OS_IPHONE
 #import <QuartzCore/QuartzCore.h>
 #else
 #import <Quartz/Quartz.h>
@@ -17,7 +18,7 @@
 {
     CABasicAnimation *_curAnimation;
 
-#if ! TARGET_OS_ASPEN
+#if ! TARGET_OS_IPHONE
 }
 #else
 // For some reason, the CALayer class on iPhone OS doesn't have these!
