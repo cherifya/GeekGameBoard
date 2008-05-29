@@ -196,11 +196,9 @@
         if( turn==_currentTurn+1 ) {
             [self applyMoveString: [_moves objectAtIndex: _currentTurn]];
         } else {
-            [CATransaction begin];
-            [CATransaction setValue:(id)kCFBooleanTrue
-                             forKey:kCATransactionDisableActions];
+            BeginDisableAnimations();
             self.stateString = [_states objectAtIndex: turn];
-            [CATransaction commit];
+            EndDisableAnimations();
         }
         _currentTurn = turn;
         self.currentPlayer = [_players objectAtIndex: (turn % _players.count)];

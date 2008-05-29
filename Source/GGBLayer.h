@@ -36,3 +36,14 @@
 - (void) animateAndBlock: (NSString*)keyPath from: (id)from to: (id)to duration: (NSTimeInterval)duration;
 
 @end
+
+
+/** Moves a layer from one superlayer to another, without changing its position onscreen. */
+void ChangeSuperlayer( CALayer *layer, CALayer *newSuperlayer, int index );
+
+/** Removes a layer from its superlayer without any fade-out animation. */
+void RemoveImmediately( CALayer *layer );
+
+/** Disables animations until EndDisableAnimations is called. */
+void BeginDisableAnimations(void);
+void EndDisableAnimations(void);

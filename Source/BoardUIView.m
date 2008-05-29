@@ -199,11 +199,9 @@ static BOOL layerIsBitHolder( CALayer* layer )  {return [layer conformsToProtoco
         CGPoint newPos = [_dragBit.superlayer convertPoint: pos fromLayer: self.layer];
 
         [CATransaction flush];
-        [CATransaction begin];
-        [CATransaction setValue:(id)kCFBooleanTrue
-                         forKey:kCATransactionDisableActions];
+        BeginDisableAnimations();
         _dragBit.position = newPos;
-        [CATransaction commit];
+        EndDisableAnimations();
 
         // Find what it's over:
         [self _findDropTarget: pos];
@@ -261,6 +259,7 @@ static BOOL layerIsBitHolder( CALayer* layer )  {return [layer conformsToProtoco
                 } else {
                     [_dragBit removeFromSuperlayer];
                 }
+                Beep();
             }
         } else {
             // Just a click, without a drag:

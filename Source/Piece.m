@@ -32,8 +32,7 @@
 {
     self = [super init];
     if (self != nil) {
-        self.imageName = imageName;
-        [self setImage: GetCGImageNamed(imageName) scale: scale];
+        [self setImageNamed: imageName scale: scale];
         self.zPosition = kPieceZ;
     }
     return self;
@@ -66,20 +65,25 @@
 @synthesize imageName=_imageName;
 
 
-- (void) setImage: (CGImageRef)image scale: (CGFloat)scale
+- (void) _setImage: (CGImageRef)image
 {
     self.contents = (id) image;
-    self.contentsGravity = @"resize";
+    self.bounds = CGRectMake(0,0,CGImageGetWidth(image),CGImageGetHeight(image));
+    self.contentsGravity = kCAGravityResizeAspect;
     self.minificationFilter = kCAFilterLinear;
-    int width = CGImageGetWidth(image), height = CGImageGetHeight(image);
-    if( scale > 0 ) {
-        if( scale >= 4.0 )
-            scale /= MAX(width,height);             // interpret scale as target dimensions
-        width = ceil( width * scale);
-        height= ceil( height* scale);
-    }
-    self.bounds = CGRectMake(0,0,width,height);
     self.imageName = nil;
+}
+
+
+- (void) setImage: (CGImageRef)image scale: (CGFloat)scale
+{
+    [self _setImage: CreateScaledImage(image,scale)];
+}
+
+- (void) setImageNamed: (NSString*)imageName scale: (CGFloat)scale
+{
+    [self _setImage: GetScaledImageNamed(imageName,scale)];
+    self.imageName = imageName;
 }
 
 - (void) setImage: (CGImageRef)image

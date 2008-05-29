@@ -61,14 +61,15 @@
     label.alignmentMode = mode;
     
     // Get the bounds of the interior of the superlayer:
-    CGFloat inset = round(font.pointSize/8);
+    CGFloat yinset = 0;
     if( [superlayer respondsToSelector: @selector(borderWidth)] )
-        inset += ((GGBLayer*)superlayer).borderWidth;
-    CGRect bounds = CGRectInset(superlayer.bounds, inset, inset);
-    if( mode==@"center" ) {
-        // horizontal centering: ignore x inset:
-        bounds = CGRectInset(bounds,-inset,0);
-    }
+        yinset += ((GGBLayer*)superlayer).borderWidth;
+    CGFloat xinset;
+    if( mode==@"center" )
+        xinset = 0;
+    else
+        xinset = yinset + round(font.pointSize/3.0);
+    CGRect bounds = CGRectInset(superlayer.bounds, xinset,yinset);
     
     // Compute y position of bottom of layer's frame. (Remember, descender is negative!)
     CGFloat y = bounds.origin.y;

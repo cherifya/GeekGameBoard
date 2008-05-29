@@ -116,6 +116,7 @@
 
 - (CGFloat) cornerRadius    {return _cornerRadius;}
 - (CGFloat) borderWidth     {return _borderWidth;}
+- (CGColorRef) backgroundColor {return _realBGColor;}
 - (CGColorRef) borderColor  {return _borderColor;}
 
 - (void) setCornerRadius: (CGFloat)r
@@ -236,3 +237,54 @@
 
 
 @end
+
+
+
+#pragma mark -
+#pragma mark UTILITIES:
+
+
+void BeginDisableAnimations(void)
+{
+    [CATransaction begin];
+    [CATransaction setValue:(id)kCFBooleanTrue
+                     forKey:kCATransactionDisableActions];
+}
+
+void EndDisableAnimations(void)
+{
+    [CATransaction commit];
+} 
+
+
+void ChangeSuperlayer( CALayer *layer, CALayer *newSuperlayer, int index )
+{
+    // Disable actions, else the layer will move to the wrong place and then back!
+    [CATransaction flush];
+    BeginDisableAnimations();
+    
+    CGPoint pos = layer.position;
+    if( layer.superlayer )
+        pos = [newSuperlayer convertPoint: pos fromLayer: layer.superlayer];
+    [layer retain];
+    [layer removeFromSuperlayer];
+    layer.position = pos;
+    if( index >= 0 )
+        [newSuperlayer insertSublayer: layer atIndex: index];
+    else
+        [newSuperlayer addSublayer: layer];
+    [layer release];
+    
+    EndDisableAnimations();
+}
+
+
+void RemoveImmediately( CALayer *layer )
+{
+    [CATransaction flush];
+    BeginDisableAnimations();
+    [layer removeFromSuperlayer];
+    EndDisableAnimations();
+}    
+
+

@@ -13,6 +13,19 @@
 #import "GGBUtils.h"
 
 
+// Temporary HACK to fix logging problem in beta 6 iPhone OS
+extern void _NSSetLogCStringFunction(void (*)(const char *string, unsigned length, BOOL withSyslogBanner));
+static void PrintNSLogMessage(const char *string, unsigned length, BOOL withSyslogBanner)
+{
+	puts(string);
+}
+static void HackNSLog(void) __attribute__((constructor));
+static void HackNSLog(void)
+{
+	_NSSetLogCStringFunction(PrintNSLogMessage);
+}
+
+
 @implementation GGB_iPhoneAppDelegate
 
 
@@ -23,9 +36,6 @@
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application 
 {	
-    for( NSString *family in [UIFont familyNames] )
-        NSLog(@"%@: (%@)", family, [[UIFont fontNamesForFamilyName: family] componentsJoinedByString: @", "]);
-        
     // Create window
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     _window.layer.backgroundColor = GetCGPatternNamed(@"Background.png");
@@ -48,7 +58,7 @@
     [_window addSubview: _headline];
     
     // Start game:
-    [self startGameNamed: @"KlondikeGame"];
+    [self startGameNamed: @"CheckersGame"];
     
     // Show window
     [_window makeKeyAndVisible];

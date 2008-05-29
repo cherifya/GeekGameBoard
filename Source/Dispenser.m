@@ -72,14 +72,12 @@
 {
     NSAssert(_bit==nil,@"Already have a currentBit");
 
-    [CATransaction begin];
-    [CATransaction setValue: (id)kCFBooleanTrue
-                     forKey: kCATransactionDisableActions];
+    BeginDisableAnimations();
     self.bit = [self createBit];
     CGPoint pos = _bit.position;
     _bit.position = CGPointMake(pos.x, pos.y+70);
     [self addSublayer: _bit];
-    [CATransaction commit];
+    EndDisableAnimations();
     
     _bit.position = pos;
 }

@@ -29,7 +29,7 @@
 
 /** Standard Z positions */
 enum {
-    kBoardZ = 1,
+    kBoardZ = 0,
     kCardZ  = 2,
     kPieceZ = 3,
     
@@ -43,6 +43,7 @@ enum {
 {
     @private
     int _restingZ;      // Original z position, saved while pickedUp
+    BOOL _pickedUp;
     Player *_owner;     // Player that owns this Bit
 }
 

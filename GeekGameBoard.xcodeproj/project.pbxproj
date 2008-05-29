@@ -19,6 +19,11 @@
 		2734B2620CC7F25A0070C008 /* HexchequerGame.m in Sources */ = {isa = PBXBuildFile; fileRef = 2734B2610CC7F25A0070C008 /* HexchequerGame.m */; };
 		2734B4F00CCA5BDB0070C008 /* CheckersGame.m in Sources */ = {isa = PBXBuildFile; fileRef = 2734B4EF0CCA5BDB0070C008 /* CheckersGame.m */; };
 		274124060CFCCF9D00842A9B /* DemoBoardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 274124050CFCCF9D00842A9B /* DemoBoardView.m */; };
+		275167D90DEE2AB000247375 /* Blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 275167D40DEE2AB000247375 /* Blue.png */; };
+		275167DA0DEE2AB000247375 /* Gold.png in Resources */ = {isa = PBXBuildFile; fileRef = 275167D50DEE2AB000247375 /* Gold.png */; };
+		275167DB0DEE2AB000247375 /* Green.png in Resources */ = {isa = PBXBuildFile; fileRef = 275167D60DEE2AB000247375 /* Green.png */; };
+		275167DC0DEE2AB000247375 /* Red.png in Resources */ = {isa = PBXBuildFile; fileRef = 275167D70DEE2AB000247375 /* Red.png */; };
+		275167DD0DEE2AB000247375 /* Violet.png in Resources */ = {isa = PBXBuildFile; fileRef = 275167D80DEE2AB000247375 /* Violet.png */; };
 		276DFC410D00867000D329AE /* Green Ball.png in Resources */ = {isa = PBXBuildFile; fileRef = 276DFC400D00867000D329AE /* Green Ball.png */; };
 		276DFC560D00890C00D329AE /* Red Ball.png in Resources */ = {isa = PBXBuildFile; fileRef = 276DFC530D00890C00D329AE /* Red Ball.png */; };
 		276DFC570D00890C00D329AE /* Yellow Ball.png in Resources */ = {isa = PBXBuildFile; fileRef = 276DFC540D00890C00D329AE /* Yellow Ball.png */; };
@@ -73,6 +78,11 @@
 		2734B4EF0CCA5BDB0070C008 /* CheckersGame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CheckersGame.m; sourceTree = "<group>"; };
 		274124040CFCCF9D00842A9B /* DemoBoardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoBoardView.h; sourceTree = "<group>"; };
 		274124050CFCCF9D00842A9B /* DemoBoardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemoBoardView.m; sourceTree = "<group>"; };
+		275167D40DEE2AB000247375 /* Blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Blue.png; sourceTree = "<group>"; };
+		275167D50DEE2AB000247375 /* Gold.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Gold.png; sourceTree = "<group>"; };
+		275167D60DEE2AB000247375 /* Green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Green.png; sourceTree = "<group>"; };
+		275167D70DEE2AB000247375 /* Red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Red.png; sourceTree = "<group>"; };
+		275167D80DEE2AB000247375 /* Violet.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Violet.png; sourceTree = "<group>"; };
 		276DFC400D00867000D329AE /* Green Ball.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Green Ball.png"; path = "Resources/Green Ball.png"; sourceTree = "<group>"; };
 		276DFC530D00890C00D329AE /* Red Ball.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Red Ball.png"; path = "Resources/Red Ball.png"; sourceTree = "<group>"; };
 		276DFC540D00890C00D329AE /* Yellow Ball.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Yellow Ball.png"; path = "Resources/Yellow Ball.png"; sourceTree = "<group>"; };
@@ -235,6 +245,19 @@
 			name = Games;
 			sourceTree = "<group>";
 		};
+		275167D30DEE2AB000247375 /* Gingko */ = {
+			isa = PBXGroup;
+			children = (
+				275167D40DEE2AB000247375 /* Blue.png */,
+				275167D50DEE2AB000247375 /* Gold.png */,
+				275167D60DEE2AB000247375 /* Green.png */,
+				275167D70DEE2AB000247375 /* Red.png */,
+				275167D80DEE2AB000247375 /* Violet.png */,
+			);
+			name = Gingko;
+			path = Resources/Gingko;
+			sourceTree = "<group>";
+		};
 		29B97314FDCFA39411CA2CEA /* BoardGame */ = {
 			isa = PBXGroup;
 			children = (
@@ -262,6 +285,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				275167D30DEE2AB000247375 /* Gingko */,
 				29B97318FDCFA39411CA2CEA /* MainMenu.nib */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
@@ -339,6 +363,11 @@
 				279F4DB20D8607AD00B32DBF /* O.tiff in Resources */,
 				279F4DB30D8607AD00B32DBF /* X.tiff in Resources */,
 				279F4DE20D8609C200B32DBF /* Background.png in Resources */,
+				275167D90DEE2AB000247375 /* Blue.png in Resources */,
+				275167DA0DEE2AB000247375 /* Gold.png in Resources */,
+				275167DB0DEE2AB000247375 /* Green.png in Resources */,
+				275167DC0DEE2AB000247375 /* Red.png in Resources */,
+				275167DD0DEE2AB000247375 /* Violet.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

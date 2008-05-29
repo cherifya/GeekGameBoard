@@ -38,10 +38,12 @@
 - (id) initWithImageNamed: (NSString*)imageName
                     scale: (CGFloat)scale;
 
+- (void) setImageNamed: (NSString*)imageName scale: (CGFloat)scale;
 - (void) setImage: (CGImageRef)image scale: (CGFloat)scale;
 - (void) setImage: (CGImageRef)image;
 - (void) setImageNamed: (NSString*)name;
 
 @property (copy) NSString* imageName;
+
 
 @end

@@ -39,13 +39,6 @@ CGColorRef CreateRGB(CGFloat red, CGFloat green, CGFloat blue, CGFloat alpha);
 #endif
 
 
-/** Moves a layer from one superlayer to another, without changing its position onscreen. */
-void ChangeSuperlayer( CALayer *layer, CALayer *newSuperlayer, int index );
-
-/** Removes a layer from its superlayer without any fade-out animation. */
-void RemoveImmediately( CALayer *layer );
-
-
 /** Loads an image or pattern file into a CGImage or CGPattern.
     If the name begins with "/", it's interpreted as an absolute filesystem path.
     Otherwise, it's the name of a resource that's looked up in the app bundle.
@@ -60,6 +53,9 @@ CGColorRef GetCGPatternNamed( NSString *name );
 /** Loads image data from the pasteboard into a CGImage. */
 CGImageRef GetCGImageFromPasteboard( NSPasteboard *pb );
 #endif
+
+CGImageRef CreateScaledImage( CGImageRef srcImage, CGFloat scale );
+CGImageRef GetScaledImageNamed( NSString *imageName, CGFloat scale );
 
 /** Creates a CGPattern from a CGImage. Caller must release it. */
 CGPatternRef CreateImagePattern( CGImageRef image );

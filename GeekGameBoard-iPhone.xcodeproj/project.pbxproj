@@ -11,6 +11,8 @@
 		1D60589B0D05DD56006BFB54 /* main-iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main-iPhone.m */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
+		2740502B0DEF36DF0006A9EE /* Pop.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 274050290DEF36DF0006A9EE /* Pop.aiff */; };
+		2740502C0DEF36DF0006A9EE /* Tink.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 2740502A0DEF36DF0006A9EE /* Tink.aiff */; };
 		279F4B590D85C51700B32DBF /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 279F4B580D85C51700B32DBF /* AudioToolbox.framework */; };
 		279F4B5B0D85C51700B32DBF /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 279F4B5A0D85C51700B32DBF /* QuartzCore.framework */; };
 		279F4B620D85C63000B32DBF /* GGBTextLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 279F4B610D85C63000B32DBF /* GGBTextLayer.m */; };
@@ -45,13 +47,20 @@
 		27C99B210D820868005AFD4F /* QuartzUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C99B0B0D820868005AFD4F /* QuartzUtils.m */; };
 		27C99B220D820868005AFD4F /* GGBUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C99B0D0D820868005AFD4F /* GGBUtils.m */; };
 		27C99B510D82106E005AFD4F /* GGBLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C99B500D82106E005AFD4F /* GGBLayer.m */; };
+		27DBB52C0DEE059700616D85 /* Blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 27DBB5270DEE059700616D85 /* Blue.png */; };
+		27DBB52D0DEE059800616D85 /* Gold.png in Resources */ = {isa = PBXBuildFile; fileRef = 27DBB5280DEE059700616D85 /* Gold.png */; };
+		27DBB52E0DEE059800616D85 /* Green.png in Resources */ = {isa = PBXBuildFile; fileRef = 27DBB5290DEE059700616D85 /* Green.png */; };
+		27DBB52F0DEE059900616D85 /* Red.png in Resources */ = {isa = PBXBuildFile; fileRef = 27DBB52A0DEE059700616D85 /* Red.png */; };
+		27DBB5300DEE059900616D85 /* Violet.png in Resources */ = {isa = PBXBuildFile; fileRef = 27DBB52B0DEE059700616D85 /* Violet.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D3623EB0D0F72F000981E51 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		1D6058910D05DD3D006BFB54 /* GGB-iPhone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "GGB-iPhone.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1D6058910D05DD3D006BFB54 /* GeekGameBoard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GeekGameBoard.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		274050290DEF36DF0006A9EE /* Pop.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = Pop.aiff; path = /System/Library/Sounds/Pop.aiff; sourceTree = "<absolute>"; };
+		2740502A0DEF36DF0006A9EE /* Tink.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = Tink.aiff; path = /System/Library/Sounds/Tink.aiff; sourceTree = "<absolute>"; };
 		279F4B580D85C51700B32DBF /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		279F4B5A0D85C51700B32DBF /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		279F4B600D85C63000B32DBF /* GGBTextLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GGBTextLayer.h; sourceTree = "<group>"; };
@@ -109,6 +118,11 @@
 		27C99B0D0D820868005AFD4F /* GGBUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GGBUtils.m; sourceTree = "<group>"; };
 		27C99B4F0D82106E005AFD4F /* GGBLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GGBLayer.h; sourceTree = "<group>"; };
 		27C99B500D82106E005AFD4F /* GGBLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GGBLayer.m; sourceTree = "<group>"; };
+		27DBB5270DEE059700616D85 /* Blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Blue.png; sourceTree = "<group>"; };
+		27DBB5280DEE059700616D85 /* Gold.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Gold.png; sourceTree = "<group>"; };
+		27DBB5290DEE059700616D85 /* Green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Green.png; sourceTree = "<group>"; };
+		27DBB52A0DEE059700616D85 /* Red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Red.png; sourceTree = "<group>"; };
+		27DBB52B0DEE059700616D85 /* Violet.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Violet.png; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main-iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "main-iPhone.m"; path = "Source/main-iPhone.m"; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* GGB-iPhone_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "GGB-iPhone_Prefix.pch"; path = "Source/GGB-iPhone_Prefix.pch"; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info-iPhone.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-iPhone.plist"; sourceTree = "<group>"; };
@@ -150,7 +164,7 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1D6058910D05DD3D006BFB54 /* GGB-iPhone.app */,
+				1D6058910D05DD3D006BFB54 /* GeekGameBoard.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -230,6 +244,18 @@
 			name = Games;
 			sourceTree = "<group>";
 		};
+		27DBB5260DEE059700616D85 /* Gingko */ = {
+			isa = PBXGroup;
+			children = (
+				27DBB5270DEE059700616D85 /* Blue.png */,
+				27DBB5280DEE059700616D85 /* Gold.png */,
+				27DBB5290DEE059700616D85 /* Green.png */,
+				27DBB52A0DEE059700616D85 /* Red.png */,
+				27DBB52B0DEE059700616D85 /* Violet.png */,
+			);
+			path = Gingko;
+			sourceTree = "<group>";
+		};
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
@@ -258,14 +284,17 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				274050290DEF36DF0006A9EE /* Pop.aiff */,
+				2740502A0DEF36DF0006A9EE /* Tink.aiff */,
 				279F4E050D860B8800B32DBF /* Green Ball.png */,
 				279F4E060D860B8800B32DBF /* Red Ball.png */,
 				279F4E070D860B8800B32DBF /* White Ball.png */,
-				279F4F1A0D86448100B32DBF /* Wood.jpg */,
 				279F4E090D860B8800B32DBF /* Yellow Ball.png */,
-				279F4C730D85D43800B32DBF /* Background.png */,
 				279F4C1C0D85D0AF00B32DBF /* X.tiff */,
 				279F4C1E0D85D0CB00B32DBF /* O.tiff */,
+				279F4F1A0D86448100B32DBF /* Wood.jpg */,
+				27DBB5260DEE059700616D85 /* Gingko */,
+				279F4C730D85D43800B32DBF /* Background.png */,
 				279F4B720D85CDE900B32DBF /* ToolbarAdvanced.icns */,
 				8D1107310486CEB800E47090 /* Info-iPhone.plist */,
 			);
@@ -298,7 +327,7 @@
 			);
 			name = "GGB-iPhone";
 			productName = "GGB-iPhone";
-			productReference = 1D6058910D05DD3D006BFB54 /* GGB-iPhone.app */;
+			productReference = 1D6058910D05DD3D006BFB54 /* GeekGameBoard.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -332,6 +361,13 @@
 				279F4E0C0D860B8800B32DBF /* White Ball.png in Resources */,
 				279F4E0E0D860B8800B32DBF /* Yellow Ball.png in Resources */,
 				279F4F1B0D86448100B32DBF /* Wood.jpg in Resources */,
+				27DBB52C0DEE059700616D85 /* Blue.png in Resources */,
+				27DBB52D0DEE059800616D85 /* Gold.png in Resources */,
+				27DBB52E0DEE059800616D85 /* Green.png in Resources */,
+				27DBB52F0DEE059900616D85 /* Red.png in Resources */,
+				27DBB5300DEE059900616D85 /* Violet.png in Resources */,
+				2740502B0DEF36DF0006A9EE /* Pop.aiff in Resources */,
+				2740502C0DEF36DF0006A9EE /* Tink.aiff in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -384,7 +420,7 @@
 				GCC_PREFIX_HEADER = "Source/GGB-iPhone_Prefix.pch";
 				INFOPLIST_FILE = "Resources/Info-iPhone.plist";
 				PREBINDING = NO;
-				PRODUCT_NAME = "GGB-iPhone";
+				PRODUCT_NAME = GeekGameBoard;
 			};
 			name = Debug;
 		};
@@ -398,7 +434,7 @@
 				GCC_PREFIX_HEADER = "Source/GGB-iPhone_Prefix.pch";
 				INFOPLIST_FILE = "Resources/Info-iPhone.plist";
 				PREBINDING = NO;
-				PRODUCT_NAME = "GGB-iPhone";
+				PRODUCT_NAME = GeekGameBoard;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -429,6 +465,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Laurence ANDERSEN";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				PREBINDING = NO;
 				SDKROOT = iphoneos2.0;
 				WARNING_CFLAGS = "-Wall";

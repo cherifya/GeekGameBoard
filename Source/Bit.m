@@ -25,6 +25,15 @@
 #import "QuartzUtils.h"
 
 
+#ifdef TARGET_OS_IPHONE
+#define kPickedUpScale   2.0      // more magnification, so piece shows up underneath fingertip
+#define kPickedUpOpacity 0.6
+#else
+#define kPickedUpScale   1.2
+#define kPickedUpOpacity 0.9
+#endif
+
+
 @implementation Bit
 
 
@@ -84,29 +93,29 @@
 
 - (BOOL) pickedUp
 {
-    return self.zPosition >= kPickedUpZ;
+    return _pickedUp;
 }
 
 - (void) setPickedUp: (BOOL)up
 {
-    if( up != self.pickedUp ) {
+    if( up != _pickedUp ) {
         CGFloat shadow, offset, radius, opacity, z, scale;
         if( up ) {
             shadow = 0.8;
             offset = 2;
             radius = 8;
-            opacity = 0.9;
-            scale = 1.2;
+            opacity = kPickedUpOpacity;
+            scale = kPickedUpScale;
             z = kPickedUpZ;
             _restingZ = self.zPosition;
         } else {
             shadow = offset = radius = 0.0;
             opacity = 1.0;
-            scale = 1.0/1.2;
+            scale = 1.0/kPickedUpScale;
             z = _restingZ;
         }
-        
-        self.zPosition = z;
+
+        //self.zPosition = z;
 #if !TARGET_OS_IPHONE
         self.shadowOpacity = shadow;
         self.shadowOffset = CGSizeMake(offset,-offset);
@@ -114,6 +123,7 @@
 #endif
         self.opacity = opacity;
         self.scale *= scale;
+        _pickedUp = up;
     }
 }
 

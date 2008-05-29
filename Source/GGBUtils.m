@@ -42,9 +42,47 @@ void setObjCopy( id<NSCopying> *variable, id<NSCopying> newValue )
 }
 
 
+#if TARGET_OS_IPHONE
+static SystemSoundID GetSound( NSString *name )
+{
+    static NSMutableDictionary *sSoundIDs;
+    NSNumber *soundIDObj = [sSoundIDs objectForKey: name];
+    if( ! soundIDObj ) {
+        NSLog(@"Loading sound '%@'",name);
+        NSString *type = name.pathExtension;
+        if( ! type.length )
+            type = @"aiff";
+        NSString *path = [[NSBundle mainBundle] pathForResource: name.stringByDeletingPathExtension
+                                                         ofType: type];
+        NSURL *url;
+        if( path )
+            url = [NSURL fileURLWithPath: path];
+        else {
+            NSLog(@"Couldn't find sound %@",name);
+            return 0;
+        }
+        //url = [NSURL fileURLWithPath: [@"/Library/Sounds/" stringByAppendingPathComponent: name]];
+        SystemSoundID soundID;
+        if( AudioServicesCreateSystemSoundID((CFURLRef)url,&soundID) != noErr ) {
+            NSLog(@"Couldn't load sound %@",url);
+            return 0;
+        }
+        
+        soundIDObj = [NSNumber numberWithUnsignedInt: soundID];
+        if( ! sSoundIDs )
+            sSoundIDs = [[NSMutableDictionary alloc] init];
+        [sSoundIDs setObject: soundIDObj forKey: name];
+    }
+    return [soundIDObj unsignedIntValue];
+}
+#endif
+
+
 void PreloadSound( NSString* name )
 {
-#if ! TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE
+    GetSound(name);
+#else
     NSSound *sound = [[NSSound soundNamed: @"Pop"] copy];
     sound.volume = 0;
     [sound play];
@@ -56,13 +94,7 @@ void PreloadSound( NSString* name )
 void PlaySound( NSString* name )
 {
 #if TARGET_OS_IPHONE
-    NSURL *url = [NSURL fileURLWithPath: [@"/Library/Sounds/" stringByAppendingPathComponent: name]];
-    SystemSoundID soundID;
-    if( AudioServicesCreateSystemSoundID((CFURLRef)url,&soundID) != noErr ) {
-        NSLog(@"Couldn't load sound %@",url);
-        return;
-    }
-    AudioServicesPlaySystemSound(soundID);
+    AudioServicesPlaySystemSound( GetSound(name) );
 #else
     [[NSSound soundNamed: name] play];
 #endif
@@ -71,7 +103,7 @@ void PlaySound( NSString* name )
 void Beep()
 {
 #if TARGET_OS_IPHONE
-    AudioServicesPlayAlertSound(0x00001000/*kSystemSoundID_UserPreferredAlert*/);
+    AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
 #else
     NSBeep();
 #endif

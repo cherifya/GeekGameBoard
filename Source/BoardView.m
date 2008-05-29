@@ -301,6 +301,7 @@ static BOOL layerIsDropTarget( CALayer* layer ) {return [layer respondsToSelecto
             if( ! [_game clickedBit: _dragBit] )
                 NSBeep();
         }
+
         _dropTarget = nil;
         _dragBit = nil;
         [NSCursor pop];

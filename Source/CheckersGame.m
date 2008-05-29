@@ -32,8 +32,8 @@
 
 - (Piece*) pieceForPlayer: (int)playerNum
 {
-    Piece *p = [[Piece alloc] initWithImageNamed: (playerNum==0 ?@"Green Ball.png" :@"Red Ball.png") 
-                                           scale: floor(_grid.spacing.width * 0.8)];
+    Piece *p = [[Piece alloc] initWithImageNamed: (playerNum==0 ?@"Green.png" :@"Red.png") 
+                                           scale: floor(_grid.spacing.width * 1.0)];
     p.owner = [self.players objectAtIndex: playerNum];
     p.name = playerNum ?@"2" :@"1";
     return [p autorelease];

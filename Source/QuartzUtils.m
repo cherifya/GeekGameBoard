@@ -22,6 +22,7 @@
 */
 #import "QuartzUtils.h"
 #import <QuartzCore/QuartzCore.h>
+#import "Piece.h"
 
 
 CGColorRef kBlackColor, kWhiteColor, 
@@ -61,41 +62,6 @@ CGColorRef CreateRGB(CGFloat red, CGFloat green, CGFloat blue, CGFloat alpha)
     return color;
 }
 #endif
-
-
-void ChangeSuperlayer( CALayer *layer, CALayer *newSuperlayer, int index )
-{
-    // Disable actions, else the layer will move to the wrong place and then back!
-    [CATransaction flush];
-    [CATransaction begin];
-    [CATransaction setValue:(id)kCFBooleanTrue
-                     forKey:kCATransactionDisableActions];
-
-    CGPoint pos = layer.position;
-    if( layer.superlayer )
-        pos = [newSuperlayer convertPoint: pos fromLayer: layer.superlayer];
-    [layer retain];
-    [layer removeFromSuperlayer];
-    layer.position = pos;
-    if( index >= 0 )
-        [newSuperlayer insertSublayer: layer atIndex: index];
-    else
-        [newSuperlayer addSublayer: layer];
-    [layer release];
-
-    [CATransaction commit];
-}
-
-
-void RemoveImmediately( CALayer *layer )
-{
-    [CATransaction flush];
-    [CATransaction begin];
-    [CATransaction setValue:(id)kCFBooleanTrue
-                     forKey:kCATransactionDisableActions];
-    [layer removeFromSuperlayer];
-    [CATransaction commit];
-}    
 
 
 CGImageRef CreateCGImageFromFile( NSString *path )
@@ -193,6 +159,47 @@ CGImageRef GetCGImageFromPasteboard( NSPasteboard *pb )
         return NULL;
 }
 #endif
+
+
+CGImageRef CreateScaledImage( CGImageRef srcImage, CGFloat scale )
+{
+    int width = CGImageGetWidth(srcImage), height = CGImageGetHeight(srcImage);
+    if( scale > 0 ) {
+        if( scale >= 4.0 )
+            scale /= MAX(width,height);             // interpret scale as target dimensions
+        width = ceil( width * scale);
+        height= ceil( height* scale);
+    }
+
+    CGColorSpaceRef space = CGColorSpaceCreateDeviceRGB();
+    CGContextRef ctx = CGBitmapContextCreate(NULL, width, height, 8, 4*width, space,
+                                             kCGBitmapByteOrderDefault | kCGImageAlphaPremultipliedLast);
+    CGColorSpaceRelease(space);
+    CGContextSetInterpolationQuality(ctx,kCGInterpolationHigh);
+    CGContextDrawImage(ctx, CGRectMake(0, 0, width, height), srcImage);
+    CGImageRef dstImage = CGBitmapContextCreateImage(ctx);
+    CGContextRelease(ctx);
+    return dstImage;
+}
+
+
+CGImageRef GetScaledImageNamed( NSString *imageName, CGFloat scale )
+{
+    // For efficiency, loaded images are cached in a dictionary by name.
+    static NSMutableDictionary *sMap;
+    if( ! sMap )
+        sMap = [[NSMutableDictionary alloc] init];
+    
+    NSArray *key = [NSArray arrayWithObjects: imageName, [NSNumber numberWithFloat: scale], nil];
+    CGImageRef image = (CGImageRef) [sMap objectForKey: key];
+    if( ! image ) {
+        // Hasn't been cached yet, so load it:
+        image = CreateScaledImage(GetCGImageNamed(imageName), scale);
+        [sMap setObject: (id)image forKey: key];
+        CGImageRelease(image);
+    }
+    return image;
+}
 
 
 float GetPixelAlpha( CGImageRef image, CGSize imageSize, CGPoint pt )
