@@ -288,3 +288,12 @@ void RemoveImmediately( CALayer *layer )
 }    
 
 
+CGColorRef GetEffectiveBackground( CALayer *layer )
+{
+    for( ; layer; layer=layer.superlayer ) {
+        CGColorRef bg = layer.backgroundColor;
+        if( bg )
+            return bg;
+    }
+    return nil;
+}

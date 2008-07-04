@@ -22,6 +22,7 @@
 */
 #import "Bit.h"
 #import "Game.h"
+#import "Player.h"
 #import "QuartzUtils.h"
 
 

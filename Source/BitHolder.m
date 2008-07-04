@@ -57,6 +57,14 @@
     }
 }
 
+- (void) destroyBit
+{
+    if( _bit ) {
+        [_bit destroy];
+        setObj(&_bit,nil);
+    }
+}
+
 - (BOOL) isEmpty    {return self.bit==nil;}
 
 @synthesize highlighted=_highlighted;

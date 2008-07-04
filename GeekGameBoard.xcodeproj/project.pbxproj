@@ -41,7 +41,6 @@
 		27CCAABD0CB92A9F001CFE24 /* Card.m in Sources */ = {isa = PBXBuildFile; fileRef = 27CCAABC0CB92A9F001CFE24 /* Card.m */; };
 		27CCABBF0CB9496B001CFE24 /* Bit.m in Sources */ = {isa = PBXBuildFile; fileRef = 27CCABBE0CB9496B001CFE24 /* Bit.m */; };
 		27CCAC750CB95C2B001CFE24 /* PlayingCard.m in Sources */ = {isa = PBXBuildFile; fileRef = 27CCAC740CB95C2B001CFE24 /* PlayingCard.m */; };
-		27D014C00D8DFB4500615ADD /* Game-Persistence.m in Sources */ = {isa = PBXBuildFile; fileRef = 27D014BF0D8DFB4500615ADD /* Game-Persistence.m */; };
 		27D4F1260CCF011200923605 /* Stack.m in Sources */ = {isa = PBXBuildFile; fileRef = 27D4F1250CCF011200923605 /* Stack.m */; };
 		27DFC4410CCD01B7005E34CE /* GoGame.m in Sources */ = {isa = PBXBuildFile; fileRef = 27DFC4400CCD01B7005E34CE /* GoGame.m */; };
 		27F230B90CD1A61B006939C1 /* KlondikeGame.m in Sources */ = {isa = PBXBuildFile; fileRef = 27F230B80CD1A61B006939C1 /* KlondikeGame.m */; };
@@ -110,8 +109,6 @@
 		27CCABBE0CB9496B001CFE24 /* Bit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bit.m; sourceTree = "<group>"; };
 		27CCAC730CB95C2B001CFE24 /* PlayingCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayingCard.h; sourceTree = "<group>"; };
 		27CCAC740CB95C2B001CFE24 /* PlayingCard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayingCard.m; sourceTree = "<group>"; };
-		27D014BE0D8DFB4500615ADD /* Game-Persistence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Game-Persistence.h"; sourceTree = "<group>"; };
-		27D014BF0D8DFB4500615ADD /* Game-Persistence.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Game-Persistence.m"; sourceTree = "<group>"; };
 		27D4F1240CCF011200923605 /* Stack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Stack.h; sourceTree = "<group>"; };
 		27D4F1250CCF011200923605 /* Stack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Stack.m; sourceTree = "<group>"; };
 		27DFC43F0CCD01B7005E34CE /* GoGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoGame.h; sourceTree = "<group>"; };
@@ -229,8 +226,6 @@
 			children = (
 				27275C490CC700F2009C4C6C /* Game.h */,
 				27275C4A0CC700F2009C4C6C /* Game.m */,
-				27D014BE0D8DFB4500615ADD /* Game-Persistence.h */,
-				27D014BF0D8DFB4500615ADD /* Game-Persistence.m */,
 				27275C900CC7C578009C4C6C /* TicTacToeGame.h */,
 				27275C910CC7C578009C4C6C /* TicTacToeGame.m */,
 				2734B4EE0CCA5BDB0070C008 /* CheckersGame.h */,
@@ -402,7 +397,6 @@
 				27C999C30D81185E005AFD4F /* GGBUtils.m in Sources */,
 				279F4D870D8606C200B32DBF /* GGBLayer.m in Sources */,
 				279F4D880D8606C200B32DBF /* GGBTextLayer.m in Sources */,
-				27D014C00D8DFB4500615ADD /* Game-Persistence.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

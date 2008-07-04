@@ -51,13 +51,17 @@
     label.foregroundColor = kBlackColor;
     
     NSString *mode;
-    if( align & kCALayerWidthSizable )
+    if( (align & (kCALayerMinXMargin | kCALayerMaxXMargin)) == (kCALayerMinXMargin | kCALayerMaxXMargin) )
         mode = @"center";
-    else if( align & kCALayerMinXMargin )
-        mode = @"right";
-    else
-        mode = @"left";
-    align |= kCALayerWidthSizable;
+    else {
+        if( align & kCALayerWidthSizable )
+            mode = @"center";
+        else if( align & kCALayerMinXMargin )
+            mode = @"right";
+        else
+            mode = @"left";
+        align |= kCALayerWidthSizable;
+    }
     label.alignmentMode = mode;
     
     // Get the bounds of the interior of the superlayer:

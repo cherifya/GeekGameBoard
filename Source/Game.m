@@ -20,71 +20,60 @@
     CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
     THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-#import "Game.h"
-#import "Bit.h"
-#import "BitHolder.h"
+#import "Game+Protected.h"
 #import "QuartzUtils.h"
+#import "GGBUtils.h"
 
 
 @interface Game ()
 @property (copy) NSArray *players;
-@property (assign) Player *currentPlayer, *winner;
+@property (assign) Player *winner;
+- (void) _startTurn;
 @end
 
 
 @implementation Game
 
 
-+ (NSString*) identifier
+- (id) init
 {
-    NSString* name = [self description];
-    if( [name hasSuffix: @"Game"] )
-        name = [name substringToIndex: name.length-4];
-    return name;
-}
-
-
-+ (NSString*) displayName
-{
-    return [self identifier];
-}
-
-
-- (id) initWithUniqueID: (NSString*)uuid
-{
-    NSParameterAssert(uuid);
     self = [super init];
     if (self != nil) {
-        _uniqueID = [uuid copy];
-        _board = [[GGBLayer alloc] init];
-        // Store a pointer to myself as the value of the "Game" property
-        // of my root layer. (CALayers can have arbitrary KV properties stored into them.)
-        // This is used by the -[CALayer game] category method defined below, to find the Game.
-        [_board setValue: self forKey: @"Game"];
-
-        _currentMove = [[NSMutableString alloc] init];
+        // Don't create _turns till -initWithCoder or -setNumberOfPlayers:.
     }
     return self;
 }
 
-- (id) init
+
+- (id) initWithCoder: (NSCoder*)decoder
 {
-    CFUUIDRef uuidRef = CFUUIDCreate(NULL);
-    NSString* uuid = (id) CFUUIDCreateString(NULL,uuidRef);
-    self = [self initWithUniqueID: uuid];
-    CFRelease(uuid);
-    CFRelease(uuidRef);
+    self = [self init];
+    if( self ) {
+        _players = [[decoder decodeObjectForKey: @"players"] mutableCopy];
+        _winner =   [decoder decodeObjectForKey: @"winner"];
+        _turns   = [[decoder decodeObjectForKey: @"turns"] mutableCopy];
+        _extraValues = [[decoder decodeObjectForKey: @"extraValues"] mutableCopy];
+        self.currentTurnNo = self.maxTurnNo;
+    }
     return self;
 }
 
-- (id) initWithBoard: (GGBLayer*)board
+
+- (void) encodeWithCoder: (NSCoder*)coder
+{
+    [coder encodeObject: _players forKey: @"players"];
+    [coder encodeObject: _winner forKey: @"winner"];
+    [coder encodeObject: _turns   forKey: @"turns"];
+    [coder encodeObject: _extraValues forKey: @"extraValues"];
+}
+
+
+- (id) initNewGameWithBoard: (GGBLayer*)board
 {
     self = [self init];
-    if (self != nil) {
-        _states = [[NSMutableArray alloc] init];
-        _moves = [[NSMutableArray alloc] init];
-        _board = [board retain];
-        [board setValue: self forKey: @"Game"];
+    if( self ) {
+        self.board = board;
+        NSAssert1(_players && _turns, @"%@ failed to set numberOfPlayers",self);
     }
     return self;
 }
@@ -94,15 +83,67 @@
 {
     [_board release];
     [_players release];
-    [_currentMove release];
-    [_states release];
-    [_moves release];
+    [_turns release];
+    [_extraValues release];
     [super dealloc];
 }
 
 
-@synthesize players=_players, currentPlayer=_currentPlayer, winner=_winner, 
-            currentMove=_currentMove, states=_states, moves=_moves, uniqueID=_uniqueID;
+@synthesize players=_players, winner=_winner, turns=_turns, requireConfirmation=_requireConfirmation;
+
+
+- (id)valueForUndefinedKey:(NSString *)key
+{
+    return [_extraValues objectForKey: key];
+}
+
+- (void)setValue:(id)value forUndefinedKey:(NSString *)key
+{
+    if( ! _extraValues )
+        _extraValues = [[NSMutableDictionary alloc] init];
+    if( value )
+        [_extraValues setObject: value forKey: key];
+    else
+        [_extraValues removeObjectForKey: key];
+}
+
+
+#pragma mark -
+#pragma mark BOARD:
+
+
+- (void) setUpBoard
+{
+    NSAssert1(NO,@"%@ forgot to implement -setUpBoard",[self class]);
+}
+
+- (GGBLayer*) board
+{
+    return _board;
+}
+
+- (void) setBoard: (GGBLayer*)board
+{
+    setObj(&_board,board);
+    // Store a pointer to myself as the value of the "Game" property
+    // of my root layer. (CALayers can have arbitrary KV properties stored into them.)
+    // This is used by the -[CALayer game] category method defined below, to find the Game.
+    [_board setValue: self forKey: @"Game"];
+    
+    BeginDisableAnimations();
+    
+    // Tell the game to add the necessary bits to the board:
+    [self setUpBoard];
+    
+    // Re-apply the current state to set up the pieces/cards:
+    self.stateString = [[_turns objectAtIndex: _currentTurnNo] boardState];
+    
+    EndDisableAnimations();
+}
+
+
+#pragma mark -
+#pragma mark PLAYERS:
 
 
 - (void) setNumberOfPlayers: (unsigned)n
@@ -114,105 +155,184 @@
         [players addObject: player];
         [player release];
     }
-    self.winner = nil;
-    self.currentPlayer = nil;
     self.players = players;
+    self.winner = nil;
+    
+    Turn *turn = [[Turn alloc] initStartOfGame: self];
+    setObj(&_turns, [NSMutableArray arrayWithObject: turn]);
+    [turn release];
+    [self _startTurn];
 }
 
-
-- (void) addToMove: (NSString*)str;
+- (Player*) remotePlayer
 {
-    [_currentMove appendString: str];
+    for( Player *player in _players )
+        if( ! player.local )
+            return player;
+    return nil;
 }
 
-
-- (BOOL) _rememberState
+- (BOOL) isLocal
 {
-    if( self.isLatestTurn ) {
-        [_states addObject: self.stateString];
-        return YES;
-    } else
-        return NO;
+    return self.remotePlayer == nil;
 }
 
-
-- (void) nextPlayer
+- (Player*) currentPlayer
 {
-    BOOL latestTurn = [self _rememberState];
-    if( ! _currentPlayer ) {
-        NSLog(@"*** The %@ Begins! ***", self.class);
-        self.currentPlayer = [_players objectAtIndex: 0];
-    } else {
-        self.currentPlayer = _currentPlayer.nextPlayer;
-        if( latestTurn ) {
-            [self willChangeValueForKey: @"currentTurn"];
-            _currentTurn++;
-            [self didChangeValueForKey: @"currentTurn"];
-        }
-    }
-    NSLog(@"Current player is %@",_currentPlayer);
+    return self.currentTurn.player;
+}
+
++ (NSArray*) keyPathsForValuesAffectingCurrentPlayer {return [NSArray arrayWithObject: @"currentTurn"];}
+
+
+#pragma mark -
+#pragma mark TURNS:
+
+
+- (Turn*) currentTurn
+{
+    return [_turns objectAtIndex: _currentTurnNo];
+}
+
+- (Turn*) latestTurn
+{
+    return [_turns lastObject];
+}
+
++ (NSArray*) keyPathsForValuesAffectingCurrentTurn {return [NSArray arrayWithObject: @"currentTurnNo"];}
++ (NSArray*) keyPathsForValuesAffectingLatestTurn  {return [NSArray arrayWithObject: @"turns"];}
+
+
+- (void) _startTurn
+{
+    Turn *lastTurn = [_turns lastObject];
+    NSAssert(lastTurn.status==kTurnFinished,@"Can't _startTurn till previous turn is finished");
+    Turn *newTurn = [[Turn alloc] initWithPlayer: lastTurn.nextPlayer];
+    
+    [self willChangeValueForKey: @"turns"];
+    [_turns addObject: newTurn];
+    [self willChangeValueForKey: @"turns"];
+    [newTurn release];
+    self.currentTurnNo = _turns.count-1;
 }
 
 
 - (void) endTurn
 {
-    NSLog(@"--- End of turn (move was '%@')", _currentMove);
-    if( self.isLatestTurn ) {
-        NSString *move = [[_currentMove copy] autorelease];
-        [_currentMove setString: @""];
-        [self willChangeValueForKey: @"maxTurn"];
-        [_moves addObject: move];
-        [self didChangeValueForKey: @"maxTurn"];
-    }
-
-    Player *winner = [self checkForWinner];
-    if( winner ) {
-        NSLog(@"*** The %@ Ends! The winner is %@ ! ***", self.class, winner);
-        [self _rememberState];
-        self.winner = winner;
-    } else
-        [self nextPlayer];
-}
-
-
-#pragma mark -
-#pragma mark STORED TURNS:
-
-
-- (unsigned) maxTurn
-{
-    return _moves.count;
-}
-
-- (unsigned) currentTurn
-{
-    return _currentTurn;
-}
-
-- (void) setCurrentTurn: (unsigned)turn
-{
-    NSParameterAssert(turn<=self.maxTurn);
-    if( turn != _currentTurn ) {
-        if( turn==_currentTurn+1 ) {
-            [self applyMoveString: [_moves objectAtIndex: _currentTurn]];
-        } else {
-            BeginDisableAnimations();
-            self.stateString = [_states objectAtIndex: turn];
-            EndDisableAnimations();
+    Turn *curTurn = self.currentTurn;
+    if( curTurn.isLatestTurn && ! curTurn.replaying ) {
+        curTurn.status = kTurnComplete;
+        NSLog(@"--- End of %@", curTurn);
+        
+        Player *winner = [self checkForWinner];
+        if( winner ) {
+            NSLog(@"*** The %@ Ends! The winner is %@ ! ***", self.class, winner);
+            self.winner = winner;
         }
-        _currentTurn = turn;
-        self.currentPlayer = [_players objectAtIndex: (turn % _players.count)];
+        
+        if( ! _requireConfirmation || !curTurn.player.local ) 
+            [self confirmCurrentTurn];
+
+        [[NSNotificationCenter defaultCenter] postNotificationName: kTurnCompleteNotification
+                                                            object: curTurn];
+    }
+}
+
+- (void) cancelCurrentTurn
+{
+    Turn *curTurn = self.currentTurn;
+    if( curTurn.status > kTurnEmpty && curTurn.status < kTurnFinished ) {
+        if( _winner )
+            self.winner = nil;
+        if( _board )
+            self.stateString = curTurn.previousTurn.boardState;
+        curTurn.status = kTurnEmpty;
+    }
+}
+
+- (void) confirmCurrentTurn
+{
+    Turn *curTurn = self.currentTurn;
+    if( curTurn.status == kTurnComplete ) {
+        curTurn.status = kTurnFinished;
+        if( ! _winner )
+            [self _startTurn];
     }
 }
 
 
 - (BOOL) isLatestTurn
 {
-    return _currentTurn == MAX(_states.count,1)-1;
+    return _currentTurnNo == _turns.count-1;
+}
+
+- (unsigned) maxTurnNo
+{
+    return _turns.count-1;
+}
+
++ (NSArray*) keyPathsForValuesAffectingIsLatestTurn {return [NSArray arrayWithObjects: @"currentTurnNo",@"turns",nil];}
++ (NSArray*) keyPathsForValuesAffectingMaxTurnNo    {return [NSArray arrayWithObjects: @"turns",nil];}
+
+- (unsigned) currentTurnNo
+{
+    return _currentTurnNo;
 }
 
 
-- (BOOL) animateMoveFrom: (BitHolder*)src to: (BitHolder*)dst
+#pragma mark -
+#pragma mark REPLAYING TURNS:
+
+
+- (void) setCurrentTurnNo: (unsigned)turnNo
+{
+    NSParameterAssert(turnNo<=self.maxTurnNo);
+    unsigned oldTurnNo = _currentTurnNo;
+    if( turnNo != oldTurnNo ) {
+        if( _board ) {
+            Turn *turn = [_turns objectAtIndex: turnNo];
+            NSString *state;
+            if( turn.status == kTurnEmpty )
+                state = turn.previousTurn.boardState;
+            else
+                state = turn.boardState;
+            NSAssert1(state,@"empty boardState at turn #%i",turnNo);
+            _currentTurnNo = turnNo;
+            if( turnNo==oldTurnNo+1 ) {
+                NSString *move = turn.move;
+                if( move ) {
+                    NSLog(@"Reapplying move '%@'",move);
+                    turn.replaying = YES;
+                    @try{
+                        if( ! [self applyMoveString: move] ) {
+                            _currentTurnNo = oldTurnNo;
+                            NSBeep();
+                            NSLog(@"WARNING: %@ failed to apply stored move '%@'!", self,move);
+                            return;
+                        }
+                    }@finally{
+                        turn.replaying = NO;
+                    }
+                }
+            } else {
+                NSLog(@"Reapplying state '%@'",state);
+                BeginDisableAnimations();
+                self.stateString = state;
+                EndDisableAnimations();
+            }
+            if( ! [self.stateString isEqual: state] ) {
+                _currentTurnNo = oldTurnNo;
+                NSBeep();
+                NSLog(@"WARNING: %@ failed to apply stored state '%@'!", self,state);
+                return;
+            }
+        } else
+            _currentTurnNo = turnNo;
+    }
+}
+
+
+- (BOOL) animateMoveFrom: (CALayer<BitHolder>*)src to: (CALayer<BitHolder>*)dst
 {
     if( src==nil || dst==nil || dst==src )
         return NO;
@@ -241,7 +361,35 @@
     
     [src draggedBit: bit to: dst];
     [self bit: bit movedFrom: src to: dst];
-    src = dst;
+    return YES;
+}
+
+
+- (BOOL) animatePlacementIn: (CALayer<BitHolder>*)dst
+{
+    if( dst == nil )
+        return NO;
+    Bit *bit = [self bitToPlaceInHolder: dst];
+    if( ! bit )
+        return NO;
+    
+    CALayer<BitHolder>* oldHolder = (CALayer<BitHolder>*) bit.holder;
+    if( oldHolder ) {
+        if( oldHolder != dst ) 
+            return [self animateMoveFrom: oldHolder to: dst];
+    } else
+        bit.position = [dst convertPoint: GetCGRectCenter(dst.bounds) toLayer: _board.superlayer];
+    ChangeSuperlayer(bit, _board.superlayer, -1);
+    bit.pickedUp = YES;
+    dst.highlighted = YES;
+    
+    DelayFor(0.2);
+    
+    dst.bit = bit;
+    dst.highlighted = NO;
+    bit.pickedUp = NO;
+    
+    [self bit: bit movedFrom: nil to: dst];
     return YES;
 }
      
@@ -250,9 +398,34 @@
 #pragma mark GAMEPLAY METHODS TO BE OVERRIDDEN:
 
 
++ (NSString*) identifier
+{
+    NSString* name = [self description];
+    if( [name hasSuffix: @"Game"] )
+        name = [name substringToIndex: name.length-4];
+    return name;
+}
+
++ (NSString*) displayName
+{
+    return [self identifier];
+}
+
 + (BOOL) landscapeOriented
 {
     return NO;
+}
+
+
+- (NSString*) initialStateString
+{
+    return @"";
+}
+
+
+- (CGImageRef) iconForPlayer: (int)playerIndex
+{
+    return nil;
 }
 
 
@@ -287,83 +460,20 @@
     return nil;
 }
 
-
+/* These are abstract
+ 
 - (NSString*) stateString                   {return @"";}
 - (void) setStateString: (NSString*)s       { }
 
 - (BOOL) applyMoveString: (NSString*)move   {return NO;}
+*/
 
 @end
 
 
 
 
-@implementation Player
-
-
-- (id) initWithGame: (Game*)game
-{
-    self = [super init];
-    if (self != nil) {
-        _game = game;
-    }
-    return self;
-}
-
-- (id) initWithCoder: (NSCoder*)decoder
-{
-    self = [self init];
-    if( self ) {
-        _game =  [decoder decodeObjectForKey: @"game"];
-        _name = [[decoder decodeObjectForKey: @"name"] copy];
-    }
-    return self;
-}
-
-- (void) encodeWithCoder: (NSCoder*)coder
-{
-    [coder encodeObject: _game forKey: @"game"];
-    [coder encodeObject: _name forKey: @"name"];
-}
-
-- (void) dealloc
-{
-    [_name release];
-    [super dealloc];
-}
-
-
-@synthesize game=_game, name=_name;
-
-- (BOOL) isCurrent      {return self == _game.currentPlayer;}
-- (BOOL) isFriendly     {return self == _game.currentPlayer;}   // could be overridden for games with partners
-- (BOOL) isUnfriendly   {return ! self.friendly;}
-
-- (int) index
-{
-    return [_game.players indexOfObjectIdenticalTo: self];
-}
-
-- (Player*) nextPlayer
-{
-    return [_game.players objectAtIndex: (self.index+1) % _game.players.count];
-}
-
-- (Player*) previousPlayer
-{
-    return [_game.players objectAtIndex: (self.index-1) % _game.players.count];
-}
-
-- (NSString*) description
-{
-    return [NSString stringWithFormat: @"%@[%@]", self.class,self.name];
-}
-
-@end
-
-
-
-
+#pragma mark -
 @implementation CALayer (Game)
 
 - (Game*) game

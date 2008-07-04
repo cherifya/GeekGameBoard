@@ -29,6 +29,7 @@ void setObj( id *variable, id newValue );
 /** Just like setObj except that it _copies_ the new value. */
 void setObjCopy( id<NSCopying> *variable, id<NSCopying> newValue );
 
+void DelayFor( NSTimeInterval interval );
 
 void PreloadSound( NSString* name );
 void PlaySound( NSString* name );

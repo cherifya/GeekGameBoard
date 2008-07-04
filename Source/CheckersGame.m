@@ -30,6 +30,26 @@
 @implementation CheckersGame
 
 
+- (id) init
+{
+    self = [super init];
+    if (self != nil) {
+        _cells = [[NSMutableArray alloc] init];
+        [self setNumberOfPlayers: 2];
+        
+        PreloadSound(@"Tink");
+        PreloadSound(@"Funk");
+        PreloadSound(@"Blow");
+        PreloadSound(@"Pop");
+    }
+    return self;
+}
+
+- (CGImageRef) iconForPlayer: (int)playerNum
+{
+    return GetCGImageNamed( playerNum==0 ?@"Green.png" :@"Red.png" );
+}
+
 - (Piece*) pieceForPlayer: (int)playerNum
 {
     Piece *p = [[Piece alloc] initWithImageNamed: (playerNum==0 ?@"Green.png" :@"Red.png") 
@@ -39,10 +59,18 @@
     return [p autorelease];
 }
 
-- (Grid*) x_makeGrid
+- (void) makeKing: (Piece*)piece
+{
+    piece.scale = 1.4;
+    [piece setValue: @"King" forKey: @"King"];
+    piece.name = piece.owner.index ?@"4" :@"3";
+}
+
+- (void) setUpBoard
 {
     RectGrid *grid = [[[RectGrid alloc] initWithRows: 8 columns: 8 frame: _board.bounds] autorelease];
     _grid = grid;
+    [_board addSublayer: _grid];
     CGPoint pos = _grid.position;
     pos.x = floor((_board.bounds.size.width-grid.frame.size.width)/2);
     grid.position = pos;
@@ -53,31 +81,11 @@
     grid.lineColor = nil;
 
     [grid addAllCells];
+    [_cells removeAllObjects];
     for( int i=0; i<32; i++ ) {
         int row = i/4;
         [_cells addObject: [_grid cellAtRow: row column: 2*(i%4) + (row&1)]];
     }
-    self.stateString = @"111111111111--------222222222222";
-    return grid;
-}
-
-
-- (id) initWithBoard: (GGBLayer*)board
-{
-    self = [super initWithBoard: board];
-    if (self != nil) {
-        [self setNumberOfPlayers: 2];
-        _cells = [[NSMutableArray alloc] init];
-        [self x_makeGrid];
-        [board addSublayer: _grid];
-        [self nextPlayer];
-        
-        PreloadSound(@"Tink");
-        PreloadSound(@"Funk");
-        PreloadSound(@"Blow");
-        PreloadSound(@"Pop");
-    }
-    return self;
 }
 
 - (void) dealloc
@@ -87,6 +95,11 @@
     [super dealloc];
 }
 
+
+- (NSString*) initialStateString
+{
+    return @"111111111111--------222222222222";
+}
 
 - (NSString*) stateString
 {
@@ -108,11 +121,15 @@
     int i = 0;
     for( GridCell *cell in _cells ) {
         Piece *piece;
-        switch( [state characterAtIndex: i++] ) {
-            case '1': piece = [self pieceForPlayer: 0]; _numPieces[0]++; break;
-            case '2': piece = [self pieceForPlayer: 1]; _numPieces[1]++; break;
-            default:  piece = nil; break;
-        }
+        int which = [state characterAtIndex: i++] - '1';
+        if( which >=0 && which < 4 ) {
+            int player = (which & 1);
+            piece = [self pieceForPlayer: player];
+            _numPieces[player]++;
+            if( which & 2 ) 
+                [self makeKing: piece];
+        } else
+            piece = nil;
         cell.bit = piece;
     }    
 }
@@ -134,9 +151,11 @@
     Square *src=(Square*)srcHolder, *dst=(Square*)dstHolder;
     int playerIndex = self.currentPlayer.index;
     
-    if( self.currentMove.length==0 )
-        [self.currentMove appendString: src.name];
-    [self.currentMove appendString: dst.name];
+    Turn *turn = self.currentTurn;
+    if( turn.move.length==0 )
+        [turn addToMove: src.name];
+    [turn addToMove: @"-"];
+    [turn addToMove: dst.name];
     
     BOOL isKing = ([bit valueForKey: @"King"] != nil);
     PlaySound(isKing ?@"Funk" :@"Tink");
@@ -145,8 +164,8 @@
     if( dst.row == (playerIndex ?0 :7) )
         if( ! isKing ) {
             PlaySound(@"Blow");
-            bit.scale = 1.4;
-            [bit setValue: @"King" forKey: @"King"];
+            [self makeKing: (Piece*)bit];
+            [turn addToMove: @"*"];
             // don't set isKing flag - piece can't jump again after being kinged.
         }
 
@@ -163,9 +182,9 @@
     
     if( capture ) {
         PlaySound(@"Pop");
-        Bit *bit = capture.bit;
-        _numPieces[bit.owner.index]--;
-        [bit destroy];
+        _numPieces[capture.bit.owner.index]--;
+        [capture destroyBit];
+        [turn addToMove: @"!"];
         
         // Now check if another capture is possible. If so, don't end the turn:
         if( (dst.fl.bit.unfriendly && dst.fl.fl.empty) || (dst.fr.bit.unfriendly && dst.fr.fr.empty) )
@@ -192,16 +211,15 @@
 
 - (BOOL) applyMoveString: (NSString*)move
 {
-    int length = move.length;
-    if( length<4 || (length&1) )
-        return NO;
     GridCell *src = nil;
-    for( int i=0; i<length; i+=2 ) {
-        NSString *ident = [move substringWithRange: NSMakeRange(i,2)];
+    for( NSString *ident in [move componentsSeparatedByString: @"-"] ) {
+        while( [ident hasSuffix: @"!"] || [ident hasSuffix: @"*"] )
+            ident = [ident substringToIndex: ident.length-1];
         GridCell *dst = [_grid cellWithName: ident];
-        if( i > 0 )
-            if( ! [self animateMoveFrom: src to: dst] )
-                return NO;
+        if( dst == nil )
+            return NO;
+        if( src && ! [self animateMoveFrom: src to: dst] )
+            return NO;
         src = dst;
     }
     return YES;

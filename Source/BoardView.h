@@ -31,6 +31,7 @@
     @private
     Game *_game;                                // Current Game
     GGBLayer *_gameboard;                       // Game's main layer
+    NSSize _oldSize;
     
     // Used during mouse-down tracking:
     NSPoint _dragStartPos;                      // Starting position of mouseDown
@@ -48,12 +49,16 @@
     NSDragOperation _viewDropOp;                // Current drag operation
 }
 
+@property (retain) Game *game;
+@property (readonly) CALayer *gameboard;
+
 - (void) startGameNamed: (NSString*)gameClassName;
 
-- (IBAction) enterFullScreen: (id)sender;
+- (void) createGameBoard;
 
-@property (readonly) Game *game;
-@property (readonly) CALayer *gameboard;
+- (void) reverseBoard;
+
+- (IBAction) enterFullScreen: (id)sender;
 
 - (CGRect) gameBoardFrame;
 

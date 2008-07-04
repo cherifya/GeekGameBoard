@@ -20,7 +20,7 @@
     CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
     THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-#import "Game.h"
+#import "Game+Protected.h"
 @class RectGrid, Stack;
 
 
@@ -32,4 +32,14 @@
     Stack *_captured[2];
 }
 
+@end
+
+
+/** 9x9 Go */
+@interface Go9Game : GoGame
+@end
+
+
+/** 13x13 Go */
+@interface Go13Game : GoGame
 @end

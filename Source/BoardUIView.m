@@ -68,7 +68,7 @@
     [rootLayer addSublayer: _gameboard];
     [_gameboard release];
     
-    _game = [[gameClass alloc] initWithBoard: _gameboard];
+    _game = [[gameClass alloc] initNewGameWithBoard: _gameboard];
 }
 
 

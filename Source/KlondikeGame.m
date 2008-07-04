@@ -39,64 +39,68 @@
 }
 
 
-- (id) initWithBoard: (GGBLayer*)board
+- (id) init
 {
-    self = [super initWithBoard: board];
-    if (self != nil) {
+    self = [super init];
+    if (self != nil)
         [self setNumberOfPlayers: 1];
-        
-        CGSize boardSize = board.bounds.size;
-        CGFloat xSpacing = floor(boardSize.width/7);
-        CGSize kCardSize;
-        kCardSize.width  = round(xSpacing * 0.9);  // 1/7th of width, with 10% gap
-        kCardSize.height = round(kCardSize.width * 1.5);
-        CGFloat gap = xSpacing-kCardSize.width;
-        [Card setCardSize: kCardSize];
-        
-        CGPoint pos = {floor(gap/2)+kCardSize.width/2, floor(boardSize.height-kCardSize.height/2)};
-        _deck = [[Deck alloc] initWithCardsOfClass: [PlayingCard class]];
-        [_deck shuffle];
-        _deck.position = pos;
-        [board addSublayer: _deck];
-        
-        pos.x += xSpacing;
-        _sink = [[Deck alloc] init];
-        _sink.position = pos;
-        [board addSublayer: _sink];
-        
-        pos.x += xSpacing;
-        for( CardSuit suit=kSuitClubs; suit<=kSuitSpades; suit++ ) {
-            pos.x += xSpacing;
-            Deck *aces = [[Deck alloc] init];
-            aces.position = pos;
-            [board addSublayer: aces];
-            _aces[suit] = aces;
-        }
-        
-        CGRect stackFrame = {{floor(gap/2), gap}, 
-                             {kCardSize.width, boardSize.height-kCardSize.height-2*gap}};
-        CGPoint startPos = CGPointMake(kCardSize.width/2,kCardSize.height/2);
-        CGSize spacing = {0, floor((stackFrame.size.height-kCardSize.height)/11.0)};
-        for( int s=0; s<7; s++ ) {
-            Stack *stack = [[Stack alloc] initWithStartPos: startPos spacing: spacing];
-            stack.frame = stackFrame;
-            stackFrame.origin.x += xSpacing;
-            stack.backgroundColor = nil; //kAlmostInvisibleWhiteColor;
-            stack.dragAsStacks = YES;
-            [board addSublayer: stack];
-            
-            // According to the rules, one card should be added to each stack in turn, instead
-            // of populating entire stacks one at a time. However, if one trusts the Deck's
-            // -shuffle method (which uses the random() function, seeded with a high-entropy
-            // cryptographically-strong value), it shouldn't make any difference :-)
-            for( int c=0; c<=s; c++ )
-                [stack addBit: [_deck removeTopCard]];
-            ((Card*)stack.bits.lastObject).faceUp = YES;
-        }
-        
-        [self nextPlayer];
-    }
     return self;
+}
+
+        
+- (void) setUpBoard
+{
+    CGSize boardSize = _board.bounds.size;
+    CGFloat xSpacing = floor(boardSize.width/7);
+    CGSize kCardSize;
+    kCardSize.width  = round(xSpacing * 0.9);  // 1/7th of width, with 10% gap
+    kCardSize.height = round(kCardSize.width * 1.5);
+    CGFloat gap = xSpacing-kCardSize.width;
+    [Card setCardSize: kCardSize];
+    
+    CGPoint pos = {floor(gap/2)+kCardSize.width/2, floor(boardSize.height-kCardSize.height/2)};
+    [_deck release];
+    _deck = [[Deck alloc] initWithCardsOfClass: [PlayingCard class]];
+    [_deck shuffle];
+    _deck.position = pos;
+    [_board addSublayer: _deck];
+    
+    pos.x += xSpacing;
+    [_sink release];
+    _sink = [[Deck alloc] init];
+    _sink.position = pos;
+    [_board addSublayer: _sink];
+    
+    pos.x += xSpacing;
+    for( CardSuit suit=kSuitClubs; suit<=kSuitSpades; suit++ ) {
+        pos.x += xSpacing;
+        Deck *aces = [[Deck alloc] init];
+        aces.position = pos;
+        [_board addSublayer: aces];
+        [_aces[suit] release];
+        _aces[suit] = aces;
+    }
+    
+    CGRect stackFrame = {{floor(gap/2), gap}, 
+                         {kCardSize.width, boardSize.height-kCardSize.height-2*gap}};
+    CGPoint startPos = CGPointMake(kCardSize.width/2,kCardSize.height/2);
+    CGSize spacing = {0, floor((stackFrame.size.height-kCardSize.height)/11.0)};
+    for( int s=0; s<7; s++ ) {
+        Stack *stack = [[Stack alloc] initWithStartPos: startPos spacing: spacing];
+        stack.frame = stackFrame;
+        stackFrame.origin.x += xSpacing;
+        stack.backgroundColor = nil; //kAlmostInvisibleWhiteColor;
+        stack.dragAsStacks = YES;
+        [_board addSublayer: stack];
+        
+        // According to the rules, one card should be added to each stack in turn, instead
+        // of populating entire stacks one at a time. However, if one trusts the Deck's
+        // -shuffle method (which uses the random() function, seeded with a high-entropy
+        // cryptographically-strong value), it shouldn't make any difference :-)
+        for( int c=0; c<=s; c++ )
+            [stack addBit: [_deck removeTopCard]];
+        ((Card*)stack.bits.lastObject).faceUp = YES;
+    }
 }
 
 
@@ -185,7 +189,7 @@
     for( CardSuit suit=kSuitClubs; suit<=kSuitSpades; suit++ )
         if( _aces[suit].cards.count < 13 )
             return nil;
-    return _currentPlayer;
+    return self.currentPlayer;
 }
 
 

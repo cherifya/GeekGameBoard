@@ -26,7 +26,7 @@
 /** Constants for various commonly used colors. */
 extern CGColorRef kBlackColor, kWhiteColor, 
                   kTranslucentGrayColor, kTranslucentLightGrayColor, 
-                  kAlmostInvisibleWhiteColor,
+                  kTranslucentWhiteColor, kAlmostInvisibleWhiteColor,
                   kHighlightColor;
 
 #if TARGET_OS_IPHONE

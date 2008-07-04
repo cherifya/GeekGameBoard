@@ -26,15 +26,6 @@
 #import "QuartzUtils.h"
 
 
-/**  WARNING: THIS CODE REQUIRES GARBAGE COLLECTION!
- **  This sample application uses Objective-C 2.0 garbage collection.
- **  Therefore, the source code in this file does NOT perform manual object memory management.
- **  If you reuse any of this code in a process that isn't garbage collected, you will need to
- **  add all necessary retain/release/autorelease calls, and implement -dealloc methods,
- **  otherwise unpleasant leakage will occur!
- **/
-
-
 @implementation DemoBoardView
 
 
@@ -44,6 +35,14 @@ static NSString* const kMenuGameNames[] = {@"KlondikeGame", @"CheckersGame", @"H
 
 /** Class name of the current game. */
 static NSString* sCurrentGameName = @"CheckersGame";
+
+
+- (IBAction) toggleRemoteOpponent: (id)sender
+{
+    NSAssert(self.game.currentTurn==0,@"Game has already begun");
+    Player *opponent = [self.game.players objectAtIndex: 1];
+    opponent.local = !opponent.local;
+}
 
 
 - (void) startGameNamed: (NSString*)gameClassName
@@ -112,19 +111,26 @@ static NSString* sCurrentGameName = @"CheckersGame";
 {
     Game *game = self.game;
     if( object == game ) {
-        NSLog(@"maxTurn = %u, currentTurn=%u", self.game.maxTurn,self.game.currentTurn);
+        NSLog(@"maxTurn = %u, currentTurn = %u", 
+              self.game.maxTurn,self.game.currentTurn);
+        NSLog(@"Game state = '%@'", self.game.stateString);
+
         _turnSlider.maxValue = self.game.maxTurn;
         _turnSlider.numberOfTickMarks = self.game.maxTurn+1;
         
         Player *p = game.winner;
         NSString *msg;
         if( p ) {
+            // The game is won
             [[NSSound soundNamed: @"Sosumi"] play];
-            msg = @"%@ wins! Congratulations!";
+            if( self.game.local )
+                msg = @"%@ wins! Congratulations!";
+            else
+                msg = p.local ?@"You Win! Congratulations!" :@"You Lose ... :-(";
         } else {
+            // Otherwise go on to the next turn:
             p = game.currentPlayer;
             msg = @"Your turn, %@";
-            NSLog(@"Game state = '%@'", self.game.stateString);
         }
         _headline.string = [NSString stringWithFormat: msg, p.name];
     }
@@ -146,13 +152,6 @@ static NSString* sCurrentGameName = @"CheckersGame";
         self.game.currentTurn++;
     else
         NSBeep();
-}
-
-
-- (IBAction) enterFullScreen: (id)sender
-{
-    [super enterFullScreen: sender];
-    [self startGameNamed: sCurrentGameName];        // restart game so it'll use the new size
 }
 
 

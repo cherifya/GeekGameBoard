@@ -30,19 +30,20 @@
 @implementation HexchequerGame
 
 
-- (Grid*) x_makeGrid
+- (void) setUpBoard
 {
     HexGrid *grid = [[HexGrid alloc] initWithRows: 9 columns: 9 frame: _board.bounds];
     _grid = grid;
+    [_board addSublayer: _grid];
     CGPoint pos = grid.position;
-    pos.x = floor((_board.bounds.size.width-grid.frame.size.width)/2);
+    pos.x += grid.spacing.width / 4;    // The right edge of the grid is blank because of the unused cells outside the hexagon
     grid.position = pos;
     grid.allowsMoves = YES;
     grid.allowsCaptures = NO;      // no land-on captures, that is
     grid.cellColor = CreateGray(1.0, 0.25);
     grid.lineColor = kTranslucentLightGrayColor;
-    
     [grid addCellsInHexagon];
+    [_cells removeAllObjects];
     for( int y=0; y<9; y++ ) {
         for( int x=0; x<9; x++ ) {
             GridCell *cell = [_grid cellAtRow: y column: x];
@@ -50,14 +51,12 @@
                 [_cells addObject: cell];
         }
     }
-    self.stateString = @"111111111111111111-------------------------222222222222222222";
-    
-    [self performSelector: @selector(applyMoveString:) withObject: @"C4D4" afterDelay: 2.0];
-    [self performSelector: @selector(applyMoveString:) withObject: @"G3F3" afterDelay: 5.0];
-    [self performSelector: @selector(applyMoveString:) withObject: @"D4E4" afterDelay: 8.0];
-    [self performSelector: @selector(applyMoveString:) withObject: @"F3D4" afterDelay: 11.0];
-    
-    return grid;
+}
+
+
+- (NSString*) initialStateString
+{
+    return @"111111111111111111-------------------------222222222222222222";
 }
 
 
@@ -78,9 +77,11 @@
     Hex *src=(Hex*)srcHolder, *dst=(Hex*)dstHolder;
     int playerIndex = self.currentPlayer.index;
 
-    if( self.currentMove.length==0 )
-        [self.currentMove appendString: src.name];
-    [self.currentMove appendString: dst.name];
+    Turn *turn = self.currentTurn;
+    if( turn.move.length==0 )
+        [turn addToMove: src.name];
+    [turn addToMove: @"-"];
+    [turn addToMove: dst.name];
     
     BOOL isKing = ([bit valueForKey: @"King"] != nil);    
     PlaySound(isKing ?@"Funk" :@"Tink");
@@ -111,9 +112,9 @@
     
     if( capture ) {
         PlaySound(@"Pop");
-        Bit *bit = capture.bit;
-        _numPieces[bit.owner.index]--;
-        [bit destroy];
+        [turn addToMove: @"!"];
+        _numPieces[capture.bit.owner.index]--;
+        [capture destroyBit];
         
         // Now check if another capture is possible. If so, don't end the turn:
         if( (dst.fl.bit.unfriendly && dst.fl.fl.empty) || (dst.fr.bit.unfriendly && dst.fr.fr.empty) )

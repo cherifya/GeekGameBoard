@@ -29,11 +29,12 @@
 {
     CATextLayer *_headline;
     IBOutlet NSSlider *_turnSlider;
+    IBOutlet NSPanel *_opponentsMoveSheet;
+    IBOutlet NSTextField *_myMoveURLField, *_opponentsMoveURLField;
 }
 
 - (IBAction) undo: (id)sender;
 - (IBAction) redo: (id)sender;
 - (IBAction) startGameFromMenu: (id)sender;
-- (IBAction) enterFullScreen: (id)sender;
 
 @end

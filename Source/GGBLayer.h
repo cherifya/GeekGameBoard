@@ -47,3 +47,6 @@ void RemoveImmediately( CALayer *layer );
 /** Disables animations until EndDisableAnimations is called. */
 void BeginDisableAnimations(void);
 void EndDisableAnimations(void);
+
+CGColorRef GetEffectiveBackground( CALayer *layer );
+

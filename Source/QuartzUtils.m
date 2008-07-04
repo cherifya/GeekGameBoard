@@ -27,7 +27,7 @@
 
 CGColorRef kBlackColor, kWhiteColor, 
            kTranslucentGrayColor, kTranslucentLightGrayColor,
-           kAlmostInvisibleWhiteColor,
+           kTranslucentWhiteColor, kAlmostInvisibleWhiteColor,
            kHighlightColor;
 
 
@@ -38,6 +38,7 @@ static void InitQuartzUtils()
     kWhiteColor = CreateGray(1.0, 1.0);
     kTranslucentGrayColor = CreateGray(0.0, 0.5);
     kTranslucentLightGrayColor = CreateGray(0.0, 0.25);
+    kTranslucentWhiteColor = CreateGray(1, 0.25);
     kAlmostInvisibleWhiteColor = CreateGray(1, 0.05);
     kHighlightColor = CreateRGB(1, 1, 0, 0.5);
 }

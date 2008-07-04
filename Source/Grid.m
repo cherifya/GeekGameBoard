@@ -23,6 +23,7 @@
 #import "Grid.h"
 #import "Bit.h"
 #import "Game.h"
+#import "Player.h"
 #import "QuartzUtils.h"
 
 
@@ -127,7 +128,7 @@ static void setcolor( CGColorRef *var, CGColorRef color )
     GridCell *cell = [[_cellClass alloc] initWithGrid: self 
                                         row: row column: col
                                                 frame: frame];
-    cell.name = [NSString stringWithFormat: @"%c%u", ('A'+row),col];
+    cell.name = [NSString stringWithFormat: @"%c%u", ('A'+row),(1+col)];
     return [cell autorelease];
 }
 

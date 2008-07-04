@@ -24,6 +24,7 @@
 #import "Bit.h"
 #import "BitHolder.h"
 #import "Game.h"
+#import "Player.h"
 #import "QuartzUtils.h"
 #import "GGBUtils.h"
 
@@ -36,7 +37,7 @@
 @implementation BoardView
 
 
-@synthesize game=_game, gameboard=_gameboard;
+@synthesize gameboard=_gameboard;
 
 
 - (void) dealloc
@@ -46,20 +47,63 @@
 }
 
 
-- (void) startGameNamed: (NSString*)gameClassName
+- (void) _removeGameBoard
 {
     if( _gameboard ) {
-        [_gameboard removeFromSuperlayer];
+        RemoveImmediately(_gameboard);
         _gameboard = nil;
     }
+}
+
+- (void) createGameBoard
+{
+    [self _removeGameBoard];
     _gameboard = [[CALayer alloc] init];
     _gameboard.frame = [self gameBoardFrame];
-    _gameboard.autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
+    _gameboard.autoresizingMask = kCALayerMinXMargin | kCALayerMaxXMargin | kCALayerMinYMargin | kCALayerMaxYMargin;
+
+    // Tell the game to set up the board:
+    _game.board = _gameboard;
+
     [self.layer addSublayer: _gameboard];
     [_gameboard release];
-    
+}
+
+
+- (void) reverseBoard
+{
+    [_gameboard setValue: [NSNumber numberWithDouble: M_PI]
+              forKeyPath: @"transform.rotation"];
+}
+
+
+- (Game*) game
+{
+    return _game;
+}
+
+- (void) setGame: (Game*)game
+{
+    if( game!=_game ) {
+        setObj(&_game,game);
+        [self createGameBoard];
+    }
+}
+
+- (void) startGameNamed: (NSString*)gameClassName
+{
     Class gameClass = NSClassFromString(gameClassName);
-    setObj(&_game, [[gameClass alloc] initWithBoard: _gameboard]);
+    Game *game = [[gameClass alloc] init];
+    if( game ) {
+        self.game = game;
+        [game release];
+    }
+}
+
+
+- (BOOL) canMakeMove
+{
+    return (_game && _game.currentPlayer.local && _game.currentTurnNo==_game.maxTurnNo);
 }
 
 
@@ -72,18 +116,46 @@
 - (void)resetCursorRects
 {
     [super resetCursorRects];
-    [self addCursorRect: self.bounds cursor: [NSCursor openHandCursor]];
+    if( self.canMakeMove )
+        [self addCursorRect: self.bounds cursor: [NSCursor openHandCursor]];
 }
 
 
 - (IBAction) enterFullScreen: (id)sender
 {
+    [self _removeGameBoard];
     if( self.isInFullScreenMode ) {
         [self exitFullScreenModeWithOptions: nil];
     } else {
         [self enterFullScreenMode: self.window.screen 
                       withOptions: nil];
     }
+    [self createGameBoard];
+}
+
+
+- (void)viewWillStartLiveResize
+{
+    [super viewWillStartLiveResize];
+    _oldSize = self.frame.size;
+}
+
+- (void)setFrameSize:(NSSize)newSize
+{
+    [super setFrameSize: newSize];
+    if( _oldSize.width > 0.0f ) {
+        CGAffineTransform xform = _gameboard.affineTransform;
+        xform.a = xform.d = MIN(newSize.width,newSize.height)/MIN(_oldSize.width,_oldSize.height);
+        _gameboard.affineTransform = xform;
+    } else
+        [self createGameBoard];
+}
+
+- (void)viewDidEndLiveResize
+{
+    [super viewDidEndLiveResize];
+    _oldSize.width = _oldSize.height = 0.0f;
+    [self createGameBoard];
 }
 
 
@@ -149,6 +221,11 @@ static BOOL layerIsDropTarget( CALayer* layer ) {return [layer respondsToSelecto
 
 - (void) mouseDown: (NSEvent*)ev
 {
+    if( ! self.canMakeMove ) {
+        NSBeep();
+        return;
+    }
+    
     BOOL placing = NO;
     _dragStartPos = ev.locationInWindow;
     _dragBit = (Bit*) [self hitTestPoint: _dragStartPos

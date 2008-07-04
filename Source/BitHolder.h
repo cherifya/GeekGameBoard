@@ -30,6 +30,9 @@
 /** Current Bit, or nil if empty */
 @property (retain) Bit* bit;
 
+/** Sets current Bit to nil, triggering its "destroy" animation */
+- (void) destroyBit;
+
 /** Conveniences for comparing self.bit with nil */
 @property (readonly, getter=isEmpty) BOOL empty;
 

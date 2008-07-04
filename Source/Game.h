@@ -20,56 +20,72 @@
     CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
     THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-@class GGBLayer, Bit, BitHolder, Player;
+
+#import <Foundation/Foundation.h>
+@class GGBLayer, Bit, BitHolder, Player, Turn;
 @protocol BitHolder;
 
 
 /** Abstract superclass. Keeps track of the rules and turns of a game. */
-@interface Game : NSObject
+@interface Game : NSObject <NSCoding>
 {
-    NSString *_uniqueID;
     GGBLayer *_board;
     NSArray *_players;
-    Player *_currentPlayer, *_winner;
-    NSMutableString *_currentMove;
-    NSMutableArray *_states, *_moves;
-    unsigned _currentTurn;
+    Player *_winner;
+    NSMutableArray *_turns;
+    unsigned _currentTurnNo;
+    NSMutableDictionary *_extraValues;
+    BOOL _requireConfirmation;
 }
 
-/** Returns the name used to identify this game in URLs.
-     (By default it just returns the class name with the "Game" suffix removed.) */
+#pragma mark  Class properties:
+
+/** The name used to identify this class of game in URLs.
+    (By default it just returns the class name with the "Game" suffix removed.) */
 + (NSString*) identifier;
 
-/** Returns the human-readable name of this game.
+/** The human-readable name of this class of game.
     (By default it just returns the class name with the "Game" suffix removed.) */
 + (NSString*) displayName;
 
+/** Is this game's board wider than it's high? */
 + (BOOL) landscapeOriented;
 
-@property (readonly, copy) NSArray *players;
-@property (readonly) Player *currentPlayer, *winner;
 
-@property (readonly) NSArray *states, *moves;
-@property (readonly) unsigned maxTurn;
-@property unsigned currentTurn;
-@property (readonly) BOOL isLatestTurn;
-
-
-/** A globally-unique string assigned to this game instance, to help networked players identify it. */
-@property (readonly) NSString* uniqueID;
-
-- (BOOL) animateMoveFrom: (BitHolder*)src to: (BitHolder*)dst;
-
-
-- (id) initWithUniqueID: (NSString*)uniqueID;
+/** Designated initializer: override this if your subclass needs additional initialization. */
 - (id) init;
 
+/** Convenience initializer that calls -init, -setBoard:, and -nextTurn. */
+- (id) initNewGameWithBoard: (GGBLayer*)board;
 
-// Methods for subclasses to implement:
+/** NSCoding initializer. Calls -init, but then restores saved payers, states, moves. */
+- (id) initWithCoder: (NSCoder*)decoder;
 
-/** Designated initializer. After calling the superclass implementation,
-    it should add the necessary Grids, Pieces, Cards, Decks etc. to the board. */
-- (id) initWithBoard: (GGBLayer*)board;
+/** NSCoding method to save Game to an archive. */
+- (void) encodeWithCoder: (NSCoder*)coder;
+
+
+@property (readonly, copy) NSArray *players;
+@property (readonly) Player *currentPlayer, *winner, *remotePlayer;
+@property (readonly, getter=isLocal) BOOL local;            // Are all players local?
+
+@property (retain) GGBLayer *board;                         // The root layer for the game.
+
+@property (readonly) NSArray *turns;
+@property (readonly) Turn *currentTurn, *latestTurn;
+@property (readonly) unsigned maxTurnNo;
+@property unsigned currentTurnNo;
+@property (readonly) BOOL isLatestTurn;
+
+@property BOOL requireConfirmation;
+- (void) cancelCurrentTurn;
+- (void) confirmCurrentTurn;
+
+
+#pragma mark  Methods for subclasses to implement:
+
+/** An icon for a player (usually the same as the image of the player's pieces.) */
+- (CGImageRef) iconForPlayer: (int)playerIndex;
 
 
 /** Should return YES if it is legal for the given bit to be moved from its current holder.
@@ -95,61 +111,5 @@
     Should return NO if the click is illegal (i.e. clicking an empty draw pile in a card game.)
     Default implementation always returns YES. */
 - (BOOL) clickedBit: (Bit*)bit;
-
-/** Should return the winning player, if the current position is a win, else nil.
-    Default implementation returns nil. */
-- (Player*) checkForWinner;
-
-/** A string describing the current state of the game (the positions of all pieces,
-    orderings of cards, player scores, ... */
-@property (copy) NSString* stateString;
-
-/** Add a move to the game based on the contents of the string. */
-- (BOOL) applyMoveString: (NSString*)move;
-
-
-// Protected methods for subclasses to call:
-
-/** Sets the number of players in the game. Subclass initializers should call this. */
-- (void) setNumberOfPlayers: (unsigned)n;
-
-/** The current move in progress. Append text to it as the user makes moves. */
-@property (readonly) NSMutableString* currentMove;
-
-/** Advance to the next player, when a turn is over. */
-- (void) nextPlayer;
-
-/** Checks for a winner and advances to the next player. */
-- (void) endTurn;
-
-@end
-
-
-
-/** A mostly-passive object used to represent a player. */
-@interface Player : NSObject <NSCoding>
-{
-    Game *_game;
-    NSString *_name;
-}
-
-- (id) initWithGame: (Game*)game;
-
-@property (readonly) Game *game;
-@property (copy) NSString *name;
-@property (readonly) int index;
-@property (readonly, getter=isCurrent) BOOL current;
-@property (readonly, getter=isFriendly) BOOL friendly;
-@property (readonly, getter=isUnfriendly) BOOL unfriendly;
-@property (readonly) Player *nextPlayer, *previousPlayer;
-
-@end
-
-
-
-@interface CALayer (Game)
-
-/** Called on any CALayer in the game's layer tree, will return the current Game object. */
-@property (readonly) Game *game;
 
 @end

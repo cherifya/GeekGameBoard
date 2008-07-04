@@ -42,6 +42,16 @@ void setObjCopy( id<NSCopying> *variable, id<NSCopying> newValue )
 }
 
 
+void DelayFor( NSTimeInterval interval )
+{
+    NSDate *end = [NSDate dateWithTimeIntervalSinceNow: interval];
+    while( [end timeIntervalSinceNow] > 0 ) {
+        if( ! [[NSRunLoop currentRunLoop] runMode: NSDefaultRunLoopMode beforeDate: end] )
+            break;
+    }
+}    
+
+
 #if TARGET_OS_IPHONE
 static SystemSoundID GetSound( NSString *name )
 {

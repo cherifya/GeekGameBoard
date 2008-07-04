@@ -38,41 +38,43 @@
     return [p autorelease];
 }
 
-- (id) initWithBoard: (GGBLayer*)board
+- (id) init
 {
-    self = [super initWithBoard: board];
+    self = [super init];
     if (self != nil) {
         [self setNumberOfPlayers: 2];
-        
-        // Create a 3x3 grid:
-        CGFloat center = floor(CGRectGetMidX(board.bounds));
-        _grid = [[RectGrid alloc] initWithRows: 3 columns: 3 frame: CGRectMake(center-150,0, 300,300)];
-        [_grid addAllCells];
-        _grid.allowsMoves = _grid.allowsCaptures = NO;
-        _grid.cellColor = CreateGray(1.0, 0.25);
-        _grid.lineColor = kTranslucentLightGrayColor;
-        [board addSublayer: _grid];
-        
-        // Create piece dispensers for the two players:
-        for( int playerNumber=0; playerNumber<=1; playerNumber++ ) {
-            Piece *p = [self pieceForPlayer: playerNumber];
-            CGFloat x = floor(CGRectGetMidX(_board.bounds));
-#if TARGET_OS_IPHONE
-            x = x - 80 + 160*playerNumber;
-            CGFloat y = 360;
-#else
-            x += (playerNumber==0 ?-230 :230);
-            CGFloat y = 175;
-#endif
-            _dispenser[playerNumber] = [[Dispenser alloc] initWithPrototype: p quantity: 0
-                                                                      frame: CGRectMake(x-45,y-45, 90,90)];
-            [_board addSublayer: _dispenser[playerNumber]];
-        }            
-        
-        // And they're off!
-        [self nextPlayer];
     }
     return self;
+}
+        
+- (void) setUpBoard
+{
+    // Create a 3x3 grid:
+    CGFloat center = floor(CGRectGetMidX(_board.bounds));
+    [_grid release];
+    _grid = [[RectGrid alloc] initWithRows: 3 columns: 3 frame: CGRectMake(center-150,0, 300,300)];
+    [_grid addAllCells];
+    _grid.allowsMoves = _grid.allowsCaptures = NO;
+    _grid.cellColor = CreateGray(1.0, 0.25);
+    _grid.lineColor = kTranslucentLightGrayColor;
+    [_board addSublayer: _grid];
+    
+    // Create piece dispensers for the two players:
+    for( int playerNumber=0; playerNumber<=1; playerNumber++ ) {
+        Piece *p = [self pieceForPlayer: playerNumber];
+        CGFloat x = floor(CGRectGetMidX(_board.bounds));
+#if TARGET_OS_IPHONE
+        x = x - 80 + 160*playerNumber;
+        CGFloat y = 360;
+#else
+        x += (playerNumber==0 ?-230 :230);
+        CGFloat y = 175;
+#endif
+        [_dispenser[playerNumber] release];
+        _dispenser[playerNumber] = [[Dispenser alloc] initWithPrototype: p quantity: 0
+                                                                  frame: CGRectMake(x-45,y-45, 90,90)];
+        [_board addSublayer: _dispenser[playerNumber]];
+    }            
 }
 
 
@@ -92,12 +94,13 @@
 - (void) setStateString: (NSString*)stateString
 {
     for( int i=0; i<9; i++ ) {
-        Piece *piece;
-        switch( [stateString characterAtIndex: i] ) {
-            case 'X': case 'x': piece = [self pieceForPlayer: 0]; break;
-            case 'O': case 'o': piece = [self pieceForPlayer: 1]; break;
-            default:            piece = nil; break;
-        }
+        Piece *piece = nil;
+        if( i < stateString.length )
+            switch( [stateString characterAtIndex: i] ) {
+                case 'X': case 'x': piece = [self pieceForPlayer: 0]; break;
+                case 'O': case 'o': piece = [self pieceForPlayer: 1]; break;
+                default:            break;
+            }
         [_grid cellAtRow: i/3 column: i%3].bit = piece;
     }
 }
@@ -116,16 +119,18 @@
 {
     Square *square = (Square*)dst;
     int squareIndex = 3*square.row + square.column;
-    [self.currentMove appendFormat: @"%@%i", bit.name, squareIndex];
+    [self.currentTurn addToMove: [NSString stringWithFormat: @"%@%i", bit.name, squareIndex]];
     [super bit: bit movedFrom: src to: dst];
 }
 
+/* FIX: Need to restore this somehow, now that -nextPlayer is gone
 - (void) nextPlayer
 {
     [super nextPlayer];
     // Give the next player another piece to put down:
     _dispenser[self.currentPlayer.index].quantity = 1;
 }
+ */
 
 static Player* ownerAt( Grid *grid, int index )
 {

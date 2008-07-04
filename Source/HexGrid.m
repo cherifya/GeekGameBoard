@@ -57,9 +57,17 @@
     // Compute the horizontal spacing:
     CGFloat s = floor(MIN( (frame.size.width -2.0)/nColumns,
                          (frame.size.height-2.0)/(nRows+0.5*tan(M_PI/6)) / (0.5*(tan(M_PI/6)+1/cos(M_PI/6))) ));
-    return [self initWithRows: nRows columns: nColumns
+    self = [self initWithRows: nRows columns: nColumns
                       spacing: CGSizeMake(s,s)
                      position: frame.origin];
+    if( self ) {
+        // Center in frame:
+        CGRect curFrame = self.frame;
+        curFrame.origin.x = round( curFrame.origin.x + (frame.size.width - curFrame.size.width )/2.0f );
+        curFrame.origin.y = round( curFrame.origin.y + (frame.size.height- curFrame.size.height)/2.0f );
+        self.frame = curFrame;
+    }
+    return self;
 }
     
     
