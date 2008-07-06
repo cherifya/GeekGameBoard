@@ -102,8 +102,18 @@ static void setcolor( CGColorRef *var, CGColorRef color )
 - (CGColorRef) lineColor                        {return _lineColor;}
 - (void) setLineColor: (CGColorRef)lineColor    {setcolor(&_lineColor,lineColor);}
 
+- (CGImageRef) backgroundImage                  {return _backgroundImage;}
+- (void) setBackgroundImage: (CGImageRef)image
+{
+    if( image != _backgroundImage ) {
+        CGImageRelease(_backgroundImage);
+        _backgroundImage = CGImageRetain(image);
+    }
+}
+
 @synthesize cellClass=_cellClass, rows=_nRows, columns=_nColumns, spacing=_spacing,
-            usesDiagonals=_usesDiagonals, allowsMoves=_allowsMoves, allowsCaptures=_allowsCaptures;
+            usesDiagonals=_usesDiagonals, allowsMoves=_allowsMoves, allowsCaptures=_allowsCaptures,
+            cells=_cells;
 
 
 #pragma mark -
@@ -205,6 +215,10 @@ static void setcolor( CGColorRef *var, CGColorRef color )
     // Custom CALayer drawing implementation. Delegates to the cells to draw themselves
     // in me; this is more efficient than having each cell have its own drawing.
     [super drawInContext: ctx];
+    
+    if( _backgroundImage )
+        CGContextDrawImage(ctx, self.bounds, _backgroundImage);
+    
     if( _cellColor ) {
         CGContextSetFillColorWithColor(ctx, _cellColor);
         [self drawCellsInContext: ctx fill: YES];
@@ -348,13 +362,11 @@ static void setcolor( CGColorRef *var, CGColorRef color )
 
 #if ! TARGET_OS_IPHONE
 
-// An image from another app can be dragged onto a Dispenser to change the Piece's appearance.
-
+// An image from another app can be dragged onto a Grid to change its background pattern.
 
 - (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender
 {
-    NSPasteboard *pb = [sender draggingPasteboard];
-    if( [NSImage canInitWithPasteboard: pb] )
+    if( CanGetCGImageFromPasteboard([sender draggingPasteboard]) )
         return NSDragOperationCopy;
     else
         return NSDragOperationNone;
@@ -362,7 +374,7 @@ static void setcolor( CGColorRef *var, CGColorRef color )
 
 - (BOOL)performDragOperation:(id <NSDraggingInfo>)sender
 {
-    CGImageRef image = GetCGImageFromPasteboard([sender draggingPasteboard]);
+    CGImageRef image = GetCGImageFromPasteboard([sender draggingPasteboard],sender);
     if( image ) {
         CGColorRef pattern = CreatePatternColor(image);
         _grid.cellColor = pattern;
@@ -456,7 +468,7 @@ static void setcolor( CGColorRef *var, CGColorRef color )
 
 - (BOOL)performDragOperation:(id <NSDraggingInfo>)sender
 {
-    CGImageRef image = GetCGImageFromPasteboard([sender draggingPasteboard]);
+    CGImageRef image = GetCGImageFromPasteboard([sender draggingPasteboard],sender);
     if( image ) {
         CGColorRef color = CreatePatternColor(image);
         RectGrid *rectGrid = (RectGrid*)_grid;

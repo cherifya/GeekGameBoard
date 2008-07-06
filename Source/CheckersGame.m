@@ -30,6 +30,25 @@
 @implementation CheckersGame
 
 
+static NSMutableDictionary *kPieceStyle1, *kPieceStyle2;
+
++ (void) initialize
+{
+    if( self == [CheckersGame class] ) {
+        kPieceStyle1 = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
+                        (id)GetCGImageNamed(@"Green.png"), @"contents",
+                        kCAGravityResizeAspect, @"contentsGravity",
+                        kCAFilterLinear, @"minificationFilter",
+                        nil];
+        kPieceStyle2 = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
+                        (id)GetCGImageNamed(@"Red.png"), @"contents",
+                        kCAGravityResizeAspect, @"contentsGravity",
+                        kCAFilterLinear, @"minificationFilter",
+                        nil];
+    }
+}
+
+
 - (id) init
 {
     self = [super init];
@@ -52,8 +71,9 @@
 
 - (Piece*) pieceForPlayer: (int)playerNum
 {
-    Piece *p = [[Piece alloc] initWithImageNamed: (playerNum==0 ?@"Green.png" :@"Red.png") 
-                                           scale: floor(_grid.spacing.width * 1.0)];
+    Piece *p = [[Piece alloc] init];
+    p.bounds = CGRectMake(0,0,floor(_grid.spacing.width),floor(_grid.spacing.height));
+    p.style = (playerNum ?kPieceStyle2 :kPieceStyle1);
     p.owner = [self.players objectAtIndex: playerNum];
     p.name = playerNum ?@"2" :@"1";
     return [p autorelease];
@@ -68,7 +88,7 @@
 
 - (void) setUpBoard
 {
-    RectGrid *grid = [[[RectGrid alloc] initWithRows: 8 columns: 8 frame: _board.bounds] autorelease];
+    RectGrid *grid = [[RectGrid alloc] initWithRows: 8 columns: 8 frame: _board.bounds];
     _grid = grid;
     [_board addSublayer: _grid];
     CGPoint pos = _grid.position;

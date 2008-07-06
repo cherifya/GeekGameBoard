@@ -27,13 +27,23 @@
 @implementation Piece
 
 
-- (id) initWithImageNamed: (NSString*)imageName
-                    scale: (CGFloat)scale
+- (id) init
 {
     self = [super init];
     if (self != nil) {
-        [self setImageNamed: imageName scale: scale];
         self.zPosition = kPieceZ;
+    }
+    return self;
+}
+
+
+
+- (id) initWithImageNamed: (NSString*)imageName
+                    scale: (CGFloat)scale
+{
+    self = [self init];
+    if (self != nil) {
+        [self setImageNamed: imageName scale: scale];
     }
     return self;
 }
@@ -122,6 +132,31 @@
     }
     return alpha >= thresholdAlpha;
 }
+
+
+#if ! TARGET_OS_IPHONE
+
+// An image from another app can be dragged onto a Piece to change its background pattern.
+
+- (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender
+{
+    if( CanGetCGImageFromPasteboard([sender draggingPasteboard]) )
+        return NSDragOperationCopy;
+    else
+        return NSDragOperationNone;
+}
+
+- (BOOL)performDragOperation:(id <NSDraggingInfo>)sender
+{
+    CGImageRef image = GetCGImageFromPasteboard([sender draggingPasteboard],sender);
+    if( image ) {
+        [self setValue: (id)image ofStyleProperty: @"contents"];
+        return YES;
+    } else
+        return NO;
+}
+
+#endif
 
 
 @end

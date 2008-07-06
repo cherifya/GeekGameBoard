@@ -105,8 +105,12 @@ CGImageRef GetCGImageNamed( NSString *name )
         if( [name hasPrefix: @"/"] )
             path = name;
         else {
-            path = [[NSBundle mainBundle] pathForResource: name ofType: nil];
-            NSCAssert1(path,@"Couldn't find bundle image resource '%@'",name);
+            NSString *dir = [name stringByDeletingLastPathComponent];
+            name = [name lastPathComponent];
+            NSString *ext = name.pathExtension;
+            name = [name stringByDeletingPathExtension];
+            path = [[NSBundle mainBundle] pathForResource: name ofType: ext inDirectory: dir];
+            NSCAssert3(path,@"Couldn't find bundle image resource '%@' type '%@' in '%@'",name,ext,dir);
         }
         image = CreateCGImageFromFile(path);
         NSCAssert1(image,@"Failed to load image from %@",path);
@@ -136,7 +140,21 @@ CGColorRef GetCGPatternNamed( NSString *name )         // can be resource name o
 
 
 #if ! TARGET_OS_IPHONE
-CGImageRef GetCGImageFromPasteboard( NSPasteboard *pb )
+
+BOOL CanGetCGImageFromPasteboard( NSPasteboard *pb )
+{
+    return [NSImage canInitWithPasteboard: pb] 
+        || [[pb types] containsObject: @"PixadexIconPathPboardType"];
+
+    /*if( [[pb types] containsObject: NSFilesPromisePboardType] ) {
+     NSArray *fileTypes = [pb propertyListForType: NSFilesPromisePboardType];
+     NSLog(@"Got file promise! Types = %@",fileTypes);
+     //FIX: Check file types
+     return NSDragOperationCopy;
+     }*/
+}    
+
+CGImageRef GetCGImageFromPasteboard( NSPasteboard *pb, id<NSDraggingInfo>dragInfo )
 {
     CGImageSourceRef src = NULL;
     NSArray *paths = [pb propertyListForType: NSFilenamesPboardType];
@@ -144,6 +162,28 @@ CGImageRef GetCGImageFromPasteboard( NSPasteboard *pb )
         // If a file is being dragged, read it:
         CFURLRef url = (CFURLRef) [NSURL fileURLWithPath: [paths objectAtIndex: 0]];
         src = CGImageSourceCreateWithURL(url, NULL);
+/*
+    } else if( dragInfo && [[pb types] containsObject:NSFilesPromisePboardType] ) {
+        NSString *dropDir = NSTemporaryDirectory();
+        NSArray *filenames = [dragInfo namesOfPromisedFilesDroppedAtDestination: [NSURL fileURLWithPath: dropDir]];
+        NSLog(@"promised files are %@ / %@", dropDir,filenames);
+        src = nil; */
+    } else if( [[pb types] containsObject: @"PixadexIconPathPboardType"] ) {
+        // Candybar 3 (nee Pixadex) doesn't drag out icons in any normal image type.
+        // It does support file-promises, but I couldn't get those to work using the Cocoa APIs.
+        // So instead I'm using its custom type that provides the path(s) to its internal ".pxicon" files.
+        // The icon is really easy to get from one of these: it's just file's custom icon.
+        NSArray *files = [pb propertyListForType: @"PixadexIconPathPboardType"];
+        if( files.count == 1 ) {
+            NSString *path = [files objectAtIndex: 0];
+            NSImage *icon = [[NSWorkspace sharedWorkspace] iconForFile: path];
+            for( NSImageRep *rep in icon.representations ) {
+                if( [rep isKindOfClass: [NSBitmapImageRep class]] ) {
+                    [rep retain];   //FIX: This leaks; but if the rep goes away, the CGImage breaks...
+                    return [(NSBitmapImageRep*)rep CGImage];
+                }
+            }
+        }
     } else {
         // Else look for an image type:
         NSString *type = [pb availableTypeFromArray: [NSImage imageUnfilteredPasteboardTypes]];
@@ -205,6 +245,7 @@ CGImageRef GetScaledImageNamed( NSString *imageName, CGFloat scale )
 
 float GetPixelAlpha( CGImageRef image, CGSize imageSize, CGPoint pt )
 {
+    NSCParameterAssert(image);
 #if TARGET_OS_IPHONE
     // iPhone uses "flipped" (i.e. normal) coords, so images are wrong-way-up
     pt.y = imageSize.height - pt.y;

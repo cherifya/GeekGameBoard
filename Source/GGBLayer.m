@@ -8,6 +8,10 @@
 
 #import "GGBLayer.h"
 #import "QuartzUtils.h"
+#import "GGBUtils.h"
+
+
+NSString* const GGBLayerStyleChangedNotification = @"GGBLayerStyleChanged";
 
 
 @implementation GGBLayer
@@ -65,6 +69,56 @@
         _curAnimation = nil;
     }
 }
+
+
+- (void) setStyle: (NSDictionary*)style
+{
+    if( style != _styleDict ) {
+        if( _styleDict )
+            [[NSNotificationCenter defaultCenter] removeObserver: self 
+                                                            name: GGBLayerStyleChangedNotification
+                                                          object: _styleDict];
+        if( style )
+            [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(_styleChanged)
+                                                         name: GGBLayerStyleChangedNotification
+                                                       object: style];
+        setObj(&_styleDict,style);
+    }
+    [super setStyle: style];
+}
+
+- (void) _styleChanged
+{
+    // Reapply the style, so any changes in the dict will take effect.
+    [super setStyle: _styleDict];
+}
+
+- (void) dealloc
+{
+    if( _styleDict )
+        [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                        name: GGBLayerStyleChangedNotification
+                                                      object: _styleDict];
+    [super dealloc];
+}
+
+
+- (void) setValue: (id)value ofStyleProperty: (NSString*)prop
+{
+    if( _styleDict ) {
+        id oldValue = [_styleDict objectForKey: prop];
+        if( oldValue != value ) {
+            if( value )
+                [_styleDict setObject: value forKey: prop];
+            else
+                [_styleDict removeObjectForKey: prop];
+            [[NSNotificationCenter defaultCenter] postNotificationName: GGBLayerStyleChangedNotification
+                                                                object: _styleDict];
+        }
+    } else
+        [self setValue: value forKey: prop];
+}
+
 
 
 #if TARGET_OS_IPHONE

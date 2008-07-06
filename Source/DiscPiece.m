@@ -27,27 +27,23 @@
 @implementation DiscPiece
 
 
-- (void) setImage: (CGImageRef)image scale: (CGFloat)scale
+- (void) _setImage: (CGImageRef)image
 {
-    if( scale < 4.0 ) {
-        int size = MAX(CGImageGetWidth(image), CGImageGetHeight(image));
-        if( scale > 0 )
-            scale = ceil( size * scale);
-        else
-            scale = size;
-        scale *= 1.2;
-    }
-    self.bounds = CGRectMake(0,0,scale,scale);
-    
+    CGFloat diameter = MAX(CGImageGetWidth(image),CGImageGetHeight(image));
+    CGFloat outerDiameter = round(diameter * 1.1);
+    self.bounds = CGRectMake(0,0,outerDiameter,outerDiameter);
+
     if( ! _imageLayer ) {
         _imageLayer = [[CALayer alloc] init];
         _imageLayer.contentsGravity = @"resizeAspect";
+        _imageLayer.masksToBounds = YES;
         [self addSublayer: _imageLayer];
         [_imageLayer release];
     }
-    _imageLayer.frame = CGRectInset(self.bounds, scale*.1, scale*.1);
+    _imageLayer.frame = CGRectInset(self.bounds, outerDiameter-diameter, outerDiameter-diameter);
+    _imageLayer.cornerRadius = diameter/2;
     _imageLayer.contents = (id) image;
-    self.cornerRadius = scale/2;
+    self.cornerRadius = outerDiameter/2;
     self.borderWidth = 3;
     self.borderColor = kTranslucentLightGrayColor;
     self.imageName = nil;

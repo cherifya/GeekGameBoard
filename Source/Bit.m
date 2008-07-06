@@ -100,18 +100,24 @@
 - (void) setPickedUp: (BOOL)up
 {
     if( up != _pickedUp ) {
-        CGFloat shadow, offset, radius, opacity, z, scale;
+        CGFloat shadow, radius, opacity, z, scale;
+        CGSize offset;
         if( up ) {
             shadow = 0.8;
-            offset = 2;
+            offset = CGSizeMake(2,2);
             radius = 8;
             opacity = kPickedUpOpacity;
             scale = kPickedUpScale;
             z = kPickedUpZ;
             _restingZ = self.zPosition;
+            _restingShadowOpacity = self.shadowOpacity;
+            _restingShadowOffset  = self.shadowOffset;
+            _restingShadowRadius  = self.shadowRadius;
         } else {
-            shadow = offset = radius = 0.0;
-            opacity = 1.0;
+            shadow = _restingShadowOpacity;
+            offset = _restingShadowOffset;
+            radius = _restingShadowRadius;
+            opacity = 1;
             scale = 1.0/kPickedUpScale;
             z = _restingZ;
         }
@@ -119,7 +125,7 @@
         //self.zPosition = z;
 #if !TARGET_OS_IPHONE
         self.shadowOpacity = shadow;
-        self.shadowOffset = CGSizeMake(offset,-offset);
+        self.shadowOffset = offset;
         self.shadowRadius = radius;
 #endif
         self.opacity = opacity;

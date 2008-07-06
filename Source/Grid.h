@@ -31,6 +31,7 @@
     CGSize _spacing;                                    
     Class _cellClass;                                   
     CGColorRef _cellColor, _lineColor;                  
+    CGImageRef _backgroundImage;
     BOOL _usesDiagonals, _allowsMoves, _allowsCaptures;
     NSMutableArray *_cells;                             // Really a 2D array, in row-major order.
 }
@@ -51,8 +52,11 @@
 @property (readonly) unsigned rows, columns;    // Dimensions of the grid
 @property (readonly) CGSize spacing;            // x,y spacing of GridCells
 @property CGColorRef cellColor, lineColor;      // Cell background color, line color (or nil)
+@property CGImageRef backgroundImage;           // Image drawn in background, behind lines and cells
 @property BOOL usesDiagonals;                   // Affects GridCell.neighbors, for rect grids
 @property BOOL allowsMoves, allowsCaptures;     // Can pieces be moved, and can they land on others?
+
+@property (readonly) NSArray *cells;
 
 /** Returns the GridCell at the given coordinates, or nil if there is no cell there.
     It's OK to call this with off-the-board coordinates; it will just return nil.*/

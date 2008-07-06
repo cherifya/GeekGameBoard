@@ -14,9 +14,13 @@
 #endif
 
 
+extern NSString* const GGBLayerStyleChangedNotification;
+
+
 @interface GGBLayer : CALayer <NSCopying>
 {
     CABasicAnimation *_curAnimation;
+    NSMutableDictionary *_styleDict;
 
 #if ! TARGET_OS_IPHONE
 }
@@ -34,6 +38,10 @@
 - (void) redisplayAll;
 
 - (void) animateAndBlock: (NSString*)keyPath from: (id)from to: (id)to duration: (NSTimeInterval)duration;
+
+/** Change a property in this layer's 'style' dictionary (if it has one),
+    and update every other layer that shares the same style dictionary. */
+- (void) setValue: (id)value ofStyleProperty: (NSString*)prop;
 
 @end
 

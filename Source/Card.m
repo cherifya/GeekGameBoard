@@ -183,7 +183,7 @@ static CATransform3D kFaceUpTransform, kFaceDownTransform;
 
 - (BOOL)performDragOperation:(id <NSDraggingInfo>)sender
 {
-    CGImageRef image = GetCGImageFromPasteboard([sender draggingPasteboard]);
+    CGImageRef image = GetCGImageFromPasteboard([sender draggingPasteboard],sender);
     if( image ) {
         GGBLayer *face = _faceUp ?_front :_back;
         face.contents = (id) image;

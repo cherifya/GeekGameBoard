@@ -50,8 +50,10 @@ CGImageRef GetCGImageNamed( NSString *name );
 CGColorRef GetCGPatternNamed( NSString *name );
 
 #if ! TARGET_OS_IPHONE
+/** Is it possible to read a CGImage from this pasteboard? */
+BOOL CanGetCGImageFromPasteboard( NSPasteboard *pb );
 /** Loads image data from the pasteboard into a CGImage. */
-CGImageRef GetCGImageFromPasteboard( NSPasteboard *pb );
+CGImageRef GetCGImageFromPasteboard( NSPasteboard *pb, id<NSDraggingInfo>dragInfo );
 #endif
 
 CGImageRef CreateScaledImage( CGImageRef srcImage, CGFloat scale );

@@ -181,7 +181,7 @@
 {
     if( ! [_prototype isKindOfClass: [Piece class]] )
         return NO;
-    CGImageRef image = GetCGImageFromPasteboard([sender draggingPasteboard]);
+    CGImageRef image = GetCGImageFromPasteboard([sender draggingPasteboard],sender);
     if( image ) {
         [(Piece*)_prototype setImage: image];
         self.prototype = _prototype; // recreates _bit

@@ -43,6 +43,8 @@ enum {
 {
     @private
     int _restingZ;      // Original z position, saved while pickedUp
+    float _restingShadowOpacity, _restingShadowRadius;
+    CGSize _restingShadowOffset;
     BOOL _pickedUp;
     Player *_owner;     // Player that owns this Bit
 }
