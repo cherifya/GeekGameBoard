@@ -47,6 +47,7 @@ enum {
     CGSize _restingShadowOffset;
     BOOL _pickedUp;
     Player *_owner;     // Player that owns this Bit
+    NSInteger _tag;
 }
 
 /** Conveniences for getting/setting the layer's scale and rotation */
@@ -65,6 +66,9 @@ enum {
 /** Conveniences for owner.friendly, owner.unfriendly */
 @property (readonly, getter=isFriendly)   BOOL friendly;
 @property (readonly, getter=isUnfriendly) BOOL unfriendly;
+
+/** An uninterpreted integer that the Game can use for its own purposes. */
+@property NSInteger tag;
 
 /** Removes this Bit while running a explosion/fade-out animation */
 - (void) destroy;

@@ -24,6 +24,7 @@
 #import "Bit.h"
 #import "BitHolder.h"
 #import "Game.h"
+#import "Turn.h"
 #import "Player.h"
 #import "QuartzUtils.h"
 #import "GGBUtils.h"
@@ -103,7 +104,9 @@
 
 - (BOOL) canMakeMove
 {
-    return (_game && _game.currentPlayer.local && _game.currentTurnNo==_game.maxTurnNo);
+    return _game != nil
+        && _game.currentPlayer.local
+        && _game.currentTurn.status < kTurnComplete;
 }
 
 

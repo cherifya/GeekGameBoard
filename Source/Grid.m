@@ -22,7 +22,8 @@
 */
 #import "Grid.h"
 #import "Bit.h"
-#import "Game.h"
+#import "Piece.h"
+#import "Game+Protected.h"
 #import "Player.h"
 #import "QuartzUtils.h"
 
@@ -112,8 +113,7 @@ static void setcolor( CGColorRef *var, CGColorRef color )
 }
 
 @synthesize cellClass=_cellClass, rows=_nRows, columns=_nColumns, spacing=_spacing,
-            usesDiagonals=_usesDiagonals, allowsMoves=_allowsMoves, allowsCaptures=_allowsCaptures,
-            cells=_cells;
+            usesDiagonals=_usesDiagonals, allowsMoves=_allowsMoves, allowsCaptures=_allowsCaptures;
 
 
 #pragma mark -
@@ -184,6 +184,16 @@ static void setcolor( CGColorRef *var, CGColorRef color )
 }
 
 
+- (NSArray*) cells
+{
+    NSMutableArray *cells = [_cells mutableCopy];
+    for( int i=cells.count-1; i>=0; i-- )
+        if( [cells objectAtIndex: i] == [NSNull null] )
+            [cells removeObjectAtIndex: i];
+    return cells;
+}
+
+
 - (GridCell*) cellWithName: (NSString*)name
 {
     for( CALayer *layer in self.sublayers )
@@ -191,6 +201,61 @@ static void setcolor( CGColorRef *var, CGColorRef color )
             if( [name isEqualToString: ((GridCell*)layer).name] )
                 return (GridCell*)layer;
     return nil;
+}
+
+
+- (NSCountedSet*) countPiecesByPlayer
+{
+    NSCountedSet *players = [NSCountedSet set];
+    for( GridCell *cell in self.cells ) {
+        Player *owner = cell.bit.owner;
+        if( owner )
+            [players addObject: owner];
+    }
+    return players;
+}
+
+
+
+#pragma mark -
+#pragma mark GAME STATE:
+
+
+- (NSString*) stateString
+{
+    NSMutableString *state = [NSMutableString stringWithCapacity: _cells.count];
+    for( GridCell *cell in self.cells ) {
+        Bit *bit = cell.bit;
+        NSString *name = bit ?bit.name :@"-";
+        NSAssert(name.length==1,@"Missing or multicharacter name");
+        [state appendString: name];
+    }
+    return state;
+}
+
+- (void) setStateString: (NSString*)state
+{
+    Game *game = self.game;
+    int i = 0;
+    for( GridCell *cell in self.cells )
+        cell.bit = [game makePieceNamed: [state substringWithRange: NSMakeRange(i++,1)]];
+}
+
+
+- (BOOL) applyMoveString: (NSString*)move
+{
+    GridCell *src = nil;
+    for( NSString *ident in [move componentsSeparatedByString: @"-"] ) {
+        while( [ident hasSuffix: @"!"] || [ident hasSuffix: @"*"] )
+            ident = [ident substringToIndex: ident.length-1];
+        GridCell *dst = [self cellWithName: ident];
+        if( dst == nil )
+            return NO;
+        if( src && ! [self.game animateMoveFrom: src to: dst] )
+            return NO;
+        src = dst;
+    }
+    return YES;
 }
 
 
@@ -463,6 +528,41 @@ static void setcolor( CGColorRef *var, CGColorRef color )
 - (Square*) bl     {return self.fwdIsN ?self.sw :self.ne;}
 - (Square*) l      {return self.fwdIsN ?self.w  :self.e;}
 
+
+static int sgn( int n ) {return n<0 ?-1 :(n>0 ?1 :0);}
+
+
+- (SEL) directionToCell: (GridCell*)dst
+{
+    static NSString* const kDirections[9] = {@"sw", @"s", @"se",
+                                             @"w",  nil,  @"e",
+                                             @"nw", @"n", @"ne"};
+    if( dst.grid != self.grid )
+        return NULL;
+    int dy=dst.row-_row, dx=dst.column-_column;
+    if( dx && dy )
+        if( !( _grid.usesDiagonals && abs(dx)==abs(dy) ) )
+            return NULL;
+    NSString *dir = kDirections[ 3*(sgn(dy)+1) + (sgn(dx)+1) ];
+    return dir ?NSSelectorFromString(dir) :NULL;
+}
+
+- (NSArray*) lineToCell: (GridCell*)dst inclusive: (BOOL)inclusive;
+{
+    SEL dir = [self directionToCell: dst];
+    if( ! dir )
+        return nil;
+    NSMutableArray *line = [NSMutableArray array];
+    GridCell *cell;
+    for( cell=self; cell; cell = [cell performSelector: dir] ) {
+        if( inclusive || (cell!=self && cell!=dst) )
+            [line addObject: cell];
+        if( cell==dst )
+            return line;
+    }
+    return nil; // should be impossible, but just in case
+}
+                
 
 #if ! TARGET_OS_IPHONE
 

@@ -43,14 +43,6 @@
     grid.cellColor = CreateGray(1.0, 0.25);
     grid.lineColor = kTranslucentLightGrayColor;
     [grid addCellsInHexagon];
-    [_cells removeAllObjects];
-    for( int y=0; y<9; y++ ) {
-        for( int x=0; x<9; x++ ) {
-            GridCell *cell = [_grid cellAtRow: y column: x];
-            if( cell )
-                [_cells addObject: cell];
-        }
-    }
 }
 
 
@@ -113,7 +105,6 @@
     if( capture ) {
         PlaySound(@"Pop");
         [turn addToMove: @"!"];
-        _numPieces[capture.bit.owner.index]--;
         [capture destroyBit];
         
         // Now check if another capture is possible. If so, don't end the turn:

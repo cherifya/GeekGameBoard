@@ -39,6 +39,9 @@
 /** BitHolders will be highlighted while the target of a drag operation */
 @property BOOL highlighted;
 
+/** An uninterpreted integer that the Game can use for its own purposes. */
+@property NSInteger tag;
+
 
 /** Tests whether the bit is allowed to be dragged out of me.
     Returns the input bit, or possibly a different Bit to drag instead, or nil if not allowed.
@@ -71,6 +74,7 @@
     @protected
     Bit *_bit;
     BOOL _highlighted;
+    NSInteger _tag;
 }
 
 @end

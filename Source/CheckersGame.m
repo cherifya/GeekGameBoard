@@ -53,7 +53,6 @@ static NSMutableDictionary *kPieceStyle1, *kPieceStyle2;
 {
     self = [super init];
     if (self != nil) {
-        _cells = [[NSMutableArray alloc] init];
         [self setNumberOfPlayers: 2];
         
         PreloadSound(@"Tink");
@@ -82,7 +81,7 @@ static NSMutableDictionary *kPieceStyle1, *kPieceStyle2;
 - (void) makeKing: (Piece*)piece
 {
     piece.scale = 1.4;
-    [piece setValue: @"King" forKey: @"King"];
+    piece.tag = YES;        // tag property stores the 'king' flag
     piece.name = piece.owner.index ?@"4" :@"3";
 }
 
@@ -100,65 +99,34 @@ static NSMutableDictionary *kPieceStyle1, *kPieceStyle2;
     grid.altCellColor = CreateGray(1.0, 0.25);
     grid.lineColor = nil;
 
-    [grid addAllCells];
-    [_cells removeAllObjects];
     for( int i=0; i<32; i++ ) {
         int row = i/4;
-        [_cells addObject: [_grid cellAtRow: row column: 2*(i%4) + (row&1)]];
+        [_grid addCellAtRow: row column: 2*(i%4) + (row&1)];
     }
+    [_grid release]; // its superlayer still retains it
 }
 
-- (void) dealloc
-{
-    [_cells release];
-    [_grid release];
-    [super dealloc];
-}
+- (NSString*) initialStateString            {return @"111111111111--------222222222222";}
+- (NSString*) stateString                   {return _grid.stateString;}
+- (void) setStateString: (NSString*)state   {_grid.stateString = state;}
 
-
-- (NSString*) initialStateString
+- (Piece*) makePieceNamed: (NSString*)name
 {
-    return @"111111111111--------222222222222";
-}
-
-- (NSString*) stateString
-{
-    unichar state[_cells.count];
-    int i = 0;
-    for( GridCell *cell in _cells ) {
-        NSString *ident = cell.bit.name;
-        if( ident )
-            state[i++] = [ident characterAtIndex: 0];
-        else
-            state[i++] = '-';
-    }
-    return [NSString stringWithCharacters: state length: i];
-}
-
-- (void) setStateString: (NSString*)state
-{
-    _numPieces[0] = _numPieces[1] = 0;
-    int i = 0;
-    for( GridCell *cell in _cells ) {
-        Piece *piece;
-        int which = [state characterAtIndex: i++] - '1';
-        if( which >=0 && which < 4 ) {
-            int player = (which & 1);
-            piece = [self pieceForPlayer: player];
-            _numPieces[player]++;
-            if( which & 2 ) 
-                [self makeKing: piece];
-        } else
-            piece = nil;
-        cell.bit = piece;
-    }    
+    int which = [name characterAtIndex: 0] - '1';
+    if( which >=0 && which < 4 ) {
+        Piece *piece = [self pieceForPlayer: (which & 1)];
+        if( which & 2 ) 
+            [self makeKing: piece];
+        return piece;
+    } else
+        return nil;
 }
 
 
 - (BOOL) canBit: (Bit*)bit moveFrom: (id<BitHolder>)srcHolder to: (id<BitHolder>)dstHolder
 {
     Square *src=(Square*)srcHolder, *dst=(Square*)dstHolder;
-    if( [bit valueForKey: @"King"] )
+    if( bit.tag )
         if( dst==src.bl || dst==src.br || dst==src.l || dst==src.r
            || (src.bl.bit.unfriendly && dst==src.bl.bl) || (src.br.bit.unfriendly && dst==src.br.br) )
             return YES;    
@@ -177,34 +145,24 @@ static NSMutableDictionary *kPieceStyle1, *kPieceStyle2;
     [turn addToMove: @"-"];
     [turn addToMove: dst.name];
     
-    BOOL isKing = ([bit valueForKey: @"King"] != nil);
+    BOOL isKing = bit.tag;
     PlaySound(isKing ?@"Funk" :@"Tink");
 
     // "King" a piece that made it to the last row:
-    if( dst.row == (playerIndex ?0 :7) )
-        if( ! isKing ) {
-            PlaySound(@"Blow");
-            [self makeKing: (Piece*)bit];
-            [turn addToMove: @"*"];
-            // don't set isKing flag - piece can't jump again after being kinged.
-        }
+    if( !isKing && (dst.row == (playerIndex ?0 :7)) ) {
+        PlaySound(@"Blow");
+        [self makeKing: (Piece*)bit];
+        [turn addToMove: @"*"];
+        // don't set isKing flag - piece can't jump again after being kinged.
+    }
 
     // Check for a capture:
-    Square *capture = nil;
-    if(dst==src.fl.fl)
-        capture = src.fl;
-    else if(dst==src.fr.fr)
-        capture = src.fr;
-    else if(dst==src.bl.bl)
-        capture = src.bl;
-    else if(dst==src.br.br)
-        capture = src.br;
-    
-    if( capture ) {
-        PlaySound(@"Pop");
-        _numPieces[capture.bit.owner.index]--;
+    NSArray *line = [src lineToCell: dst inclusive: NO];
+    if( line.count==1 ) {
+        Square *capture = [line objectAtIndex: 0];
         [capture destroyBit];
         [turn addToMove: @"!"];
+        PlaySound(@"Pop");
         
         // Now check if another capture is possible. If so, don't end the turn:
         if( (dst.fl.bit.unfriendly && dst.fl.fl.empty) || (dst.fr.bit.unfriendly && dst.fr.fr.empty) )
@@ -219,11 +177,9 @@ static NSMutableDictionary *kPieceStyle1, *kPieceStyle2;
 
 - (Player*) checkForWinner
 {
-    // Whoever runs out of pieces loses:
-    if( _numPieces[0]==0 )
-        return [self.players objectAtIndex: 1];
-    else if( _numPieces[1]==0 )
-        return [self.players objectAtIndex: 0];
+    NSCountedSet *remaining = _grid.countPiecesByPlayer;
+    if( remaining.count==1 )
+        return [remaining anyObject];
     else
         return nil;
 }

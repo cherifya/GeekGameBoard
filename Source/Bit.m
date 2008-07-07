@@ -42,6 +42,7 @@
 {
     Bit *clone = [super copyWithZone: zone];
     clone->_owner = _owner;
+    clone->_tag   = _tag;
     return clone;
 }
 
@@ -51,7 +52,7 @@
 }
 
 
-@synthesize owner=_owner;
+@synthesize owner=_owner, tag=_tag;
 
 - (BOOL) isFriendly         {return _owner.friendly;}
 - (BOOL) isUnfriendly       {return _owner.unfriendly;}

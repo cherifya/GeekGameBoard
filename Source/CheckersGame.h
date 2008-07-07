@@ -28,9 +28,7 @@
     See: http://en.wikipedia.org/wiki/Draughts */
 @interface CheckersGame : Game 
 {
-    int _numPieces[2];
     Grid *_grid;
-    NSMutableArray *_cells;
 }
 
 @end

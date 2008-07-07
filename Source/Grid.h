@@ -73,6 +73,21 @@
 
 - (GridCell*) cellWithName: (NSString*)identifier;
 
+/** Returns all of the Players who have any Bits on the grid, with each Player's count being the
+    number of Bits. */
+- (NSCountedSet*) countPiecesByPlayer;
+
+
+/** Utility to get and set the entire state of the Grid. The stateString is made by concatenating
+    the name of the Bit of every GridCell in order, with "-" for empty cells.
+    The setter method calls the Game's optional -makePieceNamed: method to create the pieces. */
+@property (copy) NSString *stateString;
+
+/** Interprets the string as a series of cell names separated by "-", and tells the Game to move
+    the piece at the first cell to each cell in succession by calling its -animateMoveFrom:to:. */
+- (BOOL) applyMoveString: (NSString*)move;
+
+
 // protected:
 - (GridCell*) createCellAtRow: (unsigned)row column: (unsigned)col 
                suggestedFrame: (CGRect)frame;
@@ -98,7 +113,7 @@
 /** Returns YES if 'forward' is north (increasing row#) for the current player */
 @property (readonly) BOOL fwdIsN;
 
-/* Go-style group detection. Returns the set of contiguous GridCells that have pieces of the same
+/** Go-style group detection. Returns the set of contiguous GridCells that have pieces of the same
    owner as this one, and optionally a count of the number of "liberties", or adjacent empty cells. */
 - (NSSet*) getGroup: (int*)outLiberties;
 
@@ -127,6 +142,17 @@
 
 @property (readonly) Square *nw, *n, *ne, *e, *se, *s, *sw, *w;    // Absolute directions (n = increasing row#)
 @property (readonly) Square *fl, *f, *fr, *r, *br, *b, *bl, *l;    // Relative to player (upside-down for player 2)
+
+/** Returns the absolute direction selector (see above) for the straight line from self to dst;
+    or NULL if there is no straight line, or if dst==self.
+    Diagonal lines are allowed only if the Grid's -usesDiagonals is YES. */
+- (SEL) directionToCell: (GridCell*)dst;
+
+/** Returns an array of all the cells in a straight line from self to dst;
+    or NULL if there is no straight line, or if dst==self.
+    If 'inclusive' is YES, the array will include self and dst, otherwise not.
+    Diagonal lines are allowed only if the Grid's -usesDiagonals is YES. */
+- (NSArray*) lineToCell: (GridCell*)dst inclusive: (BOOL)inclusive;
 
 @end
 

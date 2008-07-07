@@ -25,6 +25,7 @@
 #endif
 
 
+#ifndef _MYUTILITIES_COLLECTIONUTILS_
 void setObj( id *variable, id newValue )
 {
     if( *variable != newValue ) {
@@ -40,6 +41,7 @@ void setObjCopy( id<NSCopying> *variable, id<NSCopying> newValue )
         *variable = [(id)newValue copy];
     }
 }
+#endif
 
 
 void DelayFor( NSTimeInterval interval )

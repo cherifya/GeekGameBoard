@@ -12,6 +12,7 @@
 #import "Turn.h"
 #import "Bit.h"
 #import "BitHolder.h"
+@class Piece;
 
 
 /** Game API for subclasses to use / override */
@@ -61,5 +62,9 @@
 /** Add a move to the game based on the contents of the string.
  The string must have been returned by -currentMove at some point. */
 - (BOOL) applyMoveString: (NSString*)move;
+
+/** An optional method called as a subroutine by -[Grid setStateString:].
+    If you decide to call that in your -setStateString: implementation, you need to implement this too. */ 
+- (Piece*) makePieceNamed: (NSString*)name;
 
 @end

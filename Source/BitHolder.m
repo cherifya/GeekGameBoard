@@ -67,7 +67,7 @@
 
 - (BOOL) isEmpty    {return self.bit==nil;}
 
-@synthesize highlighted=_highlighted;
+@synthesize highlighted=_highlighted, tag=_tag;
 
 - (Bit*) canDragBit: (Bit*)bit
 {
