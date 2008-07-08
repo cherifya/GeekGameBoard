@@ -38,7 +38,7 @@
         _imageLayer.contentsGravity = @"resizeAspect";
         _imageLayer.masksToBounds = YES;
         [self addSublayer: _imageLayer];
-        [_imageLayer release];
+        [_imageLayer release]; // superlayer is holding onto it
     }
     _imageLayer.frame = CGRectInset(self.bounds, outerDiameter-diameter, outerDiameter-diameter);
     _imageLayer.cornerRadius = diameter/2;

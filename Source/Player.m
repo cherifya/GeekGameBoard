@@ -40,10 +40,8 @@
     if( self ) {
         _game =  [decoder decodeObjectForKey: @"game"];
         _name = [[decoder decodeObjectForKey: @"name"] copy];
-        _uuid = [[decoder decodeObjectForKey: @"UUID"] copy];
-        _address = [[decoder decodeObjectForKey: @"address"] copy];
-        _addressType = [[decoder decodeObjectForKey: @"addressType"] copy];
         _local=  [decoder decodeBoolForKey:   @"local"];
+        _extraValues = [[decoder decodeObjectForKey: @"extraValues"] mutableCopy];
     }
     return self;
 }
@@ -52,23 +50,35 @@
 {
     [coder encodeObject: _game  forKey: @"game"];
     [coder encodeObject: _name  forKey: @"name"];
-    [coder encodeObject: _uuid  forKey: @"UUID"];
-    [coder encodeObject: _address forKey: @"address"];
-    [coder encodeObject: _addressType forKey: @"addressType"];
     [coder encodeBool:   _local forKey: @"local"];
+    [coder encodeObject: _extraValues forKey: @"extraValues"];
 }
 
 - (void) dealloc
 {
     [_name release];
-    [_uuid release];
-    [_address release];
-    [_addressType release];
+    [_extraValues release];
     [super dealloc];
 }
 
 
-@synthesize game=_game, name=_name, UUID=_uuid, address=_address, addressType=_addressType, local=_local;
+- (id)valueForUndefinedKey:(NSString *)key
+{
+    return [_extraValues objectForKey: key];
+}
+
+- (void)setValue:(id)value forUndefinedKey:(NSString *)key
+{
+    if( ! _extraValues )
+        _extraValues = [[NSMutableDictionary alloc] init];
+    if( value )
+        [_extraValues setObject: value forKey: key];
+    else
+        [_extraValues removeObjectForKey: key];
+}
+
+
+@synthesize game=_game, name=_name, local=_local;
 
 - (BOOL) isCurrent      {return self == _game.currentPlayer;}
 - (BOOL) isFriendly     {return self == _game.currentPlayer;}   // could be overridden for games with partners

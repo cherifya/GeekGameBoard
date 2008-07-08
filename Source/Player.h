@@ -14,8 +14,9 @@
 @interface Player : NSObject <NSCoding>
 {
     Game *_game;
-    NSString *_name, *_uuid, *_address, *_addressType;
+    NSString *_name;
     BOOL _local;
+    NSMutableDictionary *_extraValues;
 }
 
 - (id) initWithGame: (Game*)game;
@@ -24,18 +25,16 @@
 - (id) initWithCoder: (NSCoder*)decoder;
 - (void) encodeWithCoder: (NSCoder*)coder;
 
+@property (copy) NSString *name;                            // Display name
+@property (readonly) CGImageRef icon;                       // An icon to display (calls game.iconForPlayer:)
+
 @property (readonly) Game *game;
-@property (copy) NSString *name,                            // Display name
-                          *UUID,                            // Address Book UUID
-                          *address,                         // Contact address
-                          *addressType;                     // Contact address type (an AB property type)
 @property (readonly) int index;                             // Player's index in the Game's -players array
-@property (readwrite,getter=isLocal) BOOL local;            // Is the player on this computer? (Defaults to YES)
+@property (readwrite,getter=isLocal) BOOL local;            // Is player a human at this computer? (Defaults to YES)
 @property (readonly, getter=isCurrent) BOOL current;        // Is it this player's turn?
 @property (readonly, getter=isFriendly) BOOL friendly;      // Is this player the current player or an ally?
 @property (readonly, getter=isUnfriendly) BOOL unfriendly;  // Is this player an opponent of the current player?
 @property (readonly) Player *nextPlayer, *previousPlayer;   // The next/previous player in sequence
-@property (readonly) CGImageRef icon;
 @end
 
 

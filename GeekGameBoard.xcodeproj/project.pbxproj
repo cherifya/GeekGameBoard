@@ -19,6 +19,8 @@
 		2734B2620CC7F25A0070C008 /* HexchequerGame.m in Sources */ = {isa = PBXBuildFile; fileRef = 2734B2610CC7F25A0070C008 /* HexchequerGame.m */; };
 		2734B4F00CCA5BDB0070C008 /* CheckersGame.m in Sources */ = {isa = PBXBuildFile; fileRef = 2734B4EF0CCA5BDB0070C008 /* CheckersGame.m */; };
 		274124060CFCCF9D00842A9B /* DemoBoardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 274124050CFCCF9D00842A9B /* DemoBoardView.m */; };
+		274B35B80E22D55E0052BAB4 /* Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 274B35B50E22D55E0052BAB4 /* Player.m */; };
+		274B35B90E22D55E0052BAB4 /* Turn.m in Sources */ = {isa = PBXBuildFile; fileRef = 274B35B70E22D55E0052BAB4 /* Turn.m */; };
 		275167D90DEE2AB000247375 /* Blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 275167D40DEE2AB000247375 /* Blue.png */; };
 		275167DA0DEE2AB000247375 /* Gold.png in Resources */ = {isa = PBXBuildFile; fileRef = 275167D50DEE2AB000247375 /* Gold.png */; };
 		275167DB0DEE2AB000247375 /* Green.png in Resources */ = {isa = PBXBuildFile; fileRef = 275167D60DEE2AB000247375 /* Green.png */; };
@@ -77,6 +79,11 @@
 		2734B4EF0CCA5BDB0070C008 /* CheckersGame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CheckersGame.m; sourceTree = "<group>"; };
 		274124040CFCCF9D00842A9B /* DemoBoardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoBoardView.h; sourceTree = "<group>"; };
 		274124050CFCCF9D00842A9B /* DemoBoardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemoBoardView.m; sourceTree = "<group>"; };
+		274B35B30E22D55E0052BAB4 /* Game+Protected.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Game+Protected.h"; sourceTree = "<group>"; };
+		274B35B40E22D55E0052BAB4 /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Player.h; sourceTree = "<group>"; };
+		274B35B50E22D55E0052BAB4 /* Player.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Player.m; sourceTree = "<group>"; };
+		274B35B60E22D55E0052BAB4 /* Turn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Turn.h; sourceTree = "<group>"; };
+		274B35B70E22D55E0052BAB4 /* Turn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Turn.m; sourceTree = "<group>"; };
 		275167D40DEE2AB000247375 /* Blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Blue.png; sourceTree = "<group>"; };
 		275167D50DEE2AB000247375 /* Gold.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Gold.png; sourceTree = "<group>"; };
 		275167D60DEE2AB000247375 /* Green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Green.png; sourceTree = "<group>"; };
@@ -226,6 +233,11 @@
 			children = (
 				27275C490CC700F2009C4C6C /* Game.h */,
 				27275C4A0CC700F2009C4C6C /* Game.m */,
+				274B35B30E22D55E0052BAB4 /* Game+Protected.h */,
+				274B35B40E22D55E0052BAB4 /* Player.h */,
+				274B35B50E22D55E0052BAB4 /* Player.m */,
+				274B35B60E22D55E0052BAB4 /* Turn.h */,
+				274B35B70E22D55E0052BAB4 /* Turn.m */,
 				27275C900CC7C578009C4C6C /* TicTacToeGame.h */,
 				27275C910CC7C578009C4C6C /* TicTacToeGame.m */,
 				2734B4EE0CCA5BDB0070C008 /* CheckersGame.h */,
@@ -397,6 +409,8 @@
 				27C999C30D81185E005AFD4F /* GGBUtils.m in Sources */,
 				279F4D870D8606C200B32DBF /* GGBLayer.m in Sources */,
 				279F4D880D8606C200B32DBF /* GGBTextLayer.m in Sources */,
+				274B35B80E22D55E0052BAB4 /* Player.m in Sources */,
+				274B35B90E22D55E0052BAB4 /* Turn.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

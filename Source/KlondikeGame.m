@@ -59,25 +59,22 @@
     [Card setCardSize: kCardSize];
     
     CGPoint pos = {floor(gap/2)+kCardSize.width/2, floor(boardSize.height-kCardSize.height/2)};
-    [_deck release];
-    _deck = [[Deck alloc] initWithCardsOfClass: [PlayingCard class]];
+    _deck = [[[Deck alloc] initWithCardsOfClass: [PlayingCard class]] autorelease];
     [_deck shuffle];
     _deck.position = pos;
     [_board addSublayer: _deck];
     
     pos.x += xSpacing;
-    [_sink release];
-    _sink = [[Deck alloc] init];
+    _sink = [[[Deck alloc] init] autorelease];
     _sink.position = pos;
     [_board addSublayer: _sink];
     
     pos.x += xSpacing;
     for( CardSuit suit=kSuitClubs; suit<=kSuitSpades; suit++ ) {
         pos.x += xSpacing;
-        Deck *aces = [[Deck alloc] init];
+        Deck *aces = [[[Deck alloc] init] autorelease];
         aces.position = pos;
         [_board addSublayer: aces];
-        [_aces[suit] release];
         _aces[suit] = aces;
     }
     

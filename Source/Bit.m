@@ -123,8 +123,8 @@
             z = _restingZ;
         }
 
-        //self.zPosition = z;
 #if !TARGET_OS_IPHONE
+        self.zPosition = z;
         self.shadowOpacity = shadow;
         self.shadowOffset = offset;
         self.shadowRadius = radius;
