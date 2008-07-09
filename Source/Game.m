@@ -125,20 +125,22 @@
 - (void) setBoard: (GGBLayer*)board
 {
     setObj(&_board,board);
-    // Store a pointer to myself as the value of the "Game" property
-    // of my root layer. (CALayers can have arbitrary KV properties stored into them.)
-    // This is used by the -[CALayer game] category method defined below, to find the Game.
-    [_board setValue: self forKey: @"Game"];
-    
-    BeginDisableAnimations();
-    
-    // Tell the game to add the necessary bits to the board:
-    [self setUpBoard];
-    
-    // Re-apply the current state to set up the pieces/cards:
-    self.stateString = [[_turns objectAtIndex: _currentTurnNo] boardState];
-    
-    EndDisableAnimations();
+    if( board ) {
+        // Store a pointer to myself as the value of the "Game" property
+        // of my root layer. (CALayers can have arbitrary KV properties stored into them.)
+        // This is used by the -[CALayer game] category method defined below, to find the Game.
+        [_board setValue: self forKey: @"Game"];
+        
+        BeginDisableAnimations();
+        
+        // Tell the game to add the necessary bits to the board:
+        [self setUpBoard];
+        
+        // Re-apply the current state to set up the pieces/cards:
+        self.stateString = [[_turns objectAtIndex: _currentTurnNo] boardState];
+        
+        EndDisableAnimations();
+    }
 }
 
 

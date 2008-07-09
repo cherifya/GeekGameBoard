@@ -78,6 +78,14 @@
 }
 
 
+- (void) copyFrom: (Player*)player
+{
+    self.local = player.local;
+    self.name = player.name;
+    setObj(&_extraValues, [[player->_extraValues mutableCopy] autorelease]);
+}
+
+
 @synthesize game=_game, name=_name, local=_local;
 
 - (BOOL) isCurrent      {return self == _game.currentPlayer;}

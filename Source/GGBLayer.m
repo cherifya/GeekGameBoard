@@ -56,10 +56,14 @@ NSString* const GGBLayerStyleChangedNotification = @"GGBLayerStyleChanged";
     _curAnimation = (id)[self animationForKey: @"animateAndBlock:"];
     [self setValue: to forKeyPath: keyPath];    // animation doesn't update the property value
 
-    // Now wait for it to finish:
-    while( _curAnimation ) {
-        [[NSRunLoop currentRunLoop] runMode: NSDefaultRunLoopMode//NSEventTrackingRunLoopMode
-                                 beforeDate: [NSDate dateWithTimeIntervalSinceNow: 0.1]];
+    if( self.presentationLayer ) {
+        // Now wait for it to finish:
+        while( _curAnimation ) {
+            [[NSRunLoop currentRunLoop] runMode: NSDefaultRunLoopMode//NSEventTrackingRunLoopMode
+                                     beforeDate: [NSDate dateWithTimeIntervalSinceNow: 0.1]];
+        }
+    } else {
+        _curAnimation = nil;
     }
 }
 

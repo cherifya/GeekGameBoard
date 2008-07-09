@@ -35,6 +35,9 @@
 @property (readonly, getter=isFriendly) BOOL friendly;      // Is this player the current player or an ally?
 @property (readonly, getter=isUnfriendly) BOOL unfriendly;  // Is this player an opponent of the current player?
 @property (readonly) Player *nextPlayer, *previousPlayer;   // The next/previous player in sequence
+
+/** Copy all of the player's attributes (name, local...) into myself. */
+- (void) copyFrom: (Player*)player;
 @end
 
 

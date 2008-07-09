@@ -86,6 +86,7 @@
 - (void) setGame: (Game*)game
 {
     if( game!=_game ) {
+        _game.board = nil;
         setObj(&_game,game);
         [self createGameBoard];
     }
