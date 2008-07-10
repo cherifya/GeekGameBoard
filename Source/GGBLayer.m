@@ -124,6 +124,30 @@ NSString* const GGBLayerStyleChangedNotification = @"GGBLayerStyleChanged";
 }
 
 
+- (CATransform3D) aggregateTransform
+{
+    CATransform3D xform = CATransform3DIdentity;
+    for( CALayer *layer=self; layer; layer=layer.superlayer ) {
+        xform = CATransform3DConcat(layer.transform,xform);
+        xform = CATransform3DConcat(layer.sublayerTransform,xform);
+    }
+    return xform;
+}
+
+
+NSString* StringFromTransform3D( CATransform3D xform )
+{
+    NSMutableString *str = [NSMutableString string];
+    const CGFloat *np = (const CGFloat*)&xform;
+    for( int i=0; i<16; i++ ) {
+        if( i>0 && (i%4)==0 )
+            [str appendString: @"\n"];
+        [str appendFormat: @"%7.2f ", *np++];
+    }
+    return str;
+}
+
+
 
 #if TARGET_OS_IPHONE
 

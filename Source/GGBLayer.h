@@ -43,6 +43,8 @@ extern NSString* const GGBLayerStyleChangedNotification;
     and update every other layer that shares the same style dictionary. */
 - (void) setValue: (id)value ofStyleProperty: (NSString*)prop;
 
+- (CATransform3D) aggregateTransform;
+
 @end
 
 
@@ -58,3 +60,4 @@ void EndDisableAnimations(void);
 
 CGColorRef GetEffectiveBackground( CALayer *layer );
 
+NSString* StringFromTransform3D( CATransform3D xform );

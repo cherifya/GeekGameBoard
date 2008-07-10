@@ -42,6 +42,7 @@
     grid.allowsCaptures = NO;      // no land-on captures, that is
     grid.cellColor = CreateGray(1.0, 0.25);
     grid.lineColor = kTranslucentLightGrayColor;
+    grid.reversed = ! [[self.players objectAtIndex: 0] isLocal];
     [grid addCellsInHexagon];
 }
 

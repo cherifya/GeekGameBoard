@@ -39,14 +39,14 @@ extern NSString* const kTurnCompleteNotification;
 
 @property (readonly)      Game      *game;
 @property (readonly)      Player    *player, *nextPlayer;
-@property (readonly)      Turn      *previousTurn;
+@property (readonly)      Turn      *previousTurn, *nextTurn;
 @property (readonly)      unsigned   turnNumber;
 @property (readonly)      BOOL       isLatestTurn;
 
 @property                 TurnStatus status;
 
-@property (readonly,copy) NSString  *move;
-@property (readonly,copy) NSString  *boardState;
+@property (readonly,copy) NSString  *move;              // The player's move (nil for turn  0)
+@property (readonly,copy) NSString  *boardState;        // State of the game AFTER the move
 @property (readonly,retain)NSDate   *date;
 @property (copy)          NSString  *comment;
 

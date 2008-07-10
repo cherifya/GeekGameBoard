@@ -219,6 +219,23 @@
 }
 
 
+- (BOOL) okToMove
+{
+    Turn *latest = self.latestTurn;
+    if( latest.player.local && latest.status < kTurnComplete ) {
+        // Automatically skip from latest finished turn, since board state is the same:
+        unsigned latestTurnNo = self.maxTurnNo;
+        if( _currentTurnNo==latestTurnNo-1 ) {
+            NSLog(@"okToMove: skipping from turn %i to %i",_currentTurnNo,latestTurnNo);
+            self.currentTurnNo = latestTurnNo;
+        }
+        if( _currentTurnNo==latestTurnNo )
+            return YES;
+    }
+    return NO;
+}
+
+
 - (void) endTurn
 {
     Turn *curTurn = self.currentTurn;

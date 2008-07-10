@@ -77,6 +77,10 @@
 @property unsigned currentTurnNo;
 @property (readonly) BOOL isLatestTurn;
 
+/** Check this before the user begins a move action (mouse-down on a bit, etc.)
+    It's YES if it's OK to move,  or NO if the current move is finished or it's another player's turn. */
+@property (readonly) BOOL okToMove;
+
 @property BOOL requireConfirmation;
 - (void) cancelCurrentTurn;
 - (void) confirmCurrentTurn;

@@ -99,9 +99,7 @@ NSString* const kTurnCompleteNotification = @"TurnComplete";
 
 - (unsigned) turnNumber     {return [_game.turns indexOfObjectIdenticalTo: self];}
 - (BOOL) isLatestTurn       {return _game.turns.lastObject == self;}
-- (Turn*) previousTurn      {return [_game.turns objectAtIndex: self.turnNumber-1];}
 - (Player*) nextPlayer      {return _player ?_player.nextPlayer :[_game.players objectAtIndex: 0];}
-
 - (TurnStatus) status       {return _status;}
 
 - (void) setStatus: (TurnStatus)status
@@ -129,6 +127,25 @@ NSString* const kTurnCompleteNotification = @"TurnComplete";
         self.date = nil;
     } else
         self.date = [NSDate date];
+}
+
+
+- (Turn*) previousTurn
+{
+    unsigned n = self.turnNumber;
+    if( n > 0 )
+        return [_game.turns objectAtIndex: n-1];
+    else
+        return nil;
+}
+
+- (Turn*) nextTurn
+{
+    unsigned n = self.turnNumber;
+    if( n+1 < _game.turns.count )
+        return [_game.turns objectAtIndex: n+1];
+    else
+        return nil;
 }
 
 

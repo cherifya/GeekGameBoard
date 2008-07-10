@@ -56,8 +56,6 @@
 
 - (void) createGameBoard;
 
-- (void) reverseBoard;
-
 - (IBAction) enterFullScreen: (id)sender;
 
 - (CGRect) gameBoardFrame;

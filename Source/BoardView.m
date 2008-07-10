@@ -71,13 +71,6 @@
 }
 
 
-- (void) reverseBoard
-{
-    [_gameboard setValue: [NSNumber numberWithDouble: M_PI]
-              forKeyPath: @"transform.rotation"];
-}
-
-
 - (Game*) game
 {
     return _game;
@@ -103,14 +96,6 @@
 }
 
 
-- (BOOL) canMakeMove
-{
-    return _game != nil
-        && _game.currentPlayer.local
-        && _game.currentTurn.status < kTurnComplete;
-}
-
-
 - (CGRect) gameBoardFrame
 {
     return self.layer.bounds;
@@ -120,7 +105,7 @@
 - (void)resetCursorRects
 {
     [super resetCursorRects];
-    if( self.canMakeMove )
+    if( _game.okToMove )
         [self addCursorRect: self.bounds cursor: [NSCursor openHandCursor]];
 }
 
@@ -225,7 +210,7 @@ static BOOL layerIsDropTarget( CALayer* layer ) {return [layer respondsToSelecto
 
 - (void) mouseDown: (NSEvent*)ev
 {
-    if( ! self.canMakeMove ) {
+    if( ! _game.okToMove ) {
         NSBeep();
         return;
     }

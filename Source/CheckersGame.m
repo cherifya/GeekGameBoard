@@ -98,6 +98,7 @@ static NSMutableDictionary *kPieceStyle1, *kPieceStyle2;
     grid.cellColor = CreateGray(0.0, 0.25);
     grid.altCellColor = CreateGray(1.0, 0.25);
     grid.lineColor = nil;
+    grid.reversed = ! [[self.players objectAtIndex: 0] isLocal];
 
     for( int i=0; i<32; i++ ) {
         int row = i/4;

@@ -112,7 +112,7 @@ static void setcolor( CGColorRef *var, CGColorRef color )
     }
 }
 
-@synthesize cellClass=_cellClass, rows=_nRows, columns=_nColumns, spacing=_spacing,
+@synthesize cellClass=_cellClass, rows=_nRows, columns=_nColumns, spacing=_spacing, reversed=_reversed,
             usesDiagonals=_usesDiagonals, allowsMoves=_allowsMoves, allowsCaptures=_allowsCaptures;
 
 
@@ -136,7 +136,7 @@ static void setcolor( CGColorRef *var, CGColorRef color )
                suggestedFrame: (CGRect)frame
 {
     GridCell *cell = [[_cellClass alloc] initWithGrid: self 
-                                        row: row column: col
+                                                  row: row column: col
                                                 frame: frame];
     cell.name = [NSString stringWithFormat: @"%c%u", ('A'+row),(1+col)];
     return [cell autorelease];
@@ -150,7 +150,12 @@ static void setcolor( CGColorRef *var, CGColorRef color )
     unsigned index = row*_nColumns+col;
     GridCell *cell = [_cells objectAtIndex: index];
     if( (id)cell == [NSNull null] ) {
-        CGRect frame = CGRectMake(col*_spacing.width, row*_spacing.height,
+        unsigned effectiveRow=row, effectiveCol=col;
+        if( _reversed ) {
+            effectiveRow = _nRows-1    - effectiveRow;
+            effectiveCol = _nColumns-1 - effectiveCol;
+        }
+        CGRect frame = CGRectMake(effectiveCol*_spacing.width, effectiveRow*_spacing.height,
                                   _spacing.width,_spacing.height);
         cell = [self createCellAtRow: row column: col suggestedFrame: frame];
         if( cell ) {
@@ -274,6 +279,21 @@ static void setcolor( CGColorRef *var, CGColorRef color )
         }
 }
 
+- (void) drawBackgroundInContext: (CGContextRef)ctx
+{
+    if( _backgroundImage ) {
+        CGRect bounds = self.bounds;
+        if( _reversed ) {
+            CGContextSaveGState(ctx);
+            CGContextRotateCTM(ctx, M_PI);
+            CGContextTranslateCTM(ctx, -bounds.size.width, -bounds.size.height);
+        }
+        CGContextDrawImage(ctx, bounds, _backgroundImage);
+        if( _reversed )
+            CGContextRestoreGState(ctx);
+    }
+}
+
 
 - (void)drawInContext:(CGContextRef)ctx
 {
@@ -281,8 +301,7 @@ static void setcolor( CGColorRef *var, CGColorRef color )
     // in me; this is more efficient than having each cell have its own drawing.
     [super drawInContext: ctx];
     
-    if( _backgroundImage )
-        CGContextDrawImage(ctx, self.bounds, _backgroundImage);
+    [self drawBackgroundInContext: ctx];
     
     if( _cellColor ) {
         CGContextSetFillColorWithColor(ctx, _cellColor);
