@@ -22,6 +22,8 @@
 */
 #import "DemoBoardView.h"
 #import "Game.h"
+#import "Turn.h"
+#import "Player.h"
 #import "GGBTextLayer.h"
 #import "QuartzUtils.h"
 
@@ -39,7 +41,7 @@ static NSString* sCurrentGameName = @"CheckersGame";
 
 - (IBAction) toggleRemoteOpponent: (id)sender
 {
-    NSAssert(self.game.currentTurn==0,@"Game has already begun");
+    NSAssert(self.game.currentTurnNo==0,@"Game has already begun");
     Player *opponent = [self.game.players objectAtIndex: 1];
     opponent.local = !opponent.local;
 }
@@ -94,7 +96,7 @@ static NSString* sCurrentGameName = @"CheckersGame";
     
     [self startGameNamed: sCurrentGameName];
     
-    [_turnSlider bind: @"value"    toObject: self withKeyPath: @"game.currentTurn" options: nil];
+    [_turnSlider bind: @"value"    toObject: self withKeyPath: @"game.currentTurnNo" options: nil];
 }
 
 
@@ -112,12 +114,12 @@ static NSString* sCurrentGameName = @"CheckersGame";
 {
     Game *game = self.game;
     if( object == game ) {
-        NSLog(@"maxTurn = %u, currentTurn = %u", 
-              self.game.maxTurn,self.game.currentTurn);
-        NSLog(@"Game state = '%@'", self.game.stateString);
+        NSLog(@"maxTurnNo = %u, currentTurnNo = %u", 
+              self.game.maxTurnNo,self.game.currentTurnNo);
+        NSLog(@"Game state = '%@'", self.game.currentTurn.boardState);
 
-        _turnSlider.maxValue = self.game.maxTurn;
-        _turnSlider.numberOfTickMarks = self.game.maxTurn+1;
+        _turnSlider.maxValue = self.game.maxTurnNo;
+        _turnSlider.numberOfTickMarks = self.game.maxTurnNo+1;
         
         Player *p = game.winner;
         NSString *msg;
@@ -141,7 +143,7 @@ static NSString* sCurrentGameName = @"CheckersGame";
 - (IBAction) undo: (id)sender
 {
     if( self.game.currentTurn > 0 )
-        self.game.currentTurn--;
+        self.game.currentTurnNo--;
     else
         NSBeep();
 }
@@ -149,8 +151,8 @@ static NSString* sCurrentGameName = @"CheckersGame";
 
 - (IBAction) redo: (id)sender
 {
-    if( self.game.currentTurn < self.game.maxTurn )
-        self.game.currentTurn++;
+    if( self.game.currentTurnNo < self.game.maxTurnNo )
+        self.game.currentTurnNo++;
     else
         NSBeep();
 }

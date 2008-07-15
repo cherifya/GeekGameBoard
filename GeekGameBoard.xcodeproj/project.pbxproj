@@ -26,6 +26,7 @@
 		275167DB0DEE2AB000247375 /* Green.png in Resources */ = {isa = PBXBuildFile; fileRef = 275167D60DEE2AB000247375 /* Green.png */; };
 		275167DC0DEE2AB000247375 /* Red.png in Resources */ = {isa = PBXBuildFile; fileRef = 275167D70DEE2AB000247375 /* Red.png */; };
 		275167DD0DEE2AB000247375 /* Violet.png in Resources */ = {isa = PBXBuildFile; fileRef = 275167D80DEE2AB000247375 /* Violet.png */; };
+		27534A2B0E2C6281006C24A6 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27534A2A0E2C6281006C24A6 /* AudioToolbox.framework */; };
 		276DFC410D00867000D329AE /* Green Ball.png in Resources */ = {isa = PBXBuildFile; fileRef = 276DFC400D00867000D329AE /* Green Ball.png */; };
 		276DFC560D00890C00D329AE /* Red Ball.png in Resources */ = {isa = PBXBuildFile; fileRef = 276DFC530D00890C00D329AE /* Red Ball.png */; };
 		276DFC570D00890C00D329AE /* Yellow Ball.png in Resources */ = {isa = PBXBuildFile; fileRef = 276DFC540D00890C00D329AE /* Yellow Ball.png */; };
@@ -89,6 +90,7 @@
 		275167D60DEE2AB000247375 /* Green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Green.png; sourceTree = "<group>"; };
 		275167D70DEE2AB000247375 /* Red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Red.png; sourceTree = "<group>"; };
 		275167D80DEE2AB000247375 /* Violet.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Violet.png; sourceTree = "<group>"; };
+		27534A2A0E2C6281006C24A6 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		276DFC400D00867000D329AE /* Green Ball.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Green Ball.png"; path = "Resources/Green Ball.png"; sourceTree = "<group>"; };
 		276DFC530D00890C00D329AE /* Red Ball.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Red Ball.png"; path = "Resources/Red Ball.png"; sourceTree = "<group>"; };
 		276DFC540D00890C00D329AE /* Yellow Ball.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Yellow Ball.png"; path = "Resources/Yellow Ball.png"; sourceTree = "<group>"; };
@@ -138,6 +140,7 @@
 			files = (
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 				27CCA95F0CB8A74D001CFE24 /* Quartz.framework in Frameworks */,
+				27534A2B0E2C6281006C24A6 /* AudioToolbox.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -183,6 +186,7 @@
 		1058C7A2FEA54F0111CA2CBB /* Other Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				27534A2A0E2C6281006C24A6 /* AudioToolbox.framework */,
 				29B97324FDCFA39411CA2CEA /* AppKit.framework */,
 				27CCA95E0CB8A74D001CFE24 /* Quartz.framework */,
 				29B97325FDCFA39411CA2CEA /* Foundation.framework */,
