@@ -28,7 +28,7 @@
     See: http://en.wikipedia.org/wiki/Go_%28board_game%29 */
 @interface GoGame : Game
 {
-    RectGrid *_grid;
+    RectGrid *_board;
     Stack *_captured[2];
 }
 

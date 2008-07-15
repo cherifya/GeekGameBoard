@@ -68,11 +68,11 @@
 }
 
 
-- (id) initNewGameWithBoard: (GGBLayer*)board
+- (id) initNewGameWithTable: (GGBLayer*)board
 {
     self = [self init];
     if( self ) {
-        self.board = board;
+        self.table = board;
         NSAssert1(_players && _turns, @"%@ failed to set numberOfPlayers",self);
     }
     return self;
@@ -81,7 +81,7 @@
 
 - (void) dealloc
 {
-    [_board release];
+    [_table release];
     [_players release];
     [_turns release];
     [_extraValues release];
@@ -117,19 +117,19 @@
     NSAssert1(NO,@"%@ forgot to implement -setUpBoard",[self class]);
 }
 
-- (GGBLayer*) board
+- (GGBLayer*) table
 {
-    return _board;
+    return _table;
 }
 
-- (void) setBoard: (GGBLayer*)board
+- (void) setTable: (GGBLayer*)board
 {
-    setObj(&_board,board);
+    setObj(&_table,board);
     if( board ) {
         // Store a pointer to myself as the value of the "Game" property
         // of my root layer. (CALayers can have arbitrary KV properties stored into them.)
         // This is used by the -[CALayer game] category method defined below, to find the Game.
-        [_board setValue: self forKey: @"Game"];
+        [_table setValue: self forKey: @"Game"];
         
         BeginDisableAnimations();
         
@@ -263,7 +263,7 @@
     if( curTurn.status > kTurnEmpty && curTurn.status < kTurnFinished ) {
         if( _winner )
             self.winner = nil;
-        if( _board )
+        if( _table )
             self.stateString = curTurn.previousTurn.boardState;
         curTurn.status = kTurnEmpty;
     }
@@ -308,7 +308,7 @@
     NSParameterAssert(turnNo<=self.maxTurnNo);
     unsigned oldTurnNo = _currentTurnNo;
     if( turnNo != oldTurnNo ) {
-        if( _board ) {
+        if( _table ) {
             Turn *turn = [_turns objectAtIndex: turnNo];
             NSString *state;
             if( turn.status == kTurnEmpty )
@@ -325,7 +325,6 @@
                     @try{
                         if( ! [self applyMoveString: move] ) {
                             _currentTurnNo = oldTurnNo;
-                            NSBeep();
                             NSLog(@"WARNING: %@ failed to apply stored move '%@'!", self,move);
                             return;
                         }
@@ -341,7 +340,6 @@
             }
             if( ! [self.stateString isEqual: state] ) {
                 _currentTurnNo = oldTurnNo;
-                NSBeep();
                 NSLog(@"WARNING: %@ failed to apply stored state '%@'!", self,state);
                 return;
             }
@@ -360,7 +358,7 @@
               || ! [self canBit: bit moveFrom: src to: dst] )
         return NO;
     
-    ChangeSuperlayer(bit, _board.superlayer, -1);
+    ChangeSuperlayer(bit, _table.superlayer, -1);
     bit.pickedUp = YES;
     dst.highlighted = YES;
     [bit performSelector: @selector(setPickedUp:) withObject:nil afterDelay: 0.15];
@@ -397,8 +395,8 @@
         if( oldHolder != dst ) 
             return [self animateMoveFrom: oldHolder to: dst];
     } else
-        bit.position = [dst convertPoint: GetCGRectCenter(dst.bounds) toLayer: _board.superlayer];
-    ChangeSuperlayer(bit, _board.superlayer, -1);
+        bit.position = [dst convertPoint: GetCGRectCenter(dst.bounds) toLayer: _table.superlayer];
+    ChangeSuperlayer(bit, _table.superlayer, -1);
     bit.pickedUp = YES;
     dst.highlighted = YES;
     

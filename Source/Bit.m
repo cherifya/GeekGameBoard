@@ -111,13 +111,17 @@
             scale = kPickedUpScale;
             z = kPickedUpZ;
             _restingZ = self.zPosition;
+#if !TARGET_OS_IPHONE
             _restingShadowOpacity = self.shadowOpacity;
             _restingShadowOffset  = self.shadowOffset;
             _restingShadowRadius  = self.shadowRadius;
+#endif
         } else {
+#if !TARGET_OS_IPHONE
             shadow = _restingShadowOpacity;
             offset = _restingShadowOffset;
             radius = _restingShadowRadius;
+#endif
             opacity = 1;
             scale = 1.0/kPickedUpScale;
             z = _restingZ;

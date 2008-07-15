@@ -100,7 +100,10 @@
                suggestedFrame: (CGRect)frame
 {
     // Overridden to stagger the odd-numbered rows
-    if( row & 1 )
+    BOOL stagger = (row & 1) != 0;
+    if( _reversed && (_nRows & 1) )
+        stagger = !stagger;
+    if( stagger )
         frame.origin.x += _spacing.width/2;
     frame.size.height += _capHeight;
     return [super createCellAtRow: row column: col suggestedFrame: frame];

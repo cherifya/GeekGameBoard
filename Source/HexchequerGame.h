@@ -23,10 +23,9 @@
 #import "CheckersGame.h"
 
 /** A hex-grid variant of checkers, made up on a whim to test out hex boards.
-    A much better existing hexagonal checkers is HexDame --
-    see: http://www.mindsports.net/CompleteGames/Elimination/HexDame.html 
-    Its implementation is left as an exercise for the reader.
-    Hint: rotate the HexGrid 30 degrees! */
+    It's a direct translation of the US checkers rules to the hex grid, inspired
+    Christian Freeling's HexDame, which is based on International Checkers.
+    [see: http://www.mindsports.net/CompleteGames/Elimination/HexDame.html] */
 @interface HexchequerGame : CheckersGame 
 
 @end

@@ -48,31 +48,31 @@
 - (void) setUpBoard
 {
     int dimensions = [[self class] dimensions];
-    CGSize size = _board.bounds.size;
+    CGSize size = _table.bounds.size;
     CGFloat boardSide = MIN(size.width,size.height);
-    RectGrid *grid = [[RectGrid alloc] initWithRows: dimensions columns: dimensions 
+    RectGrid *board = [[RectGrid alloc] initWithRows: dimensions columns: dimensions 
                                               frame: CGRectMake(floor((size.width-boardSide)/2),
                                                                 floor((size.height-boardSide)/2),
                                                                 boardSide,boardSide)];
-    _grid = grid;
+    _board = board;
     /*
     grid.backgroundColor = GetCGPatternNamed(@"Wood.jpg");
     grid.borderColor = kTranslucentLightGrayColor;
     grid.borderWidth = 2;
     */
-    grid.lineColor = kTranslucentGrayColor;
-    grid.cellClass = [GoSquare class];
-    [grid addAllCells];
-    ((GoSquare*)[grid cellAtRow: 2 column: 2]).dotted = YES;
-    ((GoSquare*)[grid cellAtRow: 6 column: 6]).dotted = YES;
-    ((GoSquare*)[grid cellAtRow: 2 column: 6]).dotted = YES;
-    ((GoSquare*)[grid cellAtRow: 6 column: 2]).dotted = YES;
-    grid.usesDiagonals = grid.allowsMoves = grid.allowsCaptures = NO;
-    [_board addSublayer: grid];
-    [grid release];
+    board.lineColor = kTranslucentGrayColor;
+    board.cellClass = [GoSquare class];
+    [board addAllCells];
+    ((GoSquare*)[board cellAtRow: 2 column: 2]).dotted = YES;
+    ((GoSquare*)[board cellAtRow: 6 column: 6]).dotted = YES;
+    ((GoSquare*)[board cellAtRow: 2 column: 6]).dotted = YES;
+    ((GoSquare*)[board cellAtRow: 6 column: 2]).dotted = YES;
+    board.usesDiagonals = board.allowsMoves = board.allowsCaptures = NO;
+    [_table addSublayer: board];
+    [board release];
     
-    CGRect gridFrame = grid.frame;
-    CGFloat pieceSize = (int)grid.spacing.width & ~1;  // make sure it's even
+    CGRect gridFrame = board.frame;
+    CGFloat pieceSize = (int)board.spacing.width & ~1;  // make sure it's even
     CGFloat captureHeight = gridFrame.size.height-4*pieceSize;
     _captured[0] = [[Stack alloc] initWithStartPos: CGPointMake(2*pieceSize,0)
                                            spacing: CGSizeMake(0,pieceSize)
@@ -82,7 +82,7 @@
                                       CGRectGetMinY(gridFrame)+3*pieceSize,
                                       2*pieceSize, captureHeight);
     _captured[0].zPosition = kPieceZ+1;
-    [_board addSublayer: _captured[0]];
+    [_table addSublayer: _captured[0]];
     [_captured[0] release];
     
     _captured[1] = [[Stack alloc] initWithStartPos: CGPointMake(0,captureHeight)
@@ -93,7 +93,7 @@
                                       CGRectGetMinY(gridFrame)+pieceSize,
                                       2*pieceSize, captureHeight);
     _captured[1].zPosition = kPieceZ+1;
-    [_board addSublayer: _captured[1]];
+    [_table addSublayer: _captured[1]];
     [_captured[1] release];
 
     PreloadSound(@"Pop");
@@ -107,7 +107,7 @@
 - (Piece*) pieceForPlayer: (int)index
 {
     NSString *imageName = index ?@"bot086.png" :@"bot089.png";
-    CGFloat pieceSize = (int)(_grid.spacing.width * 0.9) & ~1;  // make sure it's even
+    CGFloat pieceSize = (int)(_board.spacing.width * 0.9) & ~1;  // make sure it's even
     Piece *stone = [[Piece alloc] initWithImageNamed: imageName scale: pieceSize];
     stone.owner = [self.players objectAtIndex: index];
     return [stone autorelease];
@@ -191,11 +191,11 @@
 
 - (NSString*) stateString
 {
-    int n = _grid.rows;
+    int n = _board.rows;
     unichar state[n*n];
     for( int y=0; y<n; y++ )
         for( int x=0; x<n; x++ ) {
-            Bit *bit = [_grid cellAtRow: y column: x].bit;
+            Bit *bit = [_board cellAtRow: y column: x].bit;
             unichar ch;
             if( bit==nil )
                 ch = '-';
@@ -209,7 +209,7 @@
 - (void) setStateString: (NSString*)state
 {
     NSLog(@"Go: setStateString: '%@'",state);
-    int n = _grid.rows;
+    int n = _board.rows;
     for( int y=0; y<n; y++ )
         for( int x=0; x<n; x++ ) {
             int i = y*n+x;
@@ -219,7 +219,7 @@
                 if( index==0 || index==1 )
                     piece = [self pieceForPlayer: index];
             }
-            [_grid cellAtRow: y column: x].bit = piece;
+            [_board cellAtRow: y column: x].bit = piece;
         }
 }
 
@@ -227,7 +227,7 @@
 - (BOOL) applyMoveString: (NSString*)move
 {
     NSLog(@"Go: applyMoveString: '%@'",move);
-    return [self animatePlacementIn: [_grid cellWithName: move]];
+    return [self animatePlacementIn: [_board cellWithName: move]];
 }
 
 

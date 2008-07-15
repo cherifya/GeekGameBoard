@@ -9,10 +9,12 @@
 #import "iPhoneAppDelegate.h"
 #import "BoardUIView.h"
 #import "Game.h"
+#import "Player.h"
 #import "QuartzUtils.h"
 #import "GGBUtils.h"
 
 
+#if 0
 // Temporary HACK to fix logging problem in beta 6 iPhone OS
 extern void _NSSetLogCStringFunction(void (*)(const char *string, unsigned length, BOOL withSyslogBanner));
 static void PrintNSLogMessage(const char *string, unsigned length, BOOL withSyslogBanner)
@@ -24,6 +26,7 @@ static void HackNSLog(void)
 {
 	_NSSetLogCStringFunction(PrintNSLogMessage);
 }
+#endif
 
 
 @implementation GGB_iPhoneAppDelegate

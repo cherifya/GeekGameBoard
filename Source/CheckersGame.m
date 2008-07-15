@@ -71,7 +71,7 @@ static NSMutableDictionary *kPieceStyle1, *kPieceStyle2;
 - (Piece*) pieceForPlayer: (int)playerNum
 {
     Piece *p = [[Piece alloc] init];
-    p.bounds = CGRectMake(0,0,floor(_grid.spacing.width),floor(_grid.spacing.height));
+    p.bounds = CGRectMake(0,0,floor(_board.spacing.width),floor(_board.spacing.height));
     p.style = (playerNum ?kPieceStyle2 :kPieceStyle1);
     p.owner = [self.players objectAtIndex: playerNum];
     p.name = playerNum ?@"2" :@"1";
@@ -87,29 +87,29 @@ static NSMutableDictionary *kPieceStyle1, *kPieceStyle2;
 
 - (void) setUpBoard
 {
-    RectGrid *grid = [[RectGrid alloc] initWithRows: 8 columns: 8 frame: _board.bounds];
-    _grid = grid;
-    [_board addSublayer: _grid];
-    CGPoint pos = _grid.position;
-    pos.x = floor((_board.bounds.size.width-grid.frame.size.width)/2);
-    grid.position = pos;
-    grid.allowsMoves = YES;
-    grid.allowsCaptures = NO;
-    grid.cellColor = CreateGray(0.0, 0.25);
-    grid.altCellColor = CreateGray(1.0, 0.25);
-    grid.lineColor = nil;
-    grid.reversed = ! [[self.players objectAtIndex: 0] isLocal];
+    RectGrid *board = [[RectGrid alloc] initWithRows: 8 columns: 8 frame: _table.bounds];
+    _board = board;
+    [_table addSublayer: _board];
+    CGPoint pos = _board.position;
+    pos.x = floor((_table.bounds.size.width-board.frame.size.width)/2);
+    board.position = pos;
+    board.allowsMoves = YES;
+    board.allowsCaptures = NO;
+    board.cellColor    = CreateGray(0.0, 0.5);
+    board.altCellColor = CreateGray(1.0, 0.25);
+    board.lineColor = nil;
+    board.reversed = ! [[self.players objectAtIndex: 0] isLocal];
 
     for( int i=0; i<32; i++ ) {
         int row = i/4;
-        [_grid addCellAtRow: row column: 2*(i%4) + (row&1)];
+        [_board addCellAtRow: row column: 2*(i%4) + (row&1)];
     }
-    [_grid release]; // its superlayer still retains it
+    [_board release]; // its superlayer still retains it
 }
 
 - (NSString*) initialStateString            {return @"111111111111--------222222222222";}
-- (NSString*) stateString                   {return _grid.stateString;}
-- (void) setStateString: (NSString*)state   {_grid.stateString = state;}
+- (NSString*) stateString                   {return _board.stateString;}
+- (void) setStateString: (NSString*)state   {_board.stateString = state;}
 
 - (Piece*) makePieceNamed: (NSString*)name
 {
@@ -178,7 +178,7 @@ static NSMutableDictionary *kPieceStyle1, *kPieceStyle2;
 
 - (Player*) checkForWinner
 {
-    NSCountedSet *remaining = _grid.countPiecesByPlayer;
+    NSCountedSet *remaining = _board.countPiecesByPlayer;
     if( remaining.count==1 )
         return [remaining anyObject];
     else
@@ -192,7 +192,7 @@ static NSMutableDictionary *kPieceStyle1, *kPieceStyle2;
     for( NSString *ident in [move componentsSeparatedByString: @"-"] ) {
         while( [ident hasSuffix: @"!"] || [ident hasSuffix: @"*"] )
             ident = [ident substringToIndex: ident.length-1];
-        GridCell *dst = [_grid cellWithName: ident];
+        GridCell *dst = [_board cellWithName: ident];
         if( dst == nil )
             return NO;
         if( src && ! [self animateMoveFrom: src to: dst] )

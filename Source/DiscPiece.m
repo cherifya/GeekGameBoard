@@ -41,7 +41,9 @@
         [_imageLayer release]; // superlayer is holding onto it
     }
     _imageLayer.frame = CGRectInset(self.bounds, outerDiameter-diameter, outerDiameter-diameter);
+#if !TARGET_OS_IPHONE
     _imageLayer.cornerRadius = diameter/2;
+#endif
     _imageLayer.contents = (id) image;
     self.cornerRadius = outerDiameter/2;
     self.borderWidth = 3;

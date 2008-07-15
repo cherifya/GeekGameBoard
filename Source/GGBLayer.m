@@ -124,6 +124,7 @@ NSString* const GGBLayerStyleChangedNotification = @"GGBLayerStyleChanged";
 }
 
 
+#if 0
 - (CATransform3D) aggregateTransform
 {
     CATransform3D xform = CATransform3DIdentity;
@@ -146,7 +147,7 @@ NSString* StringFromTransform3D( CATransform3D xform )
     }
     return str;
 }
-
+#endif
 
 
 #if TARGET_OS_IPHONE

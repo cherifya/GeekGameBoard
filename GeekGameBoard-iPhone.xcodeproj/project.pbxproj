@@ -11,6 +11,8 @@
 		1D60589B0D05DD56006BFB54 /* main-iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main-iPhone.m */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
+		27124B380E2852A700B61BE3 /* Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 27124B350E2852A700B61BE3 /* Player.m */; };
+		27124B390E2852A700B61BE3 /* Turn.m in Sources */ = {isa = PBXBuildFile; fileRef = 27124B370E2852A700B61BE3 /* Turn.m */; };
 		2740502B0DEF36DF0006A9EE /* Pop.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 274050290DEF36DF0006A9EE /* Pop.aiff */; };
 		2740502C0DEF36DF0006A9EE /* Tink.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 2740502A0DEF36DF0006A9EE /* Tink.aiff */; };
 		279F4B590D85C51700B32DBF /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 279F4B580D85C51700B32DBF /* AudioToolbox.framework */; };
@@ -59,6 +61,11 @@
 		1D3623EB0D0F72F000981E51 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		1D6058910D05DD3D006BFB54 /* GeekGameBoard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GeekGameBoard.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		27124B330E2852A700B61BE3 /* Game+Protected.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Game+Protected.h"; sourceTree = "<group>"; };
+		27124B340E2852A700B61BE3 /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Player.h; sourceTree = "<group>"; };
+		27124B350E2852A700B61BE3 /* Player.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Player.m; sourceTree = "<group>"; };
+		27124B360E2852A700B61BE3 /* Turn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Turn.h; sourceTree = "<group>"; };
+		27124B370E2852A700B61BE3 /* Turn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Turn.m; sourceTree = "<group>"; };
 		274050290DEF36DF0006A9EE /* Pop.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = Pop.aiff; path = /System/Library/Sounds/Pop.aiff; sourceTree = "<absolute>"; };
 		2740502A0DEF36DF0006A9EE /* Tink.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = Tink.aiff; path = /System/Library/Sounds/Tink.aiff; sourceTree = "<absolute>"; };
 		279F4B580D85C51700B32DBF /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -230,6 +237,11 @@
 			children = (
 				27C99AFE0D820868005AFD4F /* Game.h */,
 				27C99AFF0D820868005AFD4F /* Game.m */,
+				27124B330E2852A700B61BE3 /* Game+Protected.h */,
+				27124B340E2852A700B61BE3 /* Player.h */,
+				27124B350E2852A700B61BE3 /* Player.m */,
+				27124B360E2852A700B61BE3 /* Turn.h */,
+				27124B370E2852A700B61BE3 /* Turn.m */,
 				27C99B000D820868005AFD4F /* TicTacToeGame.h */,
 				27C99B010D820868005AFD4F /* TicTacToeGame.m */,
 				27C99B020D820868005AFD4F /* CheckersGame.h */,
@@ -402,6 +414,8 @@
 				27C99B510D82106E005AFD4F /* GGBLayer.m in Sources */,
 				279F4B620D85C63000B32DBF /* GGBTextLayer.m in Sources */,
 				279F4B6A0D85CBFC00B32DBF /* iPhoneAppDelegate.m in Sources */,
+				27124B380E2852A700B61BE3 /* Player.m in Sources */,
+				27124B390E2852A700B61BE3 /* Turn.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -444,8 +458,8 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CODE_SIGN_IDENTITY = "Laurence ANDERSEN";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Laurence ANDERSEN";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Jens Alfke";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -461,11 +475,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CODE_SIGN_IDENTITY = "Laurence ANDERSEN";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Laurence ANDERSEN";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Jens Alfke";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
 				SDKROOT = iphoneos2.0;
 				WARNING_CFLAGS = "-Wall";

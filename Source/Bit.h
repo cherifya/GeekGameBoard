@@ -43,8 +43,10 @@ enum {
 {
     @private
     int _restingZ;      // Original z position, saved while pickedUp
+#if !TARGET_OS_IPHONE
     float _restingShadowOpacity, _restingShadowRadius;
     CGSize _restingShadowOffset;
+#endif
     BOOL _pickedUp;
     Player *_owner;     // Player that owns this Bit
     NSInteger _tag;

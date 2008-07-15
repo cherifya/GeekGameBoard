@@ -130,6 +130,15 @@ NSString* const kTurnCompleteNotification = @"TurnComplete";
 }
 
 
+- (void) _unfinish
+{
+    NSAssert(_status==kTurnFinished,@"Turn must be finished");
+    [self willChangeValueForKey: @"status"];
+    _status = kTurnComplete;
+    [self didChangeValueForKey: @"status"];
+}
+
+
 - (Turn*) previousTurn
 {
     unsigned n = self.turnNumber;
@@ -169,7 +178,7 @@ NSString* const kTurnCompleteNotification = @"TurnComplete";
 {
     if( ! _replaying ) {
         NSAssert(_status<kTurnFinished,@"Finished Turn can't be modified");
-        if( _game.board )
+        if( _game.table )
             self.boardState = _game.stateString;
     }
 }

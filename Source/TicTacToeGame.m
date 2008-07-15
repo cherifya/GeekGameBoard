@@ -50,19 +50,19 @@
 - (void) setUpBoard
 {
     // Create a 3x3 grid:
-    CGFloat center = floor(CGRectGetMidX(_board.bounds));
+    CGFloat center = floor(CGRectGetMidX(_table.bounds));
     [_grid release];
     _grid = [[RectGrid alloc] initWithRows: 3 columns: 3 frame: CGRectMake(center-150,0, 300,300)];
     [_grid addAllCells];
     _grid.allowsMoves = _grid.allowsCaptures = NO;
     _grid.cellColor = CreateGray(1.0, 0.25);
     _grid.lineColor = kTranslucentLightGrayColor;
-    [_board addSublayer: _grid];
+    [_table addSublayer: _grid];
     
     // Create piece dispensers for the two players:
     for( int playerNumber=0; playerNumber<=1; playerNumber++ ) {
         Piece *p = [self pieceForPlayer: playerNumber];
-        CGFloat x = floor(CGRectGetMidX(_board.bounds));
+        CGFloat x = floor(CGRectGetMidX(_table.bounds));
 #if TARGET_OS_IPHONE
         x = x - 80 + 160*playerNumber;
         CGFloat y = 360;
@@ -73,7 +73,7 @@
         [_dispenser[playerNumber] release];
         _dispenser[playerNumber] = [[Dispenser alloc] initWithPrototype: p quantity: 0
                                                                   frame: CGRectMake(x-45,y-45, 90,90)];
-        [_board addSublayer: _dispenser[playerNumber]];
+        [_table addSublayer: _dispenser[playerNumber]];
     }            
 }
 

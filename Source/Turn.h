@@ -58,4 +58,9 @@ extern NSString* const kTurnCompleteNotification;
 
 @property BOOL replaying;
 
+
+
+/** Changes a Turn's status from finished back to complete. For use only by -[Game unfinishLastTurn] */
+- (void) _unfinish;
+
 @end

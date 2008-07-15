@@ -54,8 +54,6 @@
         }
         setObj(&_bit,bit);
         ChangeSuperlayer(bit,self,-1);
-        if( bit )
-            NSLog(@"%@: xform = \n%@",bit,StringFromTransform3D(bit.aggregateTransform));//TEMP
     }
 }
 

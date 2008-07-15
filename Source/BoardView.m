@@ -38,7 +38,7 @@
 @implementation BoardView
 
 
-@synthesize gameboard=_gameboard;
+@synthesize table=_table;
 
 
 - (void) dealloc
@@ -50,24 +50,24 @@
 
 - (void) _removeGameBoard
 {
-    if( _gameboard ) {
-        RemoveImmediately(_gameboard);
-        _gameboard = nil;
+    if( _table ) {
+        RemoveImmediately(_table);
+        _table = nil;
     }
 }
 
 - (void) createGameBoard
 {
     [self _removeGameBoard];
-    _gameboard = [[CALayer alloc] init];
-    _gameboard.frame = [self gameBoardFrame];
-    _gameboard.autoresizingMask = kCALayerMinXMargin | kCALayerMaxXMargin | kCALayerMinYMargin | kCALayerMaxYMargin;
+    _table = [[CALayer alloc] init];
+    _table.frame = [self gameBoardFrame];
+    _table.autoresizingMask = kCALayerMinXMargin | kCALayerMaxXMargin | kCALayerMinYMargin | kCALayerMaxYMargin;
 
     // Tell the game to set up the board:
-    _game.board = _gameboard;
+    _game.table = _table;
 
-    [self.layer addSublayer: _gameboard];
-    [_gameboard release];
+    [self.layer addSublayer: _table];
+    [_table release];
 }
 
 
@@ -79,7 +79,7 @@
 - (void) setGame: (Game*)game
 {
     if( game!=_game ) {
-        _game.board = nil;
+        _game.table = nil;
         setObj(&_game,game);
         [self createGameBoard];
     }
@@ -133,9 +133,9 @@
 {
     [super setFrameSize: newSize];
     if( _oldSize.width > 0.0f ) {
-        CGAffineTransform xform = _gameboard.affineTransform;
+        CGAffineTransform xform = _table.affineTransform;
         xform.a = xform.d = MIN(newSize.width,newSize.height)/MIN(_oldSize.width,_oldSize.height);
-        _gameboard.affineTransform = xform;
+        _table.affineTransform = xform;
     } else
         [self createGameBoard];
 }
@@ -189,7 +189,7 @@ static BOOL layerIsDropTarget( CALayer* layer ) {return [layer respondsToSelecto
                    offset: (CGPoint*)outOffset
 {
     CGPoint where = [self _convertPointFromWindowToLayer: locationInWindow ];
-    CALayer *layer = [_gameboard hitTest: where];
+    CALayer *layer = [_table hitTest: where];
     while( layer ) {
         if( match(layer) ) {
             CGPoint bitPos = [self.layer convertPoint: layer.position 

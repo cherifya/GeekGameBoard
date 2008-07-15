@@ -28,7 +28,7 @@
     See: http://en.wikipedia.org/wiki/Draughts */
 @interface CheckersGame : Game 
 {
-    Grid *_grid;
+    Grid *_board;
 }
 
 @end

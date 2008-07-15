@@ -19,10 +19,7 @@
     THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 #import "GGBUtils.h"
-
-#if TARGET_OS_IPHONE
 #import <AudioToolbox/AudioToolbox.h>
-#endif
 
 
 #ifndef _MYUTILITIES_COLLECTIONUTILS_
@@ -54,7 +51,6 @@ void DelayFor( NSTimeInterval interval )
 }    
 
 
-#if TARGET_OS_IPHONE
 static SystemSoundID GetSound( NSString *name )
 {
     static NSMutableDictionary *sSoundIDs;
@@ -64,19 +60,24 @@ static SystemSoundID GetSound( NSString *name )
         NSString *type = name.pathExtension;
         if( ! type.length )
             type = @"aiff";
-        NSString *path = [[NSBundle mainBundle] pathForResource: name.stringByDeletingPathExtension
+        name = name.stringByDeletingPathExtension;
+        
+        NSString *path = [[NSBundle mainBundle] pathForResource: name
                                                          ofType: type];
+#if ! TARGET_OS_IPHONE
+        if( ! path )
+            path = [@"/System/Library/Sounds" stringByAppendingPathComponent: [name stringByAppendingPathExtension: type]];
+#endif
         NSURL *url;
         if( path )
             url = [NSURL fileURLWithPath: path];
         else {
-            NSLog(@"Couldn't find sound %@",name);
+            NSLog(@"WARNING: Couldn't find sound %@",name);
             return 0;
         }
-        //url = [NSURL fileURLWithPath: [@"/Library/Sounds/" stringByAppendingPathComponent: name]];
         SystemSoundID soundID;
         if( AudioServicesCreateSystemSoundID((CFURLRef)url,&soundID) != noErr ) {
-            NSLog(@"Couldn't load sound %@",url);
+            NSLog(@"WARNING: Couldn't load sound %@",url);
             return 0;
         }
         
@@ -87,29 +88,17 @@ static SystemSoundID GetSound( NSString *name )
     }
     return [soundIDObj unsignedIntValue];
 }
-#endif
 
 
 void PreloadSound( NSString* name )
 {
-#if TARGET_OS_IPHONE
-    GetSound(name);
-#else
-    NSSound *sound = [[NSSound soundNamed: @"Pop"] copy];
-    sound.volume = 0;
-    [sound play];
-    [sound release];
-#endif
+    (void) GetSound(name);
 }    
 
 
 void PlaySound( NSString* name )
 {
-#if TARGET_OS_IPHONE
     AudioServicesPlaySystemSound( GetSound(name) );
-#else
-    [[NSSound soundNamed: name] play];
-#endif
 }
 
 void Beep()

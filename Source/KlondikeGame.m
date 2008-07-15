@@ -50,7 +50,7 @@
         
 - (void) setUpBoard
 {
-    CGSize boardSize = _board.bounds.size;
+    CGSize boardSize = _table.bounds.size;
     CGFloat xSpacing = floor(boardSize.width/7);
     CGSize kCardSize;
     kCardSize.width  = round(xSpacing * 0.9);  // 1/7th of width, with 10% gap
@@ -62,19 +62,19 @@
     _deck = [[[Deck alloc] initWithCardsOfClass: [PlayingCard class]] autorelease];
     [_deck shuffle];
     _deck.position = pos;
-    [_board addSublayer: _deck];
+    [_table addSublayer: _deck];
     
     pos.x += xSpacing;
     _sink = [[[Deck alloc] init] autorelease];
     _sink.position = pos;
-    [_board addSublayer: _sink];
+    [_table addSublayer: _sink];
     
     pos.x += xSpacing;
     for( CardSuit suit=kSuitClubs; suit<=kSuitSpades; suit++ ) {
         pos.x += xSpacing;
         Deck *aces = [[[Deck alloc] init] autorelease];
         aces.position = pos;
-        [_board addSublayer: aces];
+        [_table addSublayer: aces];
         _aces[suit] = aces;
     }
     
@@ -88,7 +88,7 @@
         stackFrame.origin.x += xSpacing;
         stack.backgroundColor = nil; //kAlmostInvisibleWhiteColor;
         stack.dragAsStacks = YES;
-        [_board addSublayer: stack];
+        [_table addSublayer: stack];
         
         // According to the rules, one card should be added to each stack in turn, instead
         // of populating entire stacks one at a time. However, if one trusts the Deck's

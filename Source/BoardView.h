@@ -30,7 +30,7 @@
 {
     @private
     Game *_game;                                // Current Game
-    GGBLayer *_gameboard;                       // Game's main layer
+    GGBLayer *_table;                           // Game's root layer
     NSSize _oldSize;
     
     // Used during mouse-down tracking:
@@ -50,7 +50,7 @@
 }
 
 @property (retain) Game *game;
-@property (readonly) CALayer *gameboard;
+@property (readonly) CALayer *table;
 
 - (void) startGameNamed: (NSString*)gameClassName;
 

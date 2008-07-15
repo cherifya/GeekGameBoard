@@ -29,7 +29,7 @@
 /** Abstract superclass. Keeps track of the rules and turns of a game. */
 @interface Game : NSObject <NSCoding>
 {
-    GGBLayer *_board;
+    GGBLayer *_table;
     NSArray *_players;
     Player *_winner;
     NSMutableArray *_turns;
@@ -55,8 +55,8 @@
 /** Designated initializer: override this if your subclass needs additional initialization. */
 - (id) init;
 
-/** Convenience initializer that calls -init, -setBoard:, and -nextTurn. */
-- (id) initNewGameWithBoard: (GGBLayer*)board;
+/** Convenience initializer that calls -init, -setTable:, and -nextTurn. */
+- (id) initNewGameWithTable: (GGBLayer*)table;
 
 /** NSCoding initializer. Calls -init, but then restores saved payers, states, moves. */
 - (id) initWithCoder: (NSCoder*)decoder;
@@ -69,7 +69,7 @@
 @property (readonly) Player *currentPlayer, *winner, *remotePlayer;
 @property (readonly, getter=isLocal) BOOL local;            // Are all players local?
 
-@property (retain) GGBLayer *board;                         // The root layer for the game.
+@property (retain) GGBLayer *table;                         // The root layer for the game.
 
 @property (readonly) NSArray *turns;
 @property (readonly) Turn *currentTurn, *latestTurn;

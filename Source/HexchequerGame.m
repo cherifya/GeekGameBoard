@@ -32,24 +32,27 @@
 
 - (void) setUpBoard
 {
-    HexGrid *grid = [[HexGrid alloc] initWithRows: 9 columns: 9 frame: _board.bounds];
-    _grid = grid;
-    [_board addSublayer: _grid];
-    CGPoint pos = grid.position;
-    pos.x += grid.spacing.width / 4;    // The right edge of the grid is blank because of the unused cells outside the hexagon
-    grid.position = pos;
-    grid.allowsMoves = YES;
-    grid.allowsCaptures = NO;      // no land-on captures, that is
-    grid.cellColor = CreateGray(1.0, 0.25);
-    grid.lineColor = kTranslucentLightGrayColor;
-    grid.reversed = ! [[self.players objectAtIndex: 0] isLocal];
-    [grid addCellsInHexagon];
+    // Create a hex grid and rotate it 30 degrees so the cells are edge-up:
+    CGRect tableBounds = _table.bounds;
+    CGFloat s = tableBounds.size.height / 9;
+    HexGrid *board = [[HexGrid alloc] initWithRows: 9 columns: 9
+                                           spacing: CGSizeMake(s,s)
+                                          position: GetCGRectCenter(tableBounds)];
+    board.anchorPoint = CGPointMake(0.47,0.5);  // Missing half-cells on right edge perturb center pt
+    [board setValue: [NSNumber numberWithDouble: M_PI/6] forKeyPath: @"transform.rotation"];
+    _board = board;
+    [_table addSublayer: _board];
+    board.allowsMoves = YES;
+    board.allowsCaptures = NO;      // no land-on captures, that is
+    board.cellColor = CreateGray(1.0, 0.25);
+    board.lineColor = kTranslucentLightGrayColor;
+    board.reversed = ! [[self.players objectAtIndex: 0] isLocal];
+    [board addCellsInHexagon];
 }
-
 
 - (NSString*) initialStateString
 {
-    return @"111111111111111111-------------------------222222222222222222";
+      return @"1111-1111--1111---1111-----------------2222---2222--2222-2222";
 }
 
 
@@ -57,18 +60,19 @@
 {
     Hex *src=(Hex*)srcHolder, *dst=(Hex*)dstHolder;
     if( [bit valueForKey: @"King"] )
-        if( dst==src.bl || dst==src.br || dst==src.l || dst==src.r
+        if( dst==src.bl || dst==src.br || dst==src.l
            || (src.bl.bit.unfriendly && dst==src.bl.bl) || (src.br.bit.unfriendly && dst==src.br.br)
-           || (src.l.bit.unfriendly  && dst==src.l.l)   || (src.r.bit.unfriendly  && dst==src.r.r) )
+           || (src.l.bit.unfriendly  && dst==src.l.l) )
             return YES;    
-    return dst==src.fl || dst==src.fr
-        || (src.fl.bit.unfriendly && dst==src.fl.fl) || (src.fr.bit.unfriendly && dst==src.fr.fr);
+    return dst==src.fl || dst==src.fr || dst==src.r
+            || (src.fl.bit.unfriendly && dst==src.fl.fl) 
+            || (src.fr.bit.unfriendly && dst==src.fr.fr) 
+            || (src. r.bit.unfriendly && dst==src. r. r);
 }
 
 - (void) bit: (Bit*)bit movedFrom: (id<BitHolder>)srcHolder to: (id<BitHolder>)dstHolder
 {
     Hex *src=(Hex*)srcHolder, *dst=(Hex*)dstHolder;
-    int playerIndex = self.currentPlayer.index;
 
     Turn *turn = self.currentTurn;
     if( turn.move.length==0 )
@@ -80,7 +84,7 @@
     PlaySound(isKing ?@"Funk" :@"Tink");
 
     // "King" a piece that made it to the last row:
-    if( dst.row == (playerIndex ?0 :8) )
+    if( dst.fr == nil )
         if( ! isKing ) {
             PlaySound(@"Blow");
             bit.scale = 1.4;
@@ -109,11 +113,14 @@
         [capture destroyBit];
         
         // Now check if another capture is possible. If so, don't end the turn:
-        if( (dst.fl.bit.unfriendly && dst.fl.fl.empty) || (dst.fr.bit.unfriendly && dst.fr.fr.empty) )
+        if( (dst.fl.bit.unfriendly && dst.fl.fl.empty) 
+                || (dst.fr.bit.unfriendly && dst.fr.fr.empty) 
+                || (dst. r.bit.unfriendly && dst. r. r.empty) )
             return;
         if( isKing )
-            if( (dst.bl.bit.unfriendly && dst.bl.bl.empty) || (dst.br.bit.unfriendly && dst.br.br.empty)
-                    || (dst.l.bit.unfriendly && dst.l.l.empty) || (dst.r.bit.unfriendly && dst.r.r.empty))
+            if( (dst.bl.bit.unfriendly && dst.bl.bl.empty)
+                    || (dst.br.bit.unfriendly && dst.br.br.empty)
+                    || (dst.l.bit.unfriendly && dst.l.l.empty) )
                 return;
     }
     
