@@ -110,16 +110,22 @@
 }
 
 
+- (NSView*) fullScreenView
+{
+    return _fullScreenView ?: self;
+}
+
+
 - (IBAction) enterFullScreen: (id)sender
 {
-    [self _removeGameBoard];
-    if( self.isInFullScreenMode ) {
-        [self exitFullScreenModeWithOptions: nil];
+    //[self _removeGameBoard];
+    if( self.fullScreenView.isInFullScreenMode ) {
+        [self.fullScreenView exitFullScreenModeWithOptions: nil];
     } else {
-        [self enterFullScreenMode: self.window.screen 
-                      withOptions: nil];
+        [self.fullScreenView enterFullScreenMode: self.window.screen 
+                                     withOptions: nil];
     }
-    [self createGameBoard];
+    //[self createGameBoard];
 }
 
 
@@ -135,7 +141,9 @@
     if( _oldSize.width > 0.0f ) {
         CGAffineTransform xform = _table.affineTransform;
         xform.a = xform.d = MIN(newSize.width,newSize.height)/MIN(_oldSize.width,_oldSize.height);
+        BeginDisableAnimations();
         _table.affineTransform = xform;
+        EndDisableAnimations();
     } else
         [self createGameBoard];
 }
@@ -152,12 +160,16 @@
 #pragma mark KEY EVENTS:
 
 
-- (void) keyDown: (NSEvent*)ev
+- (BOOL) performKeyEquivalent: (NSEvent*)ev
 {
-    if( self.isInFullScreenMode ) {
-        if( [ev.charactersIgnoringModifiers hasPrefix: @"\033"] )       // Esc key
-            [self enterFullScreen: self];
+    if( [ev.charactersIgnoringModifiers hasPrefix: @"\033"] ) {       // Esc key
+        if( self.fullScreenView.isInFullScreenMode ) {
+            [self performSelector: @selector(enterFullScreen:) withObject: nil afterDelay: 0.0];
+            // without the delayed-perform, NSWindow crashes right after this method returns!
+            return YES;
+        }
     }
+    return NO;
 }
 
 

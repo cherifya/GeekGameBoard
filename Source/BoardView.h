@@ -28,6 +28,7 @@
 /** NSView that hosts a game. */
 @interface BoardView : NSView
 {
+    IBOutlet NSView *_fullScreenView;           // View to use as root of full-screen mode
     @private
     Game *_game;                                // Current Game
     GGBLayer *_table;                           // Game's root layer
