@@ -54,11 +54,6 @@ static NSMutableDictionary *kPieceStyle1, *kPieceStyle2;
     self = [super init];
     if (self != nil) {
         [self setNumberOfPlayers: 2];
-        
-        PreloadSound(@"Tink");
-        PreloadSound(@"Funk");
-        PreloadSound(@"Blow");
-        PreloadSound(@"Pop");
     }
     return self;
 }
@@ -87,6 +82,11 @@ static NSMutableDictionary *kPieceStyle1, *kPieceStyle2;
 
 - (void) setUpBoard
 {
+    PreloadSound(@"Tink");
+    PreloadSound(@"Funk");
+    PreloadSound(@"Blow");
+    PreloadSound(@"Pop");
+
     RectGrid *board = [[RectGrid alloc] initWithRows: 8 columns: 8 frame: _table.bounds];
     _board = board;
     [_table addSublayer: _board];
