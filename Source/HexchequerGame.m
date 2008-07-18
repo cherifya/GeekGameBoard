@@ -127,5 +127,17 @@
     [self endTurn];
 }
 
+- (BOOL) canOpponentMoveFrom: (GridCell*)src
+{
+    if( ! src.bit.unfriendly )
+        return NO;
+    if( [super canOpponentMoveFrom: src] )
+        return YES;
+    Hex *hex = (Hex*)src;
+    if( hex.bit.tag )           // remember, it's opponent's piece, so directions are reversed
+        if( hex.r.empty || (hex.r.bit.friendly && hex.r.r.empty) )
+            return YES;
+    return hex.l.empty || (hex.l.bit.friendly && hex.l.l.empty);
+}
 
 @end

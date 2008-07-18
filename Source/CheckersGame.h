@@ -21,7 +21,7 @@
     THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 #import "Game+Protected.h"
-@class Grid;
+@class Grid, GridCell;
 
 
 /** US Checkers, known as Draughts in the UK. (Other countries use similar but not identical rules.)
@@ -30,5 +30,8 @@
 {
     Grid *_board;
 }
+
+//protected
+- (BOOL) canOpponentMoveFrom: (GridCell*)src;
 
 @end

@@ -176,13 +176,32 @@ static NSMutableDictionary *kPieceStyle1, *kPieceStyle2;
     [self endTurn];
 }
 
+#pragma mark -
+#pragma mark CHECK FOR WIN:
+
+static BOOL canOpponentMoveOrJump( GridCell *first, GridCell *second ) {
+    return first.empty || (first.bit.friendly && second.empty);
+}
+
+- (BOOL) canOpponentMoveFrom: (GridCell*)src
+{
+    if( ! src.bit.unfriendly )
+        return NO;
+    Square *square = (Square*)src;
+    if( square.bit.tag )           // remember, it's opponent's piece, so directions are reversed
+        if( canOpponentMoveOrJump(square.fl,square.fl.fl) || canOpponentMoveOrJump(square.fr,square.fr.fr) )
+            return YES;
+    return canOpponentMoveOrJump(square.bl,square.bl.bl) || canOpponentMoveOrJump(square.br,square.br.br);
+}
+
 - (Player*) checkForWinner
 {
-    NSCountedSet *remaining = _board.countPiecesByPlayer;
-    if( remaining.count==1 )
-        return [remaining anyObject];
-    else
-        return nil;
+    for( GridCell *cell in _board.cells )
+        if( [self canOpponentMoveFrom: cell] ) {
+            Log(@"Checkers: %@ can move from %@",self.currentPlayer.nextPlayer,cell);
+            return nil;
+        }
+    return self.currentPlayer;
 }
 
 
