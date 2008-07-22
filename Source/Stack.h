@@ -47,10 +47,13 @@
 @property int wrapInterval;                 // How many Bits to add before wrapping
 @property BOOL dragAsStacks;                // If set to YES, dragging a Bit drags a DraggedStack
 @property (readonly) NSArray *bits;         // The Bits, in order
+@property NSUInteger numberOfBits;          // Number of bits (can be used to remove bits, but not add)
 @property (readonly) Bit *topBit;           // The topmost Bit (last item in self.bits)
 
 /** Adds a Bit to the end */
 - (void) addBit: (Bit*)bit;
+
+- (void) removeBit: (Bit*)bit;
 
 @end
 

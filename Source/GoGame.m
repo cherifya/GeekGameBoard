@@ -39,7 +39,7 @@
     self = [super init];
     if (self != nil) {
         [self setNumberOfPlayers: 2];
-        [(Player*)[_players objectAtIndex: 0] setName: @"Red"];
+        [(Player*)[_players objectAtIndex: 0] setName: @"Black"];
         [(Player*)[_players objectAtIndex: 1] setName: @"White"];
     }
     return self;
@@ -48,8 +48,9 @@
 - (void) setUpBoard
 {
     int dimensions = [[self class] dimensions];
-    CGSize size = _table.bounds.size;
-    CGFloat boardSide = MIN(size.width,size.height);
+    CGRect tableBounds = _table.bounds;
+    CGSize size = tableBounds.size;
+    CGFloat boardSide = MIN(size.width* dimensions/(CGFloat)(dimensions+2),size.height);
     RectGrid *board = [[RectGrid alloc] initWithRows: dimensions columns: dimensions 
                                               frame: CGRectMake(floor((size.width-boardSide)/2),
                                                                 floor((size.height-boardSide)/2),
@@ -73,25 +74,29 @@
     
     CGRect gridFrame = board.frame;
     CGFloat pieceSize = (int)board.spacing.width & ~1;  // make sure it's even
-    CGFloat captureHeight = gridFrame.size.height-4*pieceSize;
-    _captured[0] = [[Stack alloc] initWithStartPos: CGPointMake(2*pieceSize,0)
+    CGFloat captureMinY = CGRectGetMinY(tableBounds) + pieceSize/2,
+            captureHeight = size.height - pieceSize;
+    _captured[0] = [[Stack alloc] initWithStartPos: CGPointMake(pieceSize/2,0)
                                            spacing: CGSizeMake(0,pieceSize)
                                       wrapInterval: floor(captureHeight/pieceSize)
-                                       wrapSpacing: CGSizeMake(-pieceSize,0)];
-    _captured[0].frame = CGRectMake(CGRectGetMinX(gridFrame)-3*pieceSize, 
-                                      CGRectGetMinY(gridFrame)+3*pieceSize,
-                                      2*pieceSize, captureHeight);
+                                       wrapSpacing: CGSizeMake(pieceSize,0)];
+    _captured[0].frame = CGRectMake(CGRectGetMinX(tableBounds), 
+                                    captureMinY,
+                                    CGRectGetMinX(gridFrame)-CGRectGetMinX(tableBounds),
+                                    captureHeight);
     _captured[0].zPosition = kPieceZ+1;
     [_table addSublayer: _captured[0]];
     [_captured[0] release];
     
-    _captured[1] = [[Stack alloc] initWithStartPos: CGPointMake(0,captureHeight)
+    _captured[1] = [[Stack alloc] initWithStartPos: CGPointMake(pieceSize/2,captureHeight)
                                            spacing: CGSizeMake(0,-pieceSize)
                                       wrapInterval: floor(captureHeight/pieceSize)
-                                       wrapSpacing: CGSizeMake(pieceSize,0)];
-    _captured[1].frame = CGRectMake(CGRectGetMaxX(gridFrame)+pieceSize, 
-                                      CGRectGetMinY(gridFrame)+pieceSize,
-                                      2*pieceSize, captureHeight);
+                                       wrapSpacing: CGSizeMake(-pieceSize,0)];
+    _captured[1].frame = CGRectMake(CGRectGetMaxX(gridFrame), 
+                                    captureMinY,
+                                    CGRectGetMaxX(tableBounds)-CGRectGetMaxX(gridFrame),
+                                    captureHeight);
+    _captured[1].startPos = CGPointMake(CGRectGetMaxX(_captured[1].bounds)-pieceSize/2, captureHeight);
     _captured[1].zPosition = kPieceZ+1;
     [_table addSublayer: _captured[1]];
     [_captured[1] release];
@@ -101,13 +106,13 @@
 
 - (CGImageRef) iconForPlayer: (int)playerNum
 {
-    return GetCGImageNamed( playerNum ?@"bot086.png" :@"bot089.png" );
+    return GetCGImageNamed( playerNum ?@"Stone-white.png" :@"Stone-black.png" );
 }
 
 - (Piece*) pieceForPlayer: (int)index
 {
-    NSString *imageName = index ?@"bot086.png" :@"bot089.png";
-    CGFloat pieceSize = (int)(_board.spacing.width * 0.9) & ~1;  // make sure it's even
+    NSString *imageName = index ?@"Stone-white.png" :@"Stone-black.png";
+    CGFloat pieceSize = (int)(_board.spacing.width * 1.8) & ~1;  // make sure it's even
     Piece *stone = [[Piece alloc] initWithImageNamed: imageName scale: pieceSize];
     stone.owner = [self.players objectAtIndex: index];
     return [stone autorelease];
@@ -203,12 +208,19 @@
                 ch = '1' + bit.owner.index;
             state[y*n+x] = ch;
         }
-    return [NSString stringWithCharacters: state length: n*n];
+    NSMutableString *stateString = [NSMutableString stringWithCharacters: state length: n*n];
+    
+    NSUInteger cap0=_captured[0].numberOfBits, cap1=_captured[1].numberOfBits;
+    if( cap0 || cap1 )
+        [stateString appendFormat: @",%i,%i", cap0,cap1];
+    return stateString;
 }
 
 - (void) setStateString: (NSString*)state
 {
-    NSLog(@"Go: setStateString: '%@'",state);
+    //NSLog(@"Go: setStateString: '%@'",state);
+    NSArray *components = [state componentsSeparatedByString: @","];
+    state = [components objectAtIndex: 0];
     int n = _board.rows;
     for( int y=0; y<n; y++ )
         for( int x=0; x<n; x++ ) {
@@ -221,12 +233,24 @@
             }
             [_board cellAtRow: y column: x].bit = piece;
         }
+    
+    if( components.count < 3 )
+        components = nil;
+    for( int player=0; player<=1; player++ ) {
+        NSUInteger nCaptured = [[components objectAtIndex: 1+player] intValue];
+        NSUInteger curNCaptured = _captured[player].numberOfBits;
+        if( nCaptured < curNCaptured )
+           _captured[player].numberOfBits = nCaptured;
+        else
+            for( int i=curNCaptured; i<nCaptured; i++ )
+                [_captured[player] addBit: [self pieceForPlayer: 1-player]];
+    }
 }
 
 
 - (BOOL) applyMoveString: (NSString*)move
 {
-    NSLog(@"Go: applyMoveString: '%@'",move);
+    //NSLog(@"Go: applyMoveString: '%@'",move);
     return [self animatePlacementIn: [_board cellWithName: move]];
 }
 

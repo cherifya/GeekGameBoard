@@ -69,7 +69,7 @@ CGImageRef CreateCGImageFromFile( NSString *path )
 {
 #if TARGET_OS_IPHONE
     UIImage *uiImage = [UIImage imageWithContentsOfFile: path];
-    if(!uiImage) NSLog(@"Warning: UIImage imageWithContentsOfFile failed on file %@",path);
+    if(!uiImage) Warn(@"UIImage imageWithContentsOfFile failed on file %@",path);
     return CGImageRetain(uiImage.CGImage);
 #else
     CGImageRef image = NULL;
@@ -78,7 +78,7 @@ CGImageRef CreateCGImageFromFile( NSString *path )
     if( src ) {
         image = CGImageSourceCreateImageAtIndex(src, 0, NULL);
         CFRelease(src);
-        if(!image) NSLog(@"Warning: CGImageSourceCreateImageAtIndex failed on file %@ (ptr size=%u)",path,sizeof(void*));
+        if(!image) Warn(@"CGImageSourceCreateImageAtIndex failed on file %@ (ptr size=%u)",path,sizeof(void*));
     }
     return image;
 #endif

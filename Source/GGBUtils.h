@@ -20,6 +20,11 @@
 */
 
 
+#ifndef Warn
+#define Warn(MSG,...) NSLog(@"WARNING: " #MSG,__VA_ARGS__)
+#endif
+
+
 /** Handy utility for assigning a new value to a retained instance variable. Use as:
         setObj(&_instanceVar, newValue);
     It releases the old value and retains the new one. */

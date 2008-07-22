@@ -325,7 +325,7 @@
                     @try{
                         if( ! [self applyMoveString: move] ) {
                             _currentTurnNo = oldTurnNo;
-                            NSLog(@"WARNING: %@ failed to apply stored move '%@'!", self,move);
+                            Warn(@"%@ failed to apply stored move '%@'!", self,move);
                             return;
                         }
                     }@finally{
@@ -340,7 +340,7 @@
             }
             if( ! [self.stateString isEqual: state] ) {
                 _currentTurnNo = oldTurnNo;
-                NSLog(@"WARNING: %@ failed to apply stored state '%@'!", self,state);
+                Warn(@"%@ failed to apply stored state '%@'!", self,state);
                 return;
             }
         } else

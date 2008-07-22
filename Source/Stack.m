@@ -63,6 +63,18 @@
 @synthesize bits=_bits;
 
 
+- (NSUInteger) numberOfBits
+{
+    return _bits.count;
+}
+
+- (void) setNumberOfBits: (NSUInteger)n
+{
+    NSAssert2(n<=_bits.count,@"Cannot increase numberOfBits (from %u to %u)", _bits.count,n);
+    while( _bits.count > n )
+        [self removeBit: self.topBit];
+}
+
 - (Bit*) topBit
 {
     return [_bits lastObject];
@@ -94,6 +106,16 @@
         [_bits addObject: bit];
         ChangeSuperlayer(bit, self, n);
         [self x_repositionBit: bit forIndex: n];
+    }
+}
+
+
+- (void) removeBit: (Bit*)bit
+{
+    NSUInteger index = [_bits indexOfObjectIdenticalTo: bit];
+    if( index != NSNotFound ) {
+        [bit removeFromSuperlayer];
+        [_bits removeObjectAtIndex: index];
     }
 }
 

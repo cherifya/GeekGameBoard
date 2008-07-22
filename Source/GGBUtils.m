@@ -72,12 +72,12 @@ static SystemSoundID GetSound( NSString *name )
         if( path )
             url = [NSURL fileURLWithPath: path];
         else {
-            NSLog(@"WARNING: Couldn't find sound %@",name);
+            Warn(@"Couldn't find sound %@",name);
             return 0;
         }
         SystemSoundID soundID;
         if( AudioServicesCreateSystemSoundID((CFURLRef)url,&soundID) != noErr ) {
-            NSLog(@"WARNING: Couldn't load sound %@",url);
+            Warn(@"Couldn't load sound %@",url);
             return 0;
         }
         
