@@ -51,6 +51,10 @@
 }
 
 
+#pragma mark -
+#pragma mark PERSPECTIVE:
+
+
 - (void) _applyPerspective
 {
     CATransform3D t;
@@ -60,7 +64,7 @@
         t = CATransform3DConcat(t, CATransform3DMakeRotation(-_perspective, 1,0,0));
         
         CATransform3D pers = CATransform3DIdentity;
-        pers.m34 = 1.0/-800;
+        pers.m34 = 1.0/-2000;
         t = CATransform3DConcat(t, pers);
         t = CATransform3DConcat(t, CATransform3DMakeTranslation(size.width/2, 
                                                                 size.height*(0.25 + 0.05*sin(2*_perspective)),
@@ -84,6 +88,13 @@
         _game.tablePerspectiveAngle = p;
     }
 }
+
+- (IBAction) tiltUp: (id)sender     {self.perspective -= M_PI/40;}
+- (IBAction) tiltDown: (id)sender   {self.perspective += M_PI/40;}
+
+
+#pragma mark -
+#pragma mark GAME BOARD:
 
 
 - (void) _removeGameBoard
@@ -132,6 +143,10 @@
         [game release];
     }
 }
+
+
+#pragma mark -
+#pragma mark VIEW MANIPULATION:
 
 
 - (CGRect) gameBoardFrame

@@ -95,9 +95,9 @@ static NSMutableDictionary *kPieceStyle1, *kPieceStyle2;
 
 - (void) makeKing: (Piece*)piece
 {
-    piece.scale = kKingScale;
     piece.tag = YES;        // tag property stores the 'king' flag
     piece.name = piece.owner.index ?@"4" :@"3";
+    [self _transformPiece: piece];
 }
 
 - (void) setUpBoard

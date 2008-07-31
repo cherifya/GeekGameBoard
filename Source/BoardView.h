@@ -61,6 +61,8 @@
 
 @property CGFloat perspective;
 
+- (IBAction) tiltUp: (id)sender;
+- (IBAction) tiltDown: (id)sender;
 - (IBAction) enterFullScreen: (id)sender;
 
 @property CGSize gameBoardInset;
