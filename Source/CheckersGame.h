@@ -32,6 +32,7 @@
 }
 
 //protected
+- (Piece*) pieceForPlayer: (int)playerNum;
 - (BOOL) canOpponentMoveFrom: (GridCell*)src;
 
 @end

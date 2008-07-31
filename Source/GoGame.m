@@ -106,13 +106,13 @@
 
 - (CGImageRef) iconForPlayer: (int)playerNum
 {
-    return GetCGImageNamed( playerNum ?@"Stone-white.png" :@"Stone-black.png" );
+    return GetCGImageNamed( playerNum ?@"ball-white.png" :@"ball-black.png" );
 }
 
 - (Piece*) pieceForPlayer: (int)index
 {
-    NSString *imageName = index ?@"Stone-white.png" :@"Stone-black.png";
-    CGFloat pieceSize = (int)(_board.spacing.width * 1.8) & ~1;  // make sure it's even
+    NSString *imageName = index ?@"ball-white.png" :@"ball-black.png";
+    CGFloat pieceSize = (int)(_board.spacing.width * 1.0) & ~1;  // make sure it's even
     Piece *stone = [[Piece alloc] initWithImageNamed: imageName scale: pieceSize];
     stone.owner = [self.players objectAtIndex: index];
     return [stone autorelease];

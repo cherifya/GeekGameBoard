@@ -28,6 +28,11 @@
 #import "QuartzUtils.h"
 
 
+@interface GridCell ()
+- (void) setBitTransform: (CATransform3D)bitTransform;
+@end
+
+
 @implementation Grid
 
 
@@ -45,6 +50,7 @@
         self.lineColor = kBlackColor;
         _allowsMoves = YES;
         _usesDiagonals = YES;
+        _bitTransform = CATransform3DIdentity;
 
         self.bounds = CGRectMake(-1, -1, nColumns*spacing.width+2, nRows*spacing.height+2);
         self.position = pos;
@@ -113,7 +119,8 @@ static void setcolor( CGColorRef *var, CGColorRef color )
 }
 
 @synthesize cellClass=_cellClass, rows=_nRows, columns=_nColumns, spacing=_spacing, reversed=_reversed,
-            usesDiagonals=_usesDiagonals, allowsMoves=_allowsMoves, allowsCaptures=_allowsCaptures;
+            usesDiagonals=_usesDiagonals, allowsMoves=_allowsMoves, allowsCaptures=_allowsCaptures,
+            bitTransform=_bitTransform;
 
 
 #pragma mark -
@@ -160,7 +167,8 @@ static void setcolor( CGColorRef *var, CGColorRef color )
         cell = [self createCellAtRow: row column: col suggestedFrame: frame];
         if( cell ) {
             [_cells replaceObjectAtIndex: index withObject: cell];
-            [self addSublayer: cell];
+            //[self addSublayer: cell];
+            [self insertSublayer: cell atIndex: 0];
             [self setNeedsDisplay];
         }
     }
@@ -220,6 +228,26 @@ static void setcolor( CGColorRef *var, CGColorRef color )
     return players;
 }
 
+
+- (CATransform3D) bitTransform
+{
+    return _bitTransform;
+}
+
+- (void) setBitTransform: (CATransform3D)t
+{
+    _bitTransform = t;
+    for( GridCell *cell in self.cells )
+        [cell setBitTransform: t];
+}
+
+- (void) updateCellTransform
+{
+    CATransform3D t = self.aggregateTransform;
+    t.m41 = t.m42 = t.m43 = 0.0f;           // remove translation component
+    t = CATransform3DInvert(t);
+    self.bitTransform = t;
+}
 
 
 #pragma mark -
@@ -332,13 +360,14 @@ static void setcolor( CGColorRef *var, CGColorRef color )
         _grid = grid;
         _row = row;
         _column = col;
+        self.anchorPoint = CGPointMake(0,0);
         self.position = frame.origin;
         CGRect bounds = frame;
         bounds.origin.x -= floor(bounds.origin.x);  // make sure my coords fall on pixel boundaries
         bounds.origin.y -= floor(bounds.origin.y);
         self.bounds = bounds;
-        self.anchorPoint = CGPointMake(0,0);
         self.borderColor = kHighlightColor;         // Used when highlighting (see -setHighlighted:)
+        [self setBitTransform: grid.bitTransform];
     }
     return self;
 }
@@ -349,6 +378,18 @@ static void setcolor( CGColorRef *var, CGColorRef color )
 }
 
 @synthesize grid=_grid, row=_row, column=_column;
+
+
+- (void) setBitTransform: (CATransform3D)bitTransform
+{
+    // To make the bitTransform relative to my center, I need to offset the center to the origin
+    // first, and then back afterwards.
+    CGSize size = self.bounds.size;
+    CATransform3D x = CATransform3DMakeTranslation(-size.width/2, -size.height/2,0);
+    x = CATransform3DConcat(x, bitTransform);
+    x = CATransform3DConcat(x, CATransform3DMakeTranslation(size.width/2, size.height/2,0));
+    self.sublayerTransform = x;    
+}
 
 
 - (void) drawInParentContext: (CGContextRef)ctx fill: (BOOL)fill
@@ -366,12 +407,8 @@ static void setcolor( CGColorRef *var, CGColorRef color )
 {
     if( bit != self.bit ) {
         [super setBit: bit];
-        if( bit ) {
-            // Center it:
-            CGSize size = self.bounds.size;
-            bit.position = CGPointMake(floor(size.width/2.0),
-                                       floor(size.height/2.0));
-        }
+        if( bit )
+            bit.position = GetCGRectCenter(self.bounds);
     }
 }
 

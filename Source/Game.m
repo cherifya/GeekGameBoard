@@ -143,6 +143,23 @@
     }
 }
 
+- (CGFloat) tablePerspectiveAngle
+{
+    return _tablePerspectiveAngle;
+}
+
+- (void) setTablePerspectiveAngle: (CGFloat)angle
+{
+    if( angle != _tablePerspectiveAngle ) {
+        _tablePerspectiveAngle = angle;
+        [self perspectiveChanged];
+    }
+}
+
+- (void) perspectiveChanged
+{
+}
+
 
 #pragma mark -
 #pragma mark PLAYERS:

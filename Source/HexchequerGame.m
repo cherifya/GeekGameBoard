@@ -39,9 +39,11 @@
                                            spacing: CGSizeMake(s,s)
                                           position: GetCGRectCenter(tableBounds)];
     board.anchorPoint = CGPointMake(0.47,0.5);  // Missing half-cells on right edge perturb center pt
-    [board setValue: [NSNumber numberWithDouble: M_PI/6] forKeyPath: @"transform.rotation"];
+    board.transform = CATransform3DMakeRotation(M_PI/6, 0,0,1);
+    board.bitTransform = CATransform3DMakeRotation(-M_PI/6, 0,0,1);    // counteract board rotation
     _board = board;
     [_table addSublayer: _board];
+
     board.allowsMoves = YES;
     board.allowsCaptures = NO;      // no land-on captures, that is
     board.cellColor = CreateGray(1.0, 0.25);

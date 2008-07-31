@@ -33,6 +33,8 @@
     Game *_game;                                // Current Game
     GGBLayer *_table;                           // Game's root layer
     NSSize _oldSize;
+    CGSize _gameBoardInset;
+    CGFloat _perspective;
     
     // Used during mouse-down tracking:
     NSPoint _dragStartPos;                      // Starting position of mouseDown
@@ -57,8 +59,11 @@
 
 - (void) createGameBoard;
 
+@property CGFloat perspective;
+
 - (IBAction) enterFullScreen: (id)sender;
 
+@property CGSize gameBoardInset;
 - (CGRect) gameBoardFrame;
 
 @end

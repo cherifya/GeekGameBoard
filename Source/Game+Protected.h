@@ -25,10 +25,13 @@
 
 #pragma mark  Abstract methods for subclasses to implement:
 
-/** Called by -setBoard: Should all all necessary Grids/Pieces/Cards/etc. to _board.
+/** Called by -setTable: Should all all necessary Grids/Pieces/Cards/etc. to _table.
     This method is always called during initialization of a new Game, and may be called
-    again afterwards, for example if the board area is resized. */
+    again afterwards, for example if the table area is resized. */
 - (void) setUpBoard;
+
+/** Called after the tablePerspectiveAngle property changes. */
+- (void) perspectiveChanged;
 
 /** Should return the winning player, if the current position is a win, else nil.
     Default implementation returns nil. */
@@ -39,6 +42,10 @@
 
 /** Sets the number of players in the game. Subclass initializers should call this. */
 - (void) setNumberOfPlayers: (unsigned)n;
+
+/** The angle by which the table is tilted "away from" the viewer to give 3D perspective.
+    Subclasses should not change this! It won't do anything. */
+@property CGFloat tablePerspectiveAngle;
 
 /** Animate a piece moving from src to dst. Used in implementing -applyMoveString:. */
 - (BOOL) animateMoveFrom: (CALayer<BitHolder>*)src to: (CALayer<BitHolder>*)dst;

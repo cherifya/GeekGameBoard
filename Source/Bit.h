@@ -33,7 +33,7 @@ enum {
     kCardZ  = 2,
     kPieceZ = 3,
     
-    kPickedUpZ = 100
+    kPickedUpZ = 20
 };
 
 
@@ -43,6 +43,7 @@ enum {
 {
     @private
     int _restingZ;      // Original z position, saved while pickedUp
+    CATransform3D _restingTransform;
 #if !TARGET_OS_IPHONE
     float _restingShadowOpacity, _restingShadowRadius;
     CGSize _restingShadowOffset;

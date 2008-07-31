@@ -23,11 +23,14 @@
 #import "BoardView.h"
 #import "Bit.h"
 #import "BitHolder.h"
-#import "Game.h"
+#import "Game+Protected.h"
 #import "Turn.h"
 #import "Player.h"
 #import "QuartzUtils.h"
 #import "GGBUtils.h"
+
+
+#define kMaxPerspective 0.965   // 55 degrees
 
 
 @interface BoardView ()
@@ -38,13 +41,48 @@
 @implementation BoardView
 
 
-@synthesize table=_table;
+@synthesize table=_table, gameBoardInset=_gameBoardInset;
 
 
 - (void) dealloc
 {
     [_game release];
     [super dealloc];
+}
+
+
+- (void) _applyPerspective
+{
+    CATransform3D t;
+    if( fabs(_perspective) >= M_PI/180 ) {
+        CGSize size = self.layer.bounds.size;
+        t = CATransform3DMakeTranslation(-size.width/2, -size.height/4, 0);
+        t = CATransform3DConcat(t, CATransform3DMakeRotation(-_perspective, 1,0,0));
+        
+        CATransform3D pers = CATransform3DIdentity;
+        pers.m34 = 1.0/-800;
+        t = CATransform3DConcat(t, pers);
+        t = CATransform3DConcat(t, CATransform3DMakeTranslation(size.width/2, 
+                                                                size.height*(0.25 + 0.05*sin(2*_perspective)),
+                                                                0));
+        self.layer.borderWidth = 3;
+    } else {
+        t = CATransform3DIdentity;
+        self.layer.borderWidth = 0;
+    }
+    self.layer.transform = t;
+}    
+
+- (CGFloat) perspective {return _perspective;}
+
+- (void) setPerspective: (CGFloat)p
+{
+    p = MAX(0.0, MIN(kMaxPerspective, p));
+    if( p != _perspective ) {
+        _perspective = p;
+        [self _applyPerspective];
+        _game.tablePerspectiveAngle = p;
+    }
 }
 
 
@@ -62,7 +100,7 @@
     _table = [[CALayer alloc] init];
     _table.frame = [self gameBoardFrame];
     _table.autoresizingMask = kCALayerMinXMargin | kCALayerMaxXMargin | kCALayerMinYMargin | kCALayerMaxYMargin;
-
+    
     // Tell the game to set up the board:
     _game.table = _table;
 
@@ -98,7 +136,7 @@
 
 - (CGRect) gameBoardFrame
 {
-    return self.layer.bounds;
+    return CGRectInset(self.layer.bounds, _gameBoardInset.width,_gameBoardInset.height);
 }
 
 
@@ -114,7 +152,6 @@
 {
     return _fullScreenView ?: self;
 }
-
 
 - (IBAction) enterFullScreen: (id)sender
 {
@@ -142,6 +179,7 @@
         CGAffineTransform xform = _table.affineTransform;
         xform.a = xform.d = MIN(newSize.width,newSize.height)/MIN(_oldSize.width,_oldSize.height);
         BeginDisableAnimations();
+        [self _applyPerspective];
         _table.affineTransform = xform;
         EndDisableAnimations();
     } else
@@ -181,7 +219,9 @@
 - (CGPoint) _convertPointFromWindowToLayer: (NSPoint)locationInWindow
 {
     NSPoint where = [self convertPoint: locationInWindow fromView: nil];    // convert to view coords
-    return NSPointToCGPoint( [self convertPointToBase: where] );            // then to layer coords
+    where = [self convertPointToBase: where];                               // then to layer base coords
+    return [self.layer convertPoint: NSPointToCGPoint(where)                // then to transformed layer coords
+                          fromLayer: self.layer.superlayer];
 }
 
 
@@ -384,6 +424,13 @@ static BOOL layerIsDropTarget( CALayer* layer ) {return [layer respondsToSelecto
         _dragBit = nil;
         [NSCursor pop];
     }
+}
+
+
+- (void)scrollWheel:(NSEvent *)e
+{
+    self.perspective += e.deltaY * M_PI/180;
+    //Log(@"Perspective = %2.0f degrees (%5.3f radians)", self.perspective*180/M_PI, self.perspective);
 }
 
 

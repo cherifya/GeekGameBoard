@@ -43,6 +43,17 @@ extern NSString* const GGBLayerStyleChangedNotification;
     and update every other layer that shares the same style dictionary. */
 - (void) setValue: (id)value ofStyleProperty: (NSString*)prop;
 
+/** Send a message to all sublayers in my tree */
+- (void) makeSublayersPerformSelector: (SEL)selector withObject: (id)object;
+
+@property (readonly) CATransform3D aggregateTransform;
+
+/** Call this to notify all sublayers that their aggregate transform has changed. */
+- (void) changedTransform;
+
+/** Called to notify that a superlayer's transform has changed. */
+- (void) aggregateTransformChanged;
+
 @end
 
 
@@ -57,3 +68,5 @@ void BeginDisableAnimations(void);
 void EndDisableAnimations(void);
 
 CGColorRef GetEffectiveBackground( CALayer *layer );
+
+NSString* StringFromTransform3D( CATransform3D xform );

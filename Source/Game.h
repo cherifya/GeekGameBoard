@@ -36,6 +36,7 @@
     unsigned _currentTurnNo;
     NSMutableDictionary *_extraValues;
     BOOL _requireConfirmation;
+    CGFloat _tablePerspectiveAngle;
 }
 
 #pragma mark  Class properties:

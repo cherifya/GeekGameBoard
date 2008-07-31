@@ -27,6 +27,9 @@
 #import "GGBUtils.h"
 
 
+#define kKingScale 1.4
+
+
 @implementation CheckersGame
 
 
@@ -63,6 +66,13 @@ static NSMutableDictionary *kPieceStyle1, *kPieceStyle2;
     return GetCGImageNamed( playerNum==0 ?@"Green.png" :@"Red.png" );
 }
 
+- (void) _transformPiece: (Piece*)piece
+{
+    CGFloat scale = piece.tag ?kKingScale :1.0;
+    piece.transform = CATransform3DMakeScale(scale, scale/cos(self.tablePerspectiveAngle), scale);
+    piece.anchorPoint = CGPointMake(0.5, 0.5*cos(self.tablePerspectiveAngle));
+}
+
 - (Piece*) pieceForPlayer: (int)playerNum
 {
     Piece *p = [[Piece alloc] init];
@@ -70,12 +80,22 @@ static NSMutableDictionary *kPieceStyle1, *kPieceStyle2;
     p.style = (playerNum ?kPieceStyle2 :kPieceStyle1);
     p.owner = [self.players objectAtIndex: playerNum];
     p.name = playerNum ?@"2" :@"1";
+    [self _transformPiece: p];
     return [p autorelease];
+}
+
+- (void) perspectiveChanged
+{
+    for( GridCell *cell in _board.cells ) {
+        Piece *piece = (Piece*) cell.bit;
+        if( piece )
+            [self _transformPiece: piece];
+    }
 }
 
 - (void) makeKing: (Piece*)piece
 {
-    piece.scale = 1.4;
+    piece.scale = kKingScale;
     piece.tag = YES;        // tag property stores the 'king' flag
     piece.name = piece.owner.index ?@"4" :@"3";
 }

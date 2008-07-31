@@ -34,6 +34,7 @@
     CGImageRef _backgroundImage;
     BOOL _usesDiagonals, _allowsMoves, _allowsCaptures, _reversed;
     NSMutableArray *_cells;                             // Really a 2D array, in row-major order.
+    CATransform3D _bitTransform;
 }
 
 /** Initializes a new Grid with the given dimensions and cell size, and position in superview.
@@ -56,6 +57,9 @@
 @property BOOL usesDiagonals;                   // Affects GridCell.neighbors, for rect grids
 @property BOOL allowsMoves, allowsCaptures;     // Can pieces be moved, and can they land on others?
 @property BOOL reversed;                        // Reverses board (rotates 180°) by exchanging cell positions
+
+@property CATransform3D bitTransform;
+- (void) updateCellTransform;
 
 @property (readonly) NSArray *cells;
 

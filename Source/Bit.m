@@ -79,6 +79,12 @@
         forKeyPath: @"transform.scale"];
 }
 
+- (void) scaleBy: (CGFloat)scale
+{
+    self.transform = CATransform3DConcat(self.transform,
+                                         CATransform3DMakeScale(scale, scale, scale));
+}
+
 
 - (int) rotation
 {
@@ -101,16 +107,19 @@
 - (void) setPickedUp: (BOOL)up
 {
     if( up != _pickedUp ) {
-        CGFloat shadow, radius, opacity, z, scale;
+        CGFloat shadow, radius, opacity, z;
         CGSize offset;
+        CATransform3D transform;
+        
         if( up ) {
             shadow = 0.8;
             offset = CGSizeMake(2,2);
             radius = 8;
             opacity = kPickedUpOpacity;
-            scale = kPickedUpScale;
             z = kPickedUpZ;
             _restingZ = self.zPosition;
+            _restingTransform = self.transform;
+            transform = CATransform3DScale(_restingTransform, kPickedUpScale, kPickedUpScale, kPickedUpScale);
 #if !TARGET_OS_IPHONE
             _restingShadowOpacity = self.shadowOpacity;
             _restingShadowOffset  = self.shadowOffset;
@@ -123,7 +132,7 @@
             radius = _restingShadowRadius;
 #endif
             opacity = 1;
-            scale = 1.0/kPickedUpScale;
+            transform = _restingTransform;
             z = _restingZ;
         }
 
@@ -134,7 +143,7 @@
         self.shadowRadius = radius;
 #endif
         self.opacity = opacity;
-        self.scale *= scale;
+        self.transform = transform;
         _pickedUp = up;
     }
 }
