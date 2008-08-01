@@ -167,8 +167,10 @@ static void setcolor( CGColorRef *var, CGColorRef color )
         cell = [self createCellAtRow: row column: col suggestedFrame: frame];
         if( cell ) {
             [_cells replaceObjectAtIndex: index withObject: cell];
-            //[self addSublayer: cell];
-            [self insertSublayer: cell atIndex: 0];
+            if( _reversed )
+                [self addSublayer: cell];
+            else
+                [self insertSublayer: cell atIndex: 0];
             [self setNeedsDisplay];
         }
     }
@@ -178,7 +180,7 @@ static void setcolor( CGColorRef *var, CGColorRef color )
 
 - (void) addAllCells
 {
-    for( int row=_nRows-1; row>=0; row-- )                // makes 'upper' cells be in 'back'
+    for( int row=0; row<_nRows; row++ )
         for( int col=0; col<_nColumns; col++ ) 
             [self addCellAtRow: row column: col];
 }

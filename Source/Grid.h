@@ -24,6 +24,11 @@
 @class GridCell;
 
 
+typedef struct {
+    unsigned col, row;
+} GridCoord;
+
+
 /** Abstract superclass of regular geometric grids of GridCells that Bits can be placed on. */
 @interface Grid : GGBLayer
 {

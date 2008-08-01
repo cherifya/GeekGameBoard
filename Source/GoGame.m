@@ -34,6 +34,14 @@
 
 + (int) dimensions {return 19;}
 
++ (const GridCoord*) spotCoords
+{
+    static GridCoord const sSpots[10]={ { 3,3}, { 3,9}, { 3,15},
+                                        { 9,3}, { 9,9}, { 9,15},
+                                        {15,3}, {15,9}, {15,15}, {NSNotFound,NSNotFound} };
+    return sSpots;
+}
+
 - (id) init
 {
     self = [super init];
@@ -63,12 +71,11 @@
     */
     board.lineColor = kTranslucentGrayColor;
     board.cellClass = [GoSquare class];
-    [board addAllCells];
-    ((GoSquare*)[board cellAtRow: 2 column: 2]).dotted = YES;
-    ((GoSquare*)[board cellAtRow: 6 column: 6]).dotted = YES;
-    ((GoSquare*)[board cellAtRow: 2 column: 6]).dotted = YES;
-    ((GoSquare*)[board cellAtRow: 6 column: 2]).dotted = YES;
     board.usesDiagonals = board.allowsMoves = board.allowsCaptures = NO;
+    [board addAllCells];
+    const GridCoord *spots = [[self class] spotCoords];
+    for( int i=0; spots[i].row!=NSNotFound; i++ )
+        ((GoSquare*)[board cellAtRow: spots[i].row column: spots[i].col]).dotted = YES;
     [_table addSublayer: board];
     [board release];
     
@@ -261,10 +268,21 @@
 @implementation Go9Game
 + (NSString*) displayName   {return @"Go (9x9)";}
 + (int) dimensions          {return 9;}
++ (const GridCoord*) spotCoords
+{
+    static GridCoord const sSpots[6]= { {2,2}, {2,6}, {4,4}, {6,2}, {6,6}, {NSNotFound,NSNotFound} };
+    return sSpots;
+}
 @end
 
 
 @implementation Go13Game
 + (NSString*) displayName   {return @"Go (13x13)";}
 + (int) dimensions          {return 13;}
++ (const GridCoord*) spotCoords
+{
+    static GridCoord const sSpots[6] = { { 2,2}, { 2,10}, {6,6},
+                                         {10,2}, {10,10}, {NSNotFound,NSNotFound} };
+    return sSpots;
+}
 @end

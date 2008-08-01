@@ -113,6 +113,7 @@
     _table.autoresizingMask = kCALayerMinXMargin | kCALayerMaxXMargin | kCALayerMinYMargin | kCALayerMaxYMargin;
     
     // Tell the game to set up the board:
+    _game.tablePerspectiveAngle = _perspective;
     _game.table = _table;
 
     [self.layer addSublayer: _table];
