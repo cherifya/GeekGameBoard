@@ -23,6 +23,7 @@
 #import "QuartzUtils.h"
 #import <QuartzCore/QuartzCore.h>
 #import "Piece.h"
+#import "GGBUtils.h"
 
 
 CGColorRef kBlackColor, kWhiteColor, 

@@ -218,7 +218,7 @@ static BOOL canOpponentMoveOrJump( GridCell *first, GridCell *second ) {
 {
     for( GridCell *cell in _board.cells )
         if( [self canOpponentMoveFrom: cell] ) {
-            Log(@"Checkers: %@ can move from %@",self.currentPlayer.nextPlayer,cell);
+            //NSLog(@"Checkers: %@ can move from %@",self.currentPlayer.nextPlayer,cell);
             return nil;
         }
     return self.currentPlayer;

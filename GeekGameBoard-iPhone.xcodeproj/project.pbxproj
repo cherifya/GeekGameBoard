@@ -13,6 +13,7 @@
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		27124B380E2852A700B61BE3 /* Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 27124B350E2852A700B61BE3 /* Player.m */; };
 		27124B390E2852A700B61BE3 /* Turn.m in Sources */ = {isa = PBXBuildFile; fileRef = 27124B370E2852A700B61BE3 /* Turn.m */; };
+		273D49890ED7277500EAFFCE /* Funk.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 273D49880ED7277500EAFFCE /* Funk.aiff */; };
 		2740502B0DEF36DF0006A9EE /* Pop.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 274050290DEF36DF0006A9EE /* Pop.aiff */; };
 		2740502C0DEF36DF0006A9EE /* Tink.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 2740502A0DEF36DF0006A9EE /* Tink.aiff */; };
 		279F4B590D85C51700B32DBF /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 279F4B580D85C51700B32DBF /* AudioToolbox.framework */; };
@@ -66,6 +67,7 @@
 		27124B350E2852A700B61BE3 /* Player.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Player.m; sourceTree = "<group>"; };
 		27124B360E2852A700B61BE3 /* Turn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Turn.h; sourceTree = "<group>"; };
 		27124B370E2852A700B61BE3 /* Turn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Turn.m; sourceTree = "<group>"; };
+		273D49880ED7277500EAFFCE /* Funk.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = Funk.aiff; path = /System/Library/Sounds/Funk.aiff; sourceTree = "<absolute>"; };
 		274050290DEF36DF0006A9EE /* Pop.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = Pop.aiff; path = /System/Library/Sounds/Pop.aiff; sourceTree = "<absolute>"; };
 		2740502A0DEF36DF0006A9EE /* Tink.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = Tink.aiff; path = /System/Library/Sounds/Tink.aiff; sourceTree = "<absolute>"; };
 		279F4B580D85C51700B32DBF /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -296,6 +298,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				273D49880ED7277500EAFFCE /* Funk.aiff */,
 				274050290DEF36DF0006A9EE /* Pop.aiff */,
 				2740502A0DEF36DF0006A9EE /* Tink.aiff */,
 				279F4E050D860B8800B32DBF /* Green Ball.png */,
@@ -380,6 +383,7 @@
 				27DBB5300DEE059900616D85 /* Violet.png in Resources */,
 				2740502B0DEF36DF0006A9EE /* Pop.aiff in Resources */,
 				2740502C0DEF36DF0006A9EE /* Tink.aiff in Resources */,
+				273D49890ED7277500EAFFCE /* Funk.aiff in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
