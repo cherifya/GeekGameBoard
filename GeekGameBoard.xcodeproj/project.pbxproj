@@ -32,6 +32,14 @@
 		276DFC570D00890C00D329AE /* Yellow Ball.png in Resources */ = {isa = PBXBuildFile; fileRef = 276DFC540D00890C00D329AE /* Yellow Ball.png */; };
 		276DFC580D00890C00D329AE /* White Ball.png in Resources */ = {isa = PBXBuildFile; fileRef = 276DFC550D00890C00D329AE /* White Ball.png */; };
 		2795C2B80CC278C800D7B2BD /* Piece.m in Sources */ = {isa = PBXBuildFile; fileRef = 2795C2B70CC278C800D7B2BD /* Piece.m */; };
+		2796EA270F194FF7003B8806 /* ball-black.png in Resources */ = {isa = PBXBuildFile; fileRef = 2796EA1F0F194FF7003B8806 /* ball-black.png */; };
+		2796EA280F194FF7003B8806 /* ball-cyan.png in Resources */ = {isa = PBXBuildFile; fileRef = 2796EA200F194FF7003B8806 /* ball-cyan.png */; };
+		2796EA290F194FF7003B8806 /* ball-gray.png in Resources */ = {isa = PBXBuildFile; fileRef = 2796EA210F194FF7003B8806 /* ball-gray.png */; };
+		2796EA2A0F194FF7003B8806 /* ball-green.png in Resources */ = {isa = PBXBuildFile; fileRef = 2796EA220F194FF7003B8806 /* ball-green.png */; };
+		2796EA2B0F194FF7003B8806 /* ball-orange.png in Resources */ = {isa = PBXBuildFile; fileRef = 2796EA230F194FF7003B8806 /* ball-orange.png */; };
+		2796EA2C0F194FF7003B8806 /* ball-purple.png in Resources */ = {isa = PBXBuildFile; fileRef = 2796EA240F194FF7003B8806 /* ball-purple.png */; };
+		2796EA2D0F194FF7003B8806 /* ball-red.png in Resources */ = {isa = PBXBuildFile; fileRef = 2796EA250F194FF7003B8806 /* ball-red.png */; };
+		2796EA2E0F194FF7003B8806 /* ball-white.png in Resources */ = {isa = PBXBuildFile; fileRef = 2796EA260F194FF7003B8806 /* ball-white.png */; };
 		279F4D870D8606C200B32DBF /* GGBLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 279F4D840D8606C200B32DBF /* GGBLayer.m */; };
 		279F4D880D8606C200B32DBF /* GGBTextLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 279F4D860D8606C200B32DBF /* GGBTextLayer.m */; };
 		279F4DB20D8607AD00B32DBF /* O.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 279F4DB00D8607AD00B32DBF /* O.tiff */; };
@@ -97,6 +105,14 @@
 		276DFC550D00890C00D329AE /* White Ball.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "White Ball.png"; path = "Resources/White Ball.png"; sourceTree = "<group>"; };
 		2795C2B60CC278C800D7B2BD /* Piece.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Piece.h; sourceTree = "<group>"; };
 		2795C2B70CC278C800D7B2BD /* Piece.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Piece.m; sourceTree = "<group>"; };
+		2796EA1F0F194FF7003B8806 /* ball-black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ball-black.png"; sourceTree = "<group>"; };
+		2796EA200F194FF7003B8806 /* ball-cyan.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ball-cyan.png"; sourceTree = "<group>"; };
+		2796EA210F194FF7003B8806 /* ball-gray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ball-gray.png"; sourceTree = "<group>"; };
+		2796EA220F194FF7003B8806 /* ball-green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ball-green.png"; sourceTree = "<group>"; };
+		2796EA230F194FF7003B8806 /* ball-orange.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ball-orange.png"; sourceTree = "<group>"; };
+		2796EA240F194FF7003B8806 /* ball-purple.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ball-purple.png"; sourceTree = "<group>"; };
+		2796EA250F194FF7003B8806 /* ball-red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ball-red.png"; sourceTree = "<group>"; };
+		2796EA260F194FF7003B8806 /* ball-white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ball-white.png"; sourceTree = "<group>"; };
 		279F4D830D8606C200B32DBF /* GGBLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GGBLayer.h; sourceTree = "<group>"; };
 		279F4D840D8606C200B32DBF /* GGBLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GGBLayer.m; sourceTree = "<group>"; };
 		279F4D850D8606C200B32DBF /* GGBTextLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GGBTextLayer.h; sourceTree = "<group>"; };
@@ -269,6 +285,22 @@
 			path = Resources/Gingko;
 			sourceTree = "<group>";
 		};
+		2796EA1E0F194FF7003B8806 /* Balls */ = {
+			isa = PBXGroup;
+			children = (
+				2796EA1F0F194FF7003B8806 /* ball-black.png */,
+				2796EA200F194FF7003B8806 /* ball-cyan.png */,
+				2796EA210F194FF7003B8806 /* ball-gray.png */,
+				2796EA220F194FF7003B8806 /* ball-green.png */,
+				2796EA230F194FF7003B8806 /* ball-orange.png */,
+				2796EA240F194FF7003B8806 /* ball-purple.png */,
+				2796EA250F194FF7003B8806 /* ball-red.png */,
+				2796EA260F194FF7003B8806 /* ball-white.png */,
+			);
+			name = Balls;
+			path = Resources/Balls;
+			sourceTree = "<group>";
+		};
 		29B97314FDCFA39411CA2CEA /* BoardGame */ = {
 			isa = PBXGroup;
 			children = (
@@ -296,6 +328,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				2796EA1E0F194FF7003B8806 /* Balls */,
 				275167D30DEE2AB000247375 /* Gingko */,
 				29B97318FDCFA39411CA2CEA /* MainMenu.nib */,
 				8D1107310486CEB800E47090 /* Info.plist */,
@@ -379,6 +412,14 @@
 				275167DB0DEE2AB000247375 /* Green.png in Resources */,
 				275167DC0DEE2AB000247375 /* Red.png in Resources */,
 				275167DD0DEE2AB000247375 /* Violet.png in Resources */,
+				2796EA270F194FF7003B8806 /* ball-black.png in Resources */,
+				2796EA280F194FF7003B8806 /* ball-cyan.png in Resources */,
+				2796EA290F194FF7003B8806 /* ball-gray.png in Resources */,
+				2796EA2A0F194FF7003B8806 /* ball-green.png in Resources */,
+				2796EA2B0F194FF7003B8806 /* ball-orange.png in Resources */,
+				2796EA2C0F194FF7003B8806 /* ball-purple.png in Resources */,
+				2796EA2D0F194FF7003B8806 /* ball-red.png in Resources */,
+				2796EA2E0F194FF7003B8806 /* ball-white.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -28,7 +28,6 @@
     See: http://en.wikipedia.org/wiki/Tic-tac-toe */
 @interface TicTacToeGame : Game {
     RectGrid *_grid;
-    Dispenser *_dispenser[2];
 }
 
 @end

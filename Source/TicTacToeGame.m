@@ -58,23 +58,6 @@
     _grid.cellColor = CreateGray(1.0, 0.25);
     _grid.lineColor = kTranslucentLightGrayColor;
     [_table addSublayer: _grid];
-    
-    // Create piece dispensers for the two players:
-    for( int playerNumber=0; playerNumber<=1; playerNumber++ ) {
-        Piece *p = [self pieceForPlayer: playerNumber];
-        CGFloat x = floor(CGRectGetMidX(_table.bounds));
-#if TARGET_OS_IPHONE
-        x = x - 80 + 160*playerNumber;
-        CGFloat y = 360;
-#else
-        x += (playerNumber==0 ?-230 :230);
-        CGFloat y = 175;
-#endif
-        [_dispenser[playerNumber] release];
-        _dispenser[playerNumber] = [[Dispenser alloc] initWithPrototype: p quantity: 0
-                                                                  frame: CGRectMake(x-45,y-45, 90,90)];
-        [_table addSublayer: _dispenser[playerNumber]];
-    }            
 }
 
 
@@ -109,7 +92,7 @@
 - (Bit*) bitToPlaceInHolder: (id<BitHolder>)holder
 {
     if( holder.bit==nil && [holder isKindOfClass: [Square class]] )
-        return _dispenser[self.currentPlayer.index].bit;
+        return [self pieceForPlayer: self.currentPlayer.index];
     else
         return nil;
 }
@@ -122,15 +105,6 @@
     [self.currentTurn addToMove: [NSString stringWithFormat: @"%@%i", bit.name, squareIndex]];
     [super bit: bit movedFrom: src to: dst];
 }
-
-/* FIX: Need to restore this somehow, now that -nextPlayer is gone
-- (void) nextPlayer
-{
-    [super nextPlayer];
-    // Give the next player another piece to put down:
-    _dispenser[self.currentPlayer.index].quantity = 1;
-}
- */
 
 static Player* ownerAt( Grid *grid, int index )
 {

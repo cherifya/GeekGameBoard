@@ -49,19 +49,23 @@ static NSString* sCurrentGameName = @"CheckersGame";
 
 - (void) startGameNamed: (NSString*)gameClassName
 {
+    [self.game removeObserver: self 
+           forKeyPath: @"currentPlayer"];
+    [self.game removeObserver: self
+           forKeyPath: @"winner"];
+
     [super startGameNamed: gameClassName];
     
-    Game *game = self.game;
-    [game addObserver: self 
+    [self.game addObserver: self 
            forKeyPath: @"currentPlayer"
               options: NSKeyValueObservingOptionInitial
               context: NULL];
-    [game addObserver: self
+    [self.game addObserver: self
            forKeyPath: @"winner"
               options: 0 
               context: NULL];
     
-    self.window.title = [(id)[game class] displayName];
+    self.window.title = [(id)[self.game class] displayName];
 }
 
 
