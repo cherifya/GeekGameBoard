@@ -50,7 +50,7 @@ NSString* const GGBLayerStyleChangedNotification = @"GGBLayerStyleChanged";
     anim.duration= duration;
     anim.fromValue = from;
     anim.toValue = to;
-    anim.isRemovedOnCompletion = YES;
+    anim.removedOnCompletion = YES;
     anim.delegate = self;
     [self addAnimation:anim forKey: @"animateAndBlock:"];
     _curAnimation = (id)[self animationForKey: @"animateAndBlock:"];

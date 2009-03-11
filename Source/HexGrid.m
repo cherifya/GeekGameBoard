@@ -147,7 +147,7 @@
     CGPoint pos = self.position;
     CGContextTranslateCTM(ctx, pos.x, pos.y);
     CGContextBeginPath(ctx);
-    CGContextAddPath(ctx, ((HexGrid*)_grid).cellPath);
+    CGContextAddPath(ctx, [(HexGrid*)_grid cellPath]);
     CGContextDrawPath(ctx, (fill ?kCGPathFill :kCGPathStroke));
     
     if( !fill && self.highlighted ) {
@@ -155,7 +155,7 @@
         CGContextSetStrokeColorWithColor(ctx, self.borderColor);
         CGContextSetLineWidth(ctx,6);
         CGContextBeginPath(ctx);
-        CGContextAddPath(ctx, ((HexGrid*)_grid).cellPath);
+        CGContextAddPath(ctx, [(HexGrid*)_grid cellPath]);
         CGContextDrawPath(ctx, kCGPathStroke);
     }
     CGContextRestoreGState(ctx);
@@ -165,7 +165,7 @@
 - (BOOL)containsPoint:(CGPoint)p
 {
     return [super containsPoint: p]
-        && CGPathContainsPoint( ((HexGrid*)_grid).cellPath, NULL, p, NO );
+        && CGPathContainsPoint( [(HexGrid*)_grid cellPath], NULL, p, NO );
 }
 
 

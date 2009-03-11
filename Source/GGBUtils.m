@@ -34,7 +34,7 @@ void setObj( id *variable, id newValue )
 void setObjCopy( id<NSCopying> *variable, id<NSCopying> newValue )
 {
     if( *variable != newValue ) {
-        [*variable release];
+        [(id)*variable release];
         *variable = [(id)newValue copy];
     }
 }

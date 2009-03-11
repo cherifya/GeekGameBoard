@@ -38,7 +38,8 @@
 {
     static GridCoord const sSpots[10]={ { 3,3}, { 3,9}, { 3,15},
                                         { 9,3}, { 9,9}, { 9,15},
-                                        {15,3}, {15,9}, {15,15}, {NSNotFound,NSNotFound} };
+                                        {15,3}, {15,9}, {15,15}, 
+                                        {(unsigned)NSNotFound,(unsigned)NSNotFound} };
     return sSpots;
 }
 
@@ -74,7 +75,7 @@
     board.usesDiagonals = board.allowsMoves = board.allowsCaptures = NO;
     [board addAllCells];
     const GridCoord *spots = [[self class] spotCoords];
-    for( int i=0; spots[i].row!=NSNotFound; i++ )
+    for( int i=0; spots[i].row!=(unsigned)NSNotFound; i++ )
         ((GoSquare*)[board cellAtRow: spots[i].row column: spots[i].col]).dotted = YES;
     [_table addSublayer: board];
     [board release];
@@ -270,7 +271,8 @@
 + (int) dimensions          {return 9;}
 + (const GridCoord*) spotCoords
 {
-    static GridCoord const sSpots[6]= { {2,2}, {2,6}, {4,4}, {6,2}, {6,6}, {NSNotFound,NSNotFound} };
+    static GridCoord const sSpots[6]= { {2,2}, {2,6}, {4,4}, {6,2}, {6,6}, 
+                                        {(unsigned)NSNotFound,(unsigned)NSNotFound} };
     return sSpots;
 }
 @end
@@ -282,7 +284,8 @@
 + (const GridCoord*) spotCoords
 {
     static GridCoord const sSpots[6] = { { 2,2}, { 2,10}, {6,6},
-                                         {10,2}, {10,10}, {NSNotFound,NSNotFound} };
+                                         {10,2}, {10,10},
+                                         {(unsigned)NSNotFound,(unsigned)NSNotFound} };
     return sSpots;
 }
 @end

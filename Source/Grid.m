@@ -201,7 +201,7 @@ static void setcolor( CGColorRef *var, CGColorRef color )
 
 - (NSArray*) cells
 {
-    NSMutableArray *cells = [_cells mutableCopy];
+    NSMutableArray *cells = [[_cells mutableCopy] autorelease];
     for( int i=cells.count-1; i>=0; i-- )
         if( [cells objectAtIndex: i] == [NSNull null] )
             [cells removeObjectAtIndex: i];
