@@ -387,9 +387,11 @@ static void setcolor( CGColorRef *var, CGColorRef color )
     // To make the bitTransform relative to my center, I need to offset the center to the origin
     // first, and then back afterwards.
     CGSize size = self.bounds.size;
-    CATransform3D x = CATransform3DMakeTranslation(-size.width/2, -size.height/2,0);
+    size.width = roundf(size.width/2.0);
+    size.height = roundf(size.height/2.0);
+    CATransform3D x = CATransform3DMakeTranslation(-size.width, -size.height, 0);
     x = CATransform3DConcat(x, bitTransform);
-    x = CATransform3DConcat(x, CATransform3DMakeTranslation(size.width/2, size.height/2,0));
+    x = CATransform3DConcat(x, CATransform3DMakeTranslation(size.width, size.height ,0));
     self.sublayerTransform = x;    
 }
 
