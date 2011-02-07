@@ -28,7 +28,7 @@ NSString* const GGBLayerStyleChangedNotification = @"GGBLayerStyleChanged";
     [self setNeedsDisplay];
     for( CALayer *layer in self.sublayers )
         if( [layer isKindOfClass: [GGBLayer class]] )
-            ((GGBLayer*)layer).redisplayAll;
+            [(GGBLayer*)layer redisplayAll];
         else
             [layer setNeedsDisplay];
 }

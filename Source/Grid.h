@@ -54,7 +54,7 @@ typedef struct {
 - (id) initWithRows: (unsigned)nRows columns: (unsigned)nColumns
               frame: (CGRect)frame;
 
-@property Class cellClass;                      // What kind of GridCells to create
+@property (assign) Class cellClass;             // What kind of GridCells to create
 @property (readonly) unsigned rows, columns;    // Dimensions of the grid
 @property (readonly) CGSize spacing;            // x,y spacing of GridCells
 @property CGColorRef cellColor, lineColor;      // Cell background color, line color (or nil)

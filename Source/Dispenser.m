@@ -54,7 +54,15 @@
 }
 
 
-@synthesize bit=_bit;
+- (Bit*) bit
+{
+    return _bit;
+}
+
+- (void) setBit: (Bit*)bit
+{
+    setObj(&_bit, bit);
+}
 
 
 - (Bit*) createBit
