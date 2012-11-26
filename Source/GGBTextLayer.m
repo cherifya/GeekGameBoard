@@ -16,7 +16,7 @@
 + (GGBTextLayer*) textLayerInSuperlayer: (CALayer*)superlayer
                                withText: (NSString*)text
                                fontSize: (float) fontSize
-                              alignment: (enum CAAutoresizingMask) align
+                              alignment: (CAAutoresizingMask) align
 {
 #if TARGET_OS_IPHONE
     UIFont *font = [UIFont systemFontOfSize: fontSize];
@@ -33,7 +33,7 @@
 + (GGBTextLayer*) textLayerInSuperlayer: (CALayer*)superlayer
                                withText: (NSString*)text
                                    font: (id)inputFont
-                              alignment: (enum CAAutoresizingMask) align
+                              alignment: (CAAutoresizingMask) align
 {
     GGBTextLayer *label = [[self alloc] init];
     label.string = text;
@@ -140,11 +140,11 @@
         
         UITextAlignment align;
         if( [_alignmentMode isEqualToString: @"center"] )
-            align = UITextAlignmentCenter;
+            align = NSTextAlignmentCenter;
         else if( [_alignmentMode isEqualToString: @"right"] )
-            align = UITextAlignmentRight;
+            align = NSTextAlignmentRight;
         else
-            align = UITextAlignmentLeft;
+            align = NSTextAlignmentLeft;
         
         CGRect bounds = self.bounds;
         //float ascender=_font.ascender, descender=_font.descender, leading=_font.leading;
@@ -152,7 +152,7 @@
         
         [_string drawInRect: bounds 
                    withFont: _font
-              lineBreakMode: UILineBreakModeClip
+              lineBreakMode: NSLineBreakByClipping
                   alignment: align];
         
         UIGraphicsPopContext();

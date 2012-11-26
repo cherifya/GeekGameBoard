@@ -54,9 +54,9 @@ static void HackNSLog(void)
     self.headline = [[[UILabel alloc] initWithFrame: rHeadline] autorelease];
     _headline.backgroundColor = nil;
     _headline.opaque = NO;
-    _headline.textAlignment = UITextAlignmentCenter;
+    _headline.textAlignment = NSTextAlignmentCenter;
     _headline.font = [UIFont boldSystemFontOfSize: 20];
-    _headline.minimumFontSize = 14;
+    //_headline.minimumFontSize = 14;
     _headline.adjustsFontSizeToFitWidth = YES;
     [_window addSubview: _headline];
     

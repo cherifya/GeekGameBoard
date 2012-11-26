@@ -8,6 +8,34 @@
 
 #import "GGBLayer.h"
 
+#if TARGET_OS_IPHONE
+/* Bit definitions for `autoresizingMask' property. */
+
+typedef enum
+{
+    kCALayerNotSizable	= 0,
+    kCALayerMinXMargin	= 1U << 0,
+    kCALayerWidthSizable	= 1U << 1,
+    kCALayerMaxXMargin	= 1U << 2,
+    kCALayerMinYMargin	= 1U << 3,
+    kCALayerHeightSizable	= 1U << 4,
+    kCALayerMaxYMargin	= 1U << 5
+} CAAutoresizingMask;
+
+enum
+{
+    kCALayerBottomMargin = kCALayerMaxYMargin,
+    kCALayerTopMargin    = kCALayerMinYMargin
+};
+
+#else
+enum
+{
+    kCALayerBottomMargin = kCALayerMinYMargin,
+    kCALayerTopMargin    = kCALayerMaxYMargin
+};
+#endif
+
 
 #if TARGET_OS_IPHONE
 @interface GGBTextLayer : GGBLayer
@@ -30,39 +58,10 @@
 + (GGBTextLayer*) textLayerInSuperlayer: (CALayer*)superlayer
                                withText: (NSString*)text
                                fontSize: (float) fontSize
-                              alignment: (enum CAAutoresizingMask) align;
+                              alignment: (CAAutoresizingMask) align;
 + (GGBTextLayer*) textLayerInSuperlayer: (CALayer*)superlayer
                                withText: (NSString*)text
                                    font: (id)inputFont
-                              alignment: (enum CAAutoresizingMask) align;
+                              alignment: (CAAutoresizingMask) align;
 
 @end
-
-
-#if TARGET_OS_IPHONE
-/* Bit definitions for `autoresizingMask' property. */
-
-enum CAAutoresizingMask
-{
-    kCALayerNotSizable	= 0,
-    kCALayerMinXMargin	= 1U << 0,
-    kCALayerWidthSizable	= 1U << 1,
-    kCALayerMaxXMargin	= 1U << 2,
-    kCALayerMinYMargin	= 1U << 3,
-    kCALayerHeightSizable	= 1U << 4,
-    kCALayerMaxYMargin	= 1U << 5
-};
-
-enum
-{
-    kCALayerBottomMargin = kCALayerMaxYMargin,
-    kCALayerTopMargin    = kCALayerMinYMargin
-};
-
-#else
-enum
-{
-    kCALayerBottomMargin = kCALayerMinYMargin,
-    kCALayerTopMargin    = kCALayerMaxYMargin
-};
-#endif
