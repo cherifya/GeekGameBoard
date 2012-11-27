@@ -55,6 +55,14 @@
 		27DBB52E0DEE059800616D85 /* Green.png in Resources */ = {isa = PBXBuildFile; fileRef = 27DBB5290DEE059700616D85 /* Green.png */; };
 		27DBB52F0DEE059900616D85 /* Red.png in Resources */ = {isa = PBXBuildFile; fileRef = 27DBB52A0DEE059700616D85 /* Red.png */; };
 		27DBB5300DEE059900616D85 /* Violet.png in Resources */ = {isa = PBXBuildFile; fileRef = 27DBB52B0DEE059700616D85 /* Violet.png */; };
+		7D86C1361664500A00F2AAA9 /* ball-black.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D86C12E1664500A00F2AAA9 /* ball-black.png */; };
+		7D86C1371664500A00F2AAA9 /* ball-cyan.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D86C12F1664500A00F2AAA9 /* ball-cyan.png */; };
+		7D86C1381664500A00F2AAA9 /* ball-gray.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D86C1301664500A00F2AAA9 /* ball-gray.png */; };
+		7D86C1391664500A00F2AAA9 /* ball-green.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D86C1311664500A00F2AAA9 /* ball-green.png */; };
+		7D86C13A1664500A00F2AAA9 /* ball-orange.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D86C1321664500A00F2AAA9 /* ball-orange.png */; };
+		7D86C13B1664500A00F2AAA9 /* ball-purple.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D86C1331664500A00F2AAA9 /* ball-purple.png */; };
+		7D86C13C1664500A00F2AAA9 /* ball-red.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D86C1341664500A00F2AAA9 /* ball-red.png */; };
+		7D86C13D1664500A00F2AAA9 /* ball-white.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D86C1351664500A00F2AAA9 /* ball-white.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -134,6 +142,14 @@
 		27DBB52B0DEE059700616D85 /* Violet.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Violet.png; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main-iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "main-iPhone.m"; path = "Source/main-iPhone.m"; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* GGB-iPhone_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "GGB-iPhone_Prefix.pch"; path = "Source/GGB-iPhone_Prefix.pch"; sourceTree = "<group>"; };
+		7D86C12E1664500A00F2AAA9 /* ball-black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ball-black.png"; sourceTree = "<group>"; };
+		7D86C12F1664500A00F2AAA9 /* ball-cyan.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ball-cyan.png"; sourceTree = "<group>"; };
+		7D86C1301664500A00F2AAA9 /* ball-gray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ball-gray.png"; sourceTree = "<group>"; };
+		7D86C1311664500A00F2AAA9 /* ball-green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ball-green.png"; sourceTree = "<group>"; };
+		7D86C1321664500A00F2AAA9 /* ball-orange.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ball-orange.png"; sourceTree = "<group>"; };
+		7D86C1331664500A00F2AAA9 /* ball-purple.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ball-purple.png"; sourceTree = "<group>"; };
+		7D86C1341664500A00F2AAA9 /* ball-red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ball-red.png"; sourceTree = "<group>"; };
+		7D86C1351664500A00F2AAA9 /* ball-white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ball-white.png"; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info-iPhone.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-iPhone.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -298,6 +314,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				7D86C12D1664500A00F2AAA9 /* Balls */,
 				273D49880ED7277500EAFFCE /* Funk.aiff */,
 				274050290DEF36DF0006A9EE /* Pop.aiff */,
 				2740502A0DEF36DF0006A9EE /* Tink.aiff */,
@@ -323,6 +340,21 @@
 				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		7D86C12D1664500A00F2AAA9 /* Balls */ = {
+			isa = PBXGroup;
+			children = (
+				7D86C12E1664500A00F2AAA9 /* ball-black.png */,
+				7D86C12F1664500A00F2AAA9 /* ball-cyan.png */,
+				7D86C1301664500A00F2AAA9 /* ball-gray.png */,
+				7D86C1311664500A00F2AAA9 /* ball-green.png */,
+				7D86C1321664500A00F2AAA9 /* ball-orange.png */,
+				7D86C1331664500A00F2AAA9 /* ball-purple.png */,
+				7D86C1341664500A00F2AAA9 /* ball-red.png */,
+				7D86C1351664500A00F2AAA9 /* ball-white.png */,
+			);
+			path = Balls;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -388,6 +420,14 @@
 				2740502B0DEF36DF0006A9EE /* Pop.aiff in Resources */,
 				2740502C0DEF36DF0006A9EE /* Tink.aiff in Resources */,
 				273D49890ED7277500EAFFCE /* Funk.aiff in Resources */,
+				7D86C1361664500A00F2AAA9 /* ball-black.png in Resources */,
+				7D86C1371664500A00F2AAA9 /* ball-cyan.png in Resources */,
+				7D86C1381664500A00F2AAA9 /* ball-gray.png in Resources */,
+				7D86C1391664500A00F2AAA9 /* ball-green.png in Resources */,
+				7D86C13A1664500A00F2AAA9 /* ball-orange.png in Resources */,
+				7D86C13B1664500A00F2AAA9 /* ball-purple.png in Resources */,
+				7D86C13C1664500A00F2AAA9 /* ball-red.png in Resources */,
+				7D86C13D1664500A00F2AAA9 /* ball-white.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
