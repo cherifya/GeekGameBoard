@@ -138,7 +138,7 @@ static CATransform3D kFaceUpTransform, kFaceDownTransform;
 #if TARGET_OS_IPHONE
     back.backgroundColor = CreateRGB(0.0,0.5,0.5, 1.0);
 #else
-    back.contents = (id) GetCGImageNamed(@"/Library/Desktop Pictures/Classic Aqua Blue.jpg");
+    back.contents = (id) GetCGImageNamed(@"Classic Aqua Blue.jpg");
 #endif
     back.contentsGravity = kCAGravityResize;
     back.masksToBounds = YES;

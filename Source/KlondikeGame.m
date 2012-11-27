@@ -189,5 +189,17 @@
     return self.currentPlayer;
 }
 
+- (NSString*) stateString
+{
+    //TODO
+    return nil;
+}
+
+- (void) setStateString: (NSString*)stateString
+{
+    //TODO
+}
+
+
 
 @end

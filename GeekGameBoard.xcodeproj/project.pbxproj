@@ -55,6 +55,7 @@
 		27D4F1260CCF011200923605 /* Stack.m in Sources */ = {isa = PBXBuildFile; fileRef = 27D4F1250CCF011200923605 /* Stack.m */; };
 		27DFC4410CCD01B7005E34CE /* GoGame.m in Sources */ = {isa = PBXBuildFile; fileRef = 27DFC4400CCD01B7005E34CE /* GoGame.m */; };
 		27F230B90CD1A61B006939C1 /* KlondikeGame.m in Sources */ = {isa = PBXBuildFile; fileRef = 27F230B80CD1A61B006939C1 /* KlondikeGame.m */; };
+		7D86C12816644B0500F2AAA9 /* Classic Aqua Blue.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 7D86C12716644B0500F2AAA9 /* Classic Aqua Blue.jpg */; };
 		8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
@@ -145,6 +146,7 @@
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		32CA4F630368D1EE00C91783 /* GeekGameBoard_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeekGameBoard_Prefix.pch; sourceTree = "<group>"; };
+		7D86C12716644B0500F2AAA9 /* Classic Aqua Blue.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = "Classic Aqua Blue.jpg"; path = "Resources/Classic Aqua Blue.jpg"; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Resources/Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* GeekGameBoard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GeekGameBoard.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -333,6 +335,7 @@
 				29B97318FDCFA39411CA2CEA /* MainMenu.nib */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
+				7D86C12716644B0500F2AAA9 /* Classic Aqua Blue.jpg */,
 				279F4DE10D8609C200B32DBF /* Background.png */,
 				276DFC400D00867000D329AE /* Green Ball.png */,
 				276DFC530D00890C00D329AE /* Red Ball.png */,
@@ -424,6 +427,7 @@
 				2796EA2C0F194FF7003B8806 /* ball-purple.png in Resources */,
 				2796EA2D0F194FF7003B8806 /* ball-red.png in Resources */,
 				2796EA2E0F194FF7003B8806 /* ball-white.png in Resources */,
+				7D86C12816644B0500F2AAA9 /* Classic Aqua Blue.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
