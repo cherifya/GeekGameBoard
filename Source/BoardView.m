@@ -108,7 +108,7 @@
 - (void) createGameBoard
 {
     [self _removeGameBoard];
-    _table = [[CALayer alloc] init];
+    _table = (GGBLayer *)[[CALayer alloc] init];
     _table.frame = [self gameBoardFrame];
     _table.autoresizingMask = kCALayerMinXMargin | kCALayerMaxXMargin | kCALayerMinYMargin | kCALayerMaxYMargin;
     
@@ -469,7 +469,7 @@ static int tell( id target, SEL selector, id arg, int defaultValue )
     _viewDropTarget = [self hitTestPoint: [sender draggingLocation]
                         forLayerMatching: layerIsDropTarget
                                   offset: NULL];
-    _viewDropOp = _viewDropTarget ?[_viewDropTarget draggingEntered: sender] :NSDragOperationNone;
+    _viewDropOp = NSDragOperationNone; //_viewDropTarget ?[_viewDropTarget draggingEntered: sender] :NSDragOperationNone;
     return _viewDropOp;
 }
 
@@ -485,7 +485,7 @@ static int tell( id target, SEL selector, id arg, int defaultValue )
         tell(_viewDropTarget,@selector(draggingExited:),sender,0);
         _viewDropTarget = target;
         if( _viewDropTarget )
-            _viewDropOp = [_viewDropTarget draggingEntered: sender];
+            _viewDropOp = NSDragOperationNone; //[_viewDropTarget draggingEntered: sender];
         else
             _viewDropOp = NSDragOperationNone;
     }
@@ -510,7 +510,7 @@ static int tell( id target, SEL selector, id arg, int defaultValue )
 
 - (BOOL)performDragOperation:(id <NSDraggingInfo>)sender
 {
-    return [_viewDropTarget performDragOperation: sender];
+    return NO; //[_viewDropTarget performDragOperation: sender];
 }
 
 - (void)concludeDragOperation:(id <NSDraggingInfo>)sender

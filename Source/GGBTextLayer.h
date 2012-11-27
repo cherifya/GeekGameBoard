@@ -29,6 +29,9 @@ enum
 };
 
 #else
+
+typedef enum CAAutoresizingMask CAAutoresizingMask;
+
 enum
 {
     kCALayerBottomMargin = kCALayerMinYMargin,

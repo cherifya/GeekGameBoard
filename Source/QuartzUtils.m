@@ -79,7 +79,7 @@ CGImageRef CreateCGImageFromFile( NSString *path )
     if( src ) {
         image = CGImageSourceCreateImageAtIndex(src, 0, NULL);
         CFRelease(src);
-        if(!image) Warn(@"CGImageSourceCreateImageAtIndex failed on file %@ (ptr size=%u)",path,sizeof(void*));
+        if(!image) Warn(@"CGImageSourceCreateImageAtIndex failed on file %@ (ptr size=%lu)",path,sizeof(void*));
     }
     return image;
 #endif
