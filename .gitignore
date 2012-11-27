@@ -1,0 +1,12 @@
+# Xcode
+build/*
+*.pbxuser
+!default.pbxuser
+
+xcuserdata
+profile
+*.moved-aside
+DerivedData
+
+Podfile.lock
+project.xcworkspace
