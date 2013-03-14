@@ -69,7 +69,7 @@
     if( [superlayer respondsToSelector: @selector(borderWidth)] )
         yinset += ((GGBLayer*)superlayer).borderWidth;
     CGFloat xinset;
-    if( mode==@"center" )
+    if( [mode isEqual:@"center"] )
         xinset = 0;
     else
         xinset = yinset + round(font.pointSize/3.0);
