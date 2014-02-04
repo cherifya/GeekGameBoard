@@ -138,7 +138,7 @@
         if( _foregroundColor )
             CGContextSetFillColorWithColor(ctx, _foregroundColor);
         
-        UITextAlignment align;
+        NSTextAlignment align;
         if( [_alignmentMode isEqualToString: @"center"] )
             align = NSTextAlignmentCenter;
         else if( [_alignmentMode isEqualToString: @"right"] )
@@ -147,13 +147,14 @@
             align = NSTextAlignmentLeft;
         
         CGRect bounds = self.bounds;
-        //float ascender=_font.ascender, descender=_font.descender, leading=_font.leading;
-        //bounds.size.height -= ascender-descender - leading;
         
-        [_string drawInRect: bounds 
-                   withFont: _font
-              lineBreakMode: NSLineBreakByClipping
-                  alignment: align];
+        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy];
+        paragraphStyle.lineBreakMode = NSLineBreakByClipping;
+        paragraphStyle.alignment = align;
+        
+        NSDictionary *dictionary = @{NSFontAttributeName:_font, NSParagraphStyleAttributeName:paragraphStyle};
+        
+        [_string drawInRect:bounds withAttributes:dictionary];
         
         UIGraphicsPopContext();
         CGContextRestoreGState(ctx);

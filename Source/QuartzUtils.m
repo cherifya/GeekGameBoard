@@ -263,7 +263,7 @@ float GetPixelAlpha( CGImageRef image, CGSize imageSize, CGPoint pt )
         sTinyContext = CGBitmapContextCreate(sPixel, 1, 1, 
                                              8, 1,     // bpp, rowBytes
                                              NULL,
-                                             kCGImageAlphaOnly);
+                                             (CGBitmapInfo)kCGImageAlphaOnly);
         CGContextSetBlendMode(sTinyContext, kCGBlendModeCopy);
     }
     
